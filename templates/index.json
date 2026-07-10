@@ -10,7 +10,7 @@
       },
       "block_order": ["cat1", "cat2", "cat3"]
     },
-    "featured": { "type": "featured-products" },
+    "featured": { "type": "featured-products", "settings": { "collection": "new-arrivals" } },
     "banner": { "type": "brand-banner" },
     "quote": { "type": "testimonial" }
   },

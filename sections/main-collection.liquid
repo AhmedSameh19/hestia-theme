@@ -58,7 +58,39 @@
             {%- endif -%}
           {%- endfor -%}
           {%- if collection.filters == empty -%}
-            <p class="font-body-md text-on-surface-variant text-[14px]">{{ 'collections.no_filters' | t }}</p>
+            {%- comment -%}
+              ponytail: no Search & Discovery filters configured. Fall back to native tags
+              using a `group:Value` convention (e.g. fabric:Silk, color:Champagne) so
+              filtering still works without the app. Shopify's collection URLs only support
+              one active tag at a time (`/collections/x/tag-handle`) — that's the accepted
+              ceiling here, not a bug in this fallback.
+            {%- endcomment -%}
+            {%- assign tag_groups_found = false -%}
+            {%- assign tag_prefixes = 'fabric,color' | split: ',' -%}
+            {%- for prefix in tag_prefixes -%}
+              {%- assign prefix_match = prefix | append: ':' -%}
+              {%- capture group_links -%}
+                {%- for tag in collection.all_tags -%}
+                  {%- if tag contains prefix_match -%}
+                    {%- assign tag_label = tag | split: ':' | last -%}
+                    <a href="{% if current_tags contains tag %}{{ collection.url }}{% else %}{{ collection.url }}/{{ tag | handle }}{% endif %}"
+                       class="block font-body-md {% if current_tags contains tag %}text-primary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} transition-colors">
+                      {{ tag_label }}
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endcapture -%}
+              {%- if group_links != blank -%}
+                {%- assign tag_groups_found = true -%}
+                <section>
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 uppercase">{{ prefix }}</h3>
+                  <div class="space-y-3">{{ group_links }}</div>
+                </section>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless tag_groups_found -%}
+              <p class="font-body-md text-on-surface-variant text-[14px]">{{ 'collections.no_filters' | t }}</p>
+            {%- endunless -%}
           {%- endif -%}
         </aside>
 

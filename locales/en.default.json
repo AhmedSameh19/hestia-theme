@@ -41,7 +41,7 @@
     "filters": "Filters",
     "sort_by": "Sort By",
     "empty": "No products match your selection.",
-    "no_filters": "Set up filters in the Search & Discovery app to enable filtering."
+    "no_filters": "No filters available for this collection."
   },
   "cart": {
     "title": "Your Cart",
