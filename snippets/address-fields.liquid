@@ -1,0 +1,18 @@
+{%- comment -%} Shared address form fields. Accepts: form {%- endcomment -%}
+{%- assign input_class = 'w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none' -%}
+<div class="grid grid-cols-2 gap-4">
+  <input type="text" name="address[first_name]" value="{{ form.first_name }}" placeholder="{{ 'customers.first_name' | t }}" class="{{ input_class }}">
+  <input type="text" name="address[last_name]" value="{{ form.last_name }}" placeholder="{{ 'customers.last_name' | t }}" class="{{ input_class }}">
+</div>
+<input type="text" name="address[address1]" value="{{ form.address1 }}" placeholder="{{ 'customers.address1' | t }}" class="{{ input_class }}">
+<input type="text" name="address[address2]" value="{{ form.address2 }}" placeholder="{{ 'customers.address2' | t }}" class="{{ input_class }}">
+<div class="grid grid-cols-2 gap-4">
+  <input type="text" name="address[city]" value="{{ form.city }}" placeholder="{{ 'customers.city' | t }}" class="{{ input_class }}">
+  <input type="text" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customers.zip' | t }}" class="{{ input_class }}">
+</div>
+<div class="grid grid-cols-2 gap-4">
+  <select name="address[country]" data-default="{{ form.country }}" class="{{ input_class }}">
+    {{ all_country_option_tags }}
+  </select>
+  <input type="tel" name="address[phone]" value="{{ form.phone }}" placeholder="{{ 'customers.phone' | t }}" class="{{ input_class }}">
+</div>

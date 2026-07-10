@@ -1,0 +1,8 @@
+<article class="pt-24 pb-section-padding px-margin-mobile max-w-3xl mx-auto">
+  <p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-6">{{ article.published_at | date: '%B %d, %Y' }}</p>
+  <h1 class="font-display-lg text-display-lg-mobile md:text-headline-md mb-12">{{ article.title }}</h1>
+  {% if article.image %}
+    <div class="rounded-xl overflow-hidden mb-12"><img width="{{ article.image.width }}" height="{{ article.image.height }}" src="{{ article.image | image_url: width: 1400 }}" alt="{{ article.image.alt | escape }}" class="w-full"></div>
+  {% endif %}
+  <div class="font-body-lg text-body-lg text-on-surface-variant space-y-6">{{ article.content }}</div>
+</article>

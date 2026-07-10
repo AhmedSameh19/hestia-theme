@@ -1,0 +1,6 @@
+node_modules/
+src/
+gen-vars.js
+tailwind.config.js
+package.json
+package-lock.json

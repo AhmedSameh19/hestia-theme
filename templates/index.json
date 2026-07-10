@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "hero": { "type": "hero" },
+    "bento": {
+      "type": "category-bento",
+      "blocks": {
+        "cat1": { "type": "category", "settings": { "title": "Sleepwear" } },
+        "cat2": { "type": "category", "settings": { "title": "Loungewear" } },
+        "cat3": { "type": "category", "settings": { "title": "The Robe Edit", "subtitle": "Explore textures" } }
+      },
+      "block_order": ["cat1", "cat2", "cat3"]
+    },
+    "featured": { "type": "featured-products" },
+    "banner": { "type": "brand-banner" },
+    "quote": { "type": "testimonial" }
+  },
+  "order": ["hero", "bento", "featured", "banner", "quote"]
+}

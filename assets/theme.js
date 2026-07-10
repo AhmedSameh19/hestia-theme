@@ -1,0 +1,205 @@
+/* HESTIA theme JS — vanilla, no dependencies. */
+(function () {
+  'use strict';
+
+  var money = function (cents) {
+    // ponytail: assumes $X.XX format; swap for Shopify.formatMoney if multi-currency formatting matters
+    return '$' + (cents / 100).toFixed(2);
+  };
+
+  /* ---------- Mobile menu ---------- */
+  var menuBtn = document.querySelector('[data-menu-open]');
+  var menu = document.querySelector('[data-menu]');
+  if (menuBtn && menu) {
+    menuBtn.addEventListener('click', function () {
+      menu.hidden = !menu.hidden;
+      menuBtn.textContent = menu.hidden ? 'menu' : 'close';
+    });
+  }
+
+  /* ---------- Scroll fade-in ---------- */
+  var observer = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.fade-in-section').forEach(function (el) {
+    observer.observe(el);
+  });
+
+  /* ---------- Carousels (featured products) ---------- */
+  document.querySelectorAll('[data-carousel]').forEach(function (track) {
+    var section = track.closest('section');
+    var step = function () {
+      return (track.querySelector(':scope > *') || { offsetWidth: 360 }).offsetWidth + 24;
+    };
+    var prev = section && section.querySelector('[data-carousel-prev]');
+    var next = section && section.querySelector('[data-carousel-next]');
+    if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+  });
+
+  /* ---------- Header cart count ---------- */
+  var setCartCount = function (count) {
+    var bubble = document.querySelector('[data-cart-count]');
+    if (!bubble) return;
+    bubble.textContent = count;
+    bubble.classList.toggle('hidden', count === 0);
+  };
+
+  /* ---------- Quick add (single-variant products) ---------- */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-quick-add]');
+    if (!btn) return;
+    e.preventDefault();
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: Number(btn.dataset.quickAdd), quantity: 1 }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function () { return fetch('/cart.js').then(function (r) { return r.json(); }); })
+      .then(function (cart) { setCartCount(cart.item_count); });
+  });
+
+  /* ---------- Product page ---------- */
+  var productEl = document.querySelector('[data-product]');
+  if (productEl) {
+    var variants = JSON.parse(productEl.dataset.productJson || '[]');
+
+    // Gallery thumbs
+    var mainImage = productEl.querySelector('[data-main-image]');
+    productEl.querySelectorAll('[data-thumb]').forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        if (mainImage) mainImage.src = thumb.dataset.thumb;
+        productEl.querySelectorAll('[data-thumb]').forEach(function (t) {
+          t.classList.remove('border-primary');
+          t.classList.add('border-transparent');
+        });
+        thumb.classList.add('border-primary');
+        thumb.classList.remove('border-transparent');
+      });
+    });
+
+    // Quantity stepper
+    var qty = productEl.querySelector('[data-qty]');
+    var minus = productEl.querySelector('[data-qty-minus]');
+    var plus = productEl.querySelector('[data-qty-plus]');
+    if (minus) minus.addEventListener('click', function () { qty.value = Math.max(1, Number(qty.value) - 1); });
+    if (plus) plus.addEventListener('click', function () { qty.value = Number(qty.value) + 1; });
+
+    // Variant resolution from option radios
+    var fieldsets = productEl.querySelectorAll('[data-option-index]');
+    var resolveVariant = function () {
+      var selected = [];
+      fieldsets.forEach(function (fs) {
+        var checked = fs.querySelector('input:checked');
+        selected[Number(fs.dataset.optionIndex)] = checked ? checked.value : null;
+        var label = fs.querySelector('[data-option-label]');
+        if (label && checked) label.textContent = checked.value;
+      });
+      return variants.find(function (v) {
+        return selected.every(function (val, i) { return v.options[i] === val; });
+      });
+    };
+    fieldsets.forEach(function (fs) {
+      fs.addEventListener('change', function () {
+        var variant = resolveVariant();
+        var idInput = productEl.querySelector('[data-variant-id]');
+        var addBtn = productEl.querySelector('[data-add-to-cart]');
+        var addLabel = productEl.querySelector('[data-add-label]');
+        var price = productEl.querySelector('[data-price]');
+        if (!variant) {
+          if (addBtn) addBtn.disabled = true;
+          if (addLabel) addLabel.textContent = window.hestiaStrings.unavailable;
+          return;
+        }
+        if (idInput) idInput.value = variant.id;
+        if (price) price.textContent = money(variant.price);
+        if (addBtn) addBtn.disabled = !variant.available;
+        if (addLabel) addLabel.textContent = variant.available ? window.hestiaStrings.addToCart : window.hestiaStrings.soldOut;
+        if (variant.featured_image && mainImage) mainImage.src = variant.featured_image.src;
+      });
+    });
+
+    // AJAX add to cart (skip when Buy it Now submits the form for checkout)
+    var form = productEl.querySelector('form[action*="/cart/add"]');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (e.submitter && e.submitter.name === 'checkout') return; // let Shopify handle Buy it Now
+        e.preventDefault();
+        var addBtn = form.querySelector('[data-add-to-cart]');
+        var addLabel = form.querySelector('[data-add-label]');
+        fetch('/cart/add.js', { method: 'POST', body: new FormData(form) })
+          .then(function (r) {
+            if (!r.ok) throw new Error('add failed');
+            return fetch('/cart.js');
+          })
+          .then(function (r) { return r.json(); })
+          .then(function (cart) {
+            setCartCount(cart.item_count);
+            if (addLabel) {
+              var original = addLabel.textContent;
+              addLabel.textContent = window.hestiaStrings.added;
+              setTimeout(function () { addLabel.textContent = original; }, 1500);
+            }
+          })
+          .catch(function () { if (addBtn) addBtn.disabled = false; });
+      });
+    }
+
+    // Exclusive accordions
+    var group = productEl.querySelector('[data-accordion-group]');
+    if (group) {
+      group.querySelectorAll('details').forEach(function (el) {
+        el.addEventListener('toggle', function () {
+          if (!el.open) return;
+          group.querySelectorAll('details').forEach(function (other) {
+            if (other !== el) other.removeAttribute('open');
+          });
+        });
+      });
+    }
+  }
+
+  /* ---------- Cart page ---------- */
+  var cartEl = document.querySelector('[data-cart]');
+  if (cartEl) {
+    var changeLine = function (line, quantity) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line: line, quantity: quantity }),
+      }).then(function () { location.reload(); }); // ponytail: full reload keeps totals/progress bar in sync without a rendering layer
+    };
+    cartEl.addEventListener('click', function (e) {
+      var stepBtn = e.target.closest('[data-line-qty]');
+      if (stepBtn) {
+        var row = stepBtn.closest('[data-line]');
+        var current = Number(row.querySelector('.min-w-\\[20px\\]').textContent);
+        changeLine(Number(stepBtn.dataset.lineQty), Math.max(0, current + Number(stepBtn.dataset.delta)));
+      }
+      var removeBtn = e.target.closest('[data-line-remove]');
+      if (removeBtn) changeLine(Number(removeBtn.dataset.lineRemove), 0);
+    });
+  }
+
+  /* ---------- Collection filters (mobile toggle) ---------- */
+  var filtersToggle = document.querySelector('[data-filters-toggle]');
+  var filters = document.querySelector('[data-filters]');
+  if (filtersToggle && filters) {
+    filtersToggle.addEventListener('click', function () {
+      filters.classList.toggle('hidden');
+    });
+  }
+  var sort = document.querySelector('[data-sort]');
+  if (sort) {
+    sort.addEventListener('change', function () { sort.form.submit(); });
+  }
+})();

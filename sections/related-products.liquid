@@ -1,0 +1,30 @@
+<section class="pb-section-padding max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop fade-in-section">
+  <div class="flex justify-between items-end mb-12">
+    <div>
+      <h2 class="font-headline-md text-headline-md mb-2">{{ section.settings.heading }}</h2>
+      <p class="font-label-caps text-label-caps text-on-surface-variant uppercase">{{ section.settings.subheading }}</p>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+    {%- for rec in recommendations.products limit: 3 -%}
+      {% render 'product-card', product: rec, show_quick_add: true %}
+    {%- else -%}
+      {%- comment -%} Recommendations need the storefront to warm up; fall back to the product's collection {%- endcomment -%}
+      {%- for rec in collection.products limit: 3 -%}
+        {%- unless rec.id == product.id -%}
+          {% render 'product-card', product: rec, show_quick_add: true %}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Related products",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Complete your domestic sanctuary" }
+  ]
+}
+{% endschema %}

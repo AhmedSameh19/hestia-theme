@@ -1,0 +1,29 @@
+{%- comment -%}
+  Product card per the collection mockup. Accepts: product, show_quick_add (bool)
+{%- endcomment -%}
+<div class="product-card group relative">
+  <a href="{{ product.url }}" class="block aspect-[3/4] overflow-hidden rounded-xl bg-primary-container product-shadow mb-6 relative">
+    {%- if product.compare_at_price > product.price -%}
+      <span class="absolute top-4 left-4 z-10 bg-terracotta text-white px-3 py-1 rounded-full font-label-caps text-[10px] tracking-widest uppercase">{{ 'products.sale' | t }}</span>
+    {%- endif -%}
+    {%- if product.featured_image -%}
+      <img width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" src="{{ product.featured_image | image_url: width: 720 }}"
+           srcset="{{ product.featured_image | image_url: width: 360 }} 360w, {{ product.featured_image | image_url: width: 720 }} 720w"
+           sizes="(min-width: 768px) 360px, 90vw"
+           alt="{{ product.featured_image.alt | escape }}" loading="lazy"
+           class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+    {%- endif -%}
+    {%- if show_quick_add and product.variants.size == 1 and product.available -%}
+      <button type="button" data-quick-add="{{ product.first_available_variant.id }}"
+              class="quick-add-btn opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 absolute bottom-6 left-6 right-6 bg-sage text-white py-3 rounded-xl font-label-caps text-label-caps uppercase transition-all duration-300 hover:brightness-90">
+        {{ 'products.quick_add' | t }}
+      </button>
+    {%- endif -%}
+  </a>
+  <div class="space-y-1">
+    <h3 class="font-headline-sm text-headline-sm text-primary"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    {% render 'price', item: product %}
+  </div>
+</div>

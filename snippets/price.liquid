@@ -1,0 +1,9 @@
+{%- comment -%} Renders product/variant price. Accepts: item (product or variant) {%- endcomment -%}
+{%- if item.compare_at_price > item.price -%}
+  <span class="flex gap-2 items-center">
+    <span class="font-body-md text-on-surface-variant">{{ item.price | money }}</span>
+    <s class="font-body-md text-[14px] text-outline">{{ item.compare_at_price | money }}</s>
+  </span>
+{%- else -%}
+  <span class="font-body-md text-on-surface-variant">{{ item.price | money }}</span>
+{%- endif -%}

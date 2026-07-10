@@ -1,0 +1,28 @@
+<div class="pt-24 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+  <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-12">{{ 'general.search' | t }}</h1>
+  <form action="{{ routes.search_url }}" method="get" class="flex gap-4 max-w-xl mb-16 border-b border-outline-variant pb-3">
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_placeholder' | t }}"
+           class="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 font-body-lg text-body-lg">
+    <button type="submit" class="material-symbols-outlined text-primary" aria-label="{{ 'general.search' | t }}">search</button>
+  </form>
+  {% if search.performed %}
+    {% paginate search.results by 12 %}
+      {% if search.results_count == 0 %}
+        <p class="font-body-lg text-on-surface-variant">{{ 'general.no_results' | t }}</p>
+      {% endif %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-16">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            {% render 'product-card', product: item %}
+          {% else %}
+            <a href="{{ item.url }}" class="block space-y-2">
+              <h3 class="font-headline-sm text-headline-sm text-primary">{{ item.title }}</h3>
+              <p class="font-body-md text-on-surface-variant">{{ item.content | strip_html | truncatewords: 25 }}</p>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if paginate.pages > 1 %}<div class="mt-24 text-center font-label-caps">{{ paginate | default_pagination }}</div>{% endif %}
+    {% endpaginate %}
+  {% endif %}
+</div>

@@ -1,0 +1,32 @@
+<section class="py-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center fade-in-section">
+  <div class="max-w-3xl mx-auto">
+    <span class="material-symbols-outlined icon-fill text-terracotta text-4xl mb-6">format_quote</span>
+    <blockquote class="font-headline-md text-headline-md mb-8 leading-snug text-primary">
+      &ldquo;{{ section.settings.quote }}&rdquo;
+    </blockquote>
+    <div class="flex items-center justify-center gap-4">
+      {%- if section.settings.avatar -%}
+        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+          <img width="80" height="80" src="{{ section.settings.avatar | image_url: width: 80, height: 80, crop: 'center' }}" alt="{{ section.settings.author | escape }}" loading="lazy" class="w-full h-full object-cover">
+        </div>
+      {%- endif -%}
+      <div class="text-left">
+        <p class="font-label-caps text-label-caps uppercase font-bold">{{ section.settings.author }}</p>
+        <p class="font-body-md text-[14px] text-on-surface-variant">{{ section.settings.author_note }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonial",
+  "settings": [
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "The quality of the silk is unlike anything I've ever owned. It makes coming home the best part of my day." },
+    { "type": "image_picker", "id": "avatar", "label": "Avatar" },
+    { "type": "text", "id": "author", "label": "Author", "default": "Eleanor M." },
+    { "type": "text", "id": "author_note", "label": "Author note", "default": "Verified Collector" }
+  ],
+  "presets": [{ "name": "Testimonial" }]
+}
+{% endschema %}

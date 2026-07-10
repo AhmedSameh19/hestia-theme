@@ -1,0 +1,30 @@
+<div class="pt-24 pb-section-padding px-margin-mobile max-w-2xl mx-auto">
+  <h1 class="font-display-lg text-headline-md mb-12">{{ 'customers.addresses' | t }}</h1>
+  <div class="space-y-8 mb-16">
+    {% paginate customer.addresses by 10 %}
+      {% for address in customer.addresses %}
+        <div class="p-6 rounded-xl bg-surface-container-low">
+          {% if address == customer.default_address %}<span class="font-label-caps text-[10px] uppercase text-sage block mb-2">{{ 'customers.default_address' | t }}</span>{% endif %}
+          <div class="font-body-md text-on-surface-variant">{{ address | format_address }}</div>
+          <div class="flex gap-6 mt-4 font-label-caps text-label-caps uppercase">
+            <button type="button" onclick="document.getElementById('EditAddress_{{ address.id }}').toggleAttribute('hidden')" class="underline underline-offset-4 hover:text-primary">{{ 'customers.edit' | t }}</button>
+            {% form 'customer_address', address %}
+              <button type="submit" name="_method" value="delete" class="underline underline-offset-4 hover:text-error" onclick="return confirm('{{ 'customers.delete_confirm' | t }}')">{{ 'customers.delete' | t }}</button>
+            {% endform %}
+          </div>
+          <div id="EditAddress_{{ address.id }}" hidden class="mt-6">
+            {% form 'customer_address', address, class: 'space-y-4' %}
+              {% render 'address-fields', form: form %}
+              <button type="submit" class="bg-terracotta text-white px-8 py-3 rounded-xl font-label-caps text-label-caps uppercase">{{ 'customers.save' | t }}</button>
+            {% endform %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endpaginate %}
+  </div>
+  <h2 class="font-headline-sm text-headline-sm mb-8">{{ 'customers.add_address' | t }}</h2>
+  {% form 'customer_address', customer.new_address, class: 'space-y-4' %}
+    {% render 'address-fields', form: form %}
+    <button type="submit" class="bg-terracotta text-white px-8 py-3 rounded-xl font-label-caps text-label-caps uppercase">{{ 'customers.save' | t }}</button>
+  {% endform %}
+</div>

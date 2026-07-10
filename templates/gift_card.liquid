@@ -1,0 +1,20 @@
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ 'general.gift_card' | t }} | {{ shop.name }}</title>
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body class="bg-background text-on-surface font-body-md">
+  <div class="min-h-screen flex flex-col items-center justify-center px-margin-mobile text-center gap-8">
+    <img width="48" height="48" src="{{ 'logo-monogram.png' | asset_url }}" alt="{{ shop.name }}" class="w-12 h-12 object-contain">
+    <h1 class="font-display-lg text-headline-md">{{ 'general.gift_card' | t }}</h1>
+    <p class="font-display-lg text-display-lg-mobile">{{ gift_card.balance | money }}</p>
+    <p class="font-label-caps text-label-caps uppercase tracking-widest bg-primary-container px-8 py-4 rounded-xl">{{ gift_card.code | format_code }}</p>
+    {% if gift_card.expired %}<p class="text-error">{{ 'general.gift_card_expired' | t }}</p>{% endif %}
+    <a href="{{ shop.url }}" class="inline-block bg-terracotta text-white px-10 py-5 rounded-xl font-label-caps text-label-caps uppercase tracking-widest">{{ 'cart.continue_shopping' | t }}</a>
+  </div>
+</body>
+</html>

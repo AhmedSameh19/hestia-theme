@@ -1,0 +1,52 @@
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm">
+  <nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto h-20">
+    <div class="flex-1 flex justify-start items-center gap-4">
+      <button data-menu-open class="md:hidden material-symbols-outlined text-on-surface-variant" aria-label="{{ 'general.menu' | t }}">menu</button>
+      <a class="block h-8 opacity-90 transition-opacity hover:opacity-100" href="{{ routes.root_url }}">
+        {%- if section.settings.logo -%}
+          <img width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}" src="{{ section.settings.logo | image_url: height: 64 }}" alt="{{ shop.name }}" class="h-full w-auto object-contain">
+        {%- else -%}
+          <img width="32" height="32" src="{{ 'logo-monogram.png' | asset_url }}" alt="{{ shop.name }}" class="h-full w-auto object-contain dark:invert">
+        {%- endif -%}
+      </a>
+    </div>
+
+    <div class="hidden md:flex flex-1 justify-center items-center gap-10">
+      {%- for link in section.settings.menu.links -%}
+        <a class="font-label-caps text-label-caps uppercase relative transition-colors
+                  {% if link.current %}text-primary border-b border-primary pb-1 font-bold{% else %}text-on-surface-variant nav-link-hover hover:text-primary{% endif %}"
+           href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    </div>
+
+    <div class="flex-1 flex justify-end items-center gap-6">
+      <a href="{{ routes.search_url }}" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.search' | t }}">search</a>
+      <a href="{{ routes.account_url }}" class="hidden md:block material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.account' | t }}">person</a>
+      <a href="{{ routes.cart_url }}" class="relative material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.cart' | t }}">
+        shopping_bag
+        <span data-cart-count
+              class="absolute -top-1 -right-1 bg-terracotta text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </nav>
+
+  {%- comment -%} Mobile menu drawer {%- endcomment -%}
+  <div data-menu hidden class="md:hidden bg-surface border-t border-outline-variant/30 px-margin-mobile py-8">
+    <div class="flex flex-col gap-6">
+      {%- for link in section.settings.menu.links -%}
+        <a class="font-label-caps text-label-caps uppercase {% if link.current %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+      <a class="font-label-caps text-label-caps uppercase text-on-surface-variant" href="{{ routes.account_url }}">{{ 'general.account' | t }}</a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Defaults to the HESTIA Xi monogram" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ]
+}
+{% endschema %}

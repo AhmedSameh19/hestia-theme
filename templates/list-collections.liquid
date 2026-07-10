@@ -1,0 +1,14 @@
+<div class="pt-24 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+  <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-16">{{ 'general.collections' | t }}</h1>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+    {% for collection in collections %}
+      <a href="{{ collection.url }}" class="group relative overflow-hidden rounded-3xl bento-card-zoom aspect-[4/3] block bg-secondary-container">
+        {% if collection.featured_image %}
+          <img width="{{ collection.featured_image.width }}" height="{{ collection.featured_image.height }}" src="{{ collection.featured_image | image_url: width: 720 }}" alt="{{ collection.title | escape }}" loading="lazy" class="w-full h-full object-cover">
+        {% endif %}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <h2 class="absolute bottom-8 left-8 font-headline-sm text-headline-sm text-white">{{ collection.title }}</h2>
+      </a>
+    {% endfor %}
+  </div>
+</div>

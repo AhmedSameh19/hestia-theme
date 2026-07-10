@@ -1,0 +1,11 @@
+<div class="pt-24 pb-section-padding px-margin-mobile max-w-md mx-auto">
+  <h1 class="font-display-lg text-headline-md mb-12">{{ 'customers.activate_account' | t }}</h1>
+  {% form 'activate_customer_password', class: 'space-y-6' %}
+    {{ form.errors | default_errors }}
+    <input type="password" name="customer[password]" placeholder="{{ 'general.password' | t }}" autocomplete="new-password" required
+           class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+    <input type="password" name="customer[password_confirmation]" placeholder="{{ 'customers.password_confirm' | t }}" autocomplete="new-password" required
+           class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+    <button type="submit" class="w-full bg-terracotta text-white py-4 rounded-xl font-label-caps text-label-caps uppercase tracking-widest">{{ 'customers.activate_account' | t }}</button>
+  {% endform %}
+</div>

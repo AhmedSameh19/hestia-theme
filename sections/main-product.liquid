@@ -1,0 +1,139 @@
+<div class="pt-12 pb-section-padding max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+  <nav class="mb-12" aria-label="breadcrumbs">
+    <ol class="flex items-center gap-2 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">
+      <li><a class="hover:text-primary" href="{{ routes.root_url }}">{{ 'general.home' | t }}</a></li>
+      {%- if collection -%}
+        <li class="material-symbols-outlined text-[12px]" aria-hidden="true">chevron_right</li>
+        <li><a class="hover:text-primary" href="{{ collection.url }}">{{ collection.title }}</a></li>
+      {%- endif -%}
+      <li class="material-symbols-outlined text-[12px]" aria-hidden="true">chevron_right</li>
+      <li class="text-primary" aria-current="page">{{ product.title }}</li>
+    </ol>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter" data-product data-product-json="{{ product.variants | json | escape }}">
+    {%- comment -%} Gallery {%- endcomment -%}
+    <div class="lg:col-span-7 flex flex-col-reverse md:flex-row-reverse gap-4">
+      <div class="flex-grow aspect-[4/5] rounded-xl overflow-hidden bg-surface-container-low shadow-sm">
+        {%- if product.featured_media -%}
+          <img width="{{ product.featured_media.width }}" height="{{ product.featured_media.height }}" data-main-image src="{{ product.featured_media | image_url: width: 1400 }}"
+               alt="{{ product.featured_media.alt | escape }}" class="w-full h-full object-cover transition-soft hover:scale-105">
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+        {%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="flex flex-row md:flex-col gap-4 md:w-24 shrink-0 overflow-x-auto no-scrollbar">
+          {%- for media in product.media -%}
+            <button type="button" data-thumb="{{ media | image_url: width: 1400 }}"
+                    class="w-20 md:w-auto shrink-0 aspect-[3/4] rounded-lg overflow-hidden border-2 {% if forloop.first %}border-primary{% else %}border-transparent hover:border-outline-variant{% endif %} cursor-pointer">
+              <img width="{{ media.width }}" height="{{ media.height }}" src="{{ media | image_url: width: 200 }}" alt="{{ media.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Info {%- endcomment -%}
+    <div class="lg:col-span-5 flex flex-col pt-4 lg:pt-0">
+      <div class="border-b border-outline-variant/30 pb-8">
+        <h1 class="font-headline-md text-display-lg-mobile md:text-headline-md text-on-surface mb-2">{{ product.title }}</h1>
+        <p class="font-headline-sm text-headline-sm text-warm-brown mb-6" data-price>
+          {% render 'price', item: product.selected_or_first_available_variant %}
+        </p>
+        <div class="text-on-surface-variant leading-relaxed">{{ product.description | truncatewords: 40 }}</div>
+      </div>
+
+      {% form 'product', product, class: 'py-8 space-y-8' %}
+        <input type="hidden" name="id" data-variant-id value="{{ product.selected_or_first_available_variant.id }}">
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <fieldset data-option-index="{{ forloop.index0 }}">
+              <legend class="font-label-caps text-label-caps text-on-surface-variant uppercase block mb-4">
+                {{ option.name }}: <span data-option-label>{{ option.selected_value }}</span>
+              </legend>
+              <div class="flex flex-wrap gap-2">
+                {%- assign is_color = false -%}
+                {%- if option.name == 'Color' or option.name == 'Colour' -%}{%- assign is_color = true -%}{%- endif -%}
+                {%- for value in option.values -%}
+                  <label class="cursor-pointer">
+                    <input type="radio" name="option-{{ forloop.parentloop.index0 }}" value="{{ value | escape }}"
+                           class="sr-only peer" {% if value == option.selected_value %}checked{% endif %}>
+                    {%- if is_color -%}
+                      <span class="block w-8 h-8 rounded-full ring-1 ring-outline-variant peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-primary transition-soft"
+                            style="background-color: {{ value.swatch.color | default: value | handle }};" title="{{ value }}"></span>
+                    {%- else -%}
+                      <span class="block px-6 py-2 rounded-full border border-outline-variant font-label-caps text-[12px] hover:border-primary peer-checked:border-2 peer-checked:border-primary peer-checked:bg-primary-container transition-soft">{{ value }}</span>
+                    {%- endif -%}
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="flex gap-4">
+          <div class="flex items-center border border-outline-variant rounded-xl h-14 px-4 bg-surface-container-lowest">
+            <button type="button" data-qty-minus class="material-symbols-outlined text-primary hover:opacity-50" aria-label="{{ 'general.decrease' | t }}">remove</button>
+            <input type="number" name="quantity" value="1" min="1" data-qty
+                   class="w-12 text-center bg-transparent border-none focus:outline-none font-body-md" aria-label="{{ 'general.quantity' | t }}">
+            <button type="button" data-qty-plus class="material-symbols-outlined text-primary hover:opacity-50" aria-label="{{ 'general.increase' | t }}">add</button>
+          </div>
+          <button type="submit" name="add" data-add-to-cart
+                  class="flex-grow bg-terracotta text-white rounded-xl h-14 font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-soft shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            <span data-add-label>
+              {%- if product.selected_or_first_available_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+            </span>
+          </button>
+        </div>
+        {%- if section.settings.show_buy_now -%}
+          <button type="submit" name="checkout"
+                  class="w-full border border-sage text-sage rounded-xl h-14 font-label-caps text-label-caps uppercase tracking-widest hover:bg-sage hover:text-white transition-soft">
+            {{ 'products.buy_it_now' | t }}
+          </button>
+        {%- endif -%}
+      {% endform %}
+
+      {%- comment -%} Accordions {%- endcomment -%}
+      <div class="border-t border-outline-variant/30 mt-4" data-accordion-group>
+        <details class="group border-b border-outline-variant/30" open>
+          <summary class="flex justify-between items-center py-5 cursor-pointer list-none font-headline-sm text-body-lg">
+            {{ 'products.description' | t }}
+            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+          </summary>
+          <div class="pb-6 text-on-surface-variant text-body-md space-y-3">{{ product.description }}</div>
+        </details>
+        {%- if product.metafields.custom.fabric_care != blank -%}
+          <details class="group border-b border-outline-variant/30">
+            <summary class="flex justify-between items-center py-5 cursor-pointer list-none font-headline-sm text-body-lg">
+              {{ 'products.fabric_care' | t }}
+              <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <div class="pb-6 text-on-surface-variant text-body-md">{{ product.metafields.custom.fabric_care | metafield_tag }}</div>
+          </details>
+        {%- endif -%}
+        {%- if section.settings.shipping_text != blank -%}
+          <details class="group border-b border-outline-variant/30">
+            <summary class="flex justify-between items-center py-5 cursor-pointer list-none font-headline-sm text-body-lg">
+              {{ 'products.shipping' | t }}
+              <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <div class="pb-6 text-on-surface-variant text-body-md">{{ section.settings.shipping_text }}</div>
+          </details>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_buy_now", "label": "Show Buy it Now button", "default": true },
+    { "type": "richtext", "id": "shipping_text", "label": "Shipping accordion text", "default": "<p>Free standard shipping on orders over $150. International shipping available. Returns accepted within 30 days of purchase in original, unworn condition.</p>" }
+  ]
+}
+{% endschema %}

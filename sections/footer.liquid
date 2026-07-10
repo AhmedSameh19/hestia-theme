@@ -1,0 +1,54 @@
+<footer class="bg-warm-brown text-primary-fixed w-full rounded-t-[3rem] mt-20">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-24 max-w-container-max mx-auto">
+    <div class="md:col-span-5 mb-12 md:mb-0">
+      {%- if section.settings.wordmark -%}
+        <img width="{{ section.settings.wordmark.width }}" height="{{ section.settings.wordmark.height }}" src="{{ section.settings.wordmark | image_url: width: 480 }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
+      {%- else -%}
+        <img width="9000" height="4500" src="{{ 'logo-wordmark-cream.png' | asset_url }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
+      {%- endif -%}
+      <p class="font-body-md text-primary-fixed/80 mb-8 max-w-sm">{{ section.settings.newsletter_text }}</p>
+      {% form 'customer', class: 'flex gap-4 max-w-md' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email" name="contact[email]" required
+               class="flex-1 bg-transparent border-b border-primary-fixed/30 py-3 text-primary-fixed placeholder:text-primary-fixed/40 focus:outline-none focus:border-primary-fixed transition-colors"
+               placeholder="{{ 'general.email_placeholder' | t }}">
+        <button type="submit" class="font-label-caps text-label-caps text-primary-fixed hover:text-white transition-colors tracking-widest uppercase">
+          {{ 'general.subscribe' | t }}
+        </button>
+      {% endform %}
+    </div>
+
+    {%- assign menus = 'menu_1,menu_2,menu_3' | split: ',' -%}
+    {%- for id in menus -%}
+      {%- assign menu = section.settings[id] -%}
+      {%- if menu != blank -%}
+        <div class="md:col-span-2 {% if forloop.first %}md:col-start-7{% endif %} flex flex-col gap-4">
+          <h4 class="font-label-caps text-label-caps text-primary-fixed font-bold mb-4 uppercase">{{ menu.title }}</h4>
+          {%- for link in menu.links -%}
+            <a class="font-label-caps text-label-caps text-primary-fixed/80 hover:text-white transition-colors uppercase" href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="px-margin-mobile md:px-margin-desktop py-8 border-t border-primary-fixed/10 max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="font-label-caps text-[10px] text-primary-fixed/60 tracking-widest uppercase">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ powered_by_link }}
+    </p>
+    <img width="24" height="24" src="{{ 'logo-monogram.png' | asset_url }}" alt="" class="w-6 h-6 object-contain opacity-30 invert">
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "image_picker", "id": "wordmark", "label": "Wordmark", "info": "Defaults to the cream HESTIA wordmark" },
+    { "type": "textarea", "id": "newsletter_text", "label": "Newsletter text", "default": "Join our inner circle for early access to collections and editorial musings on the art of living." },
+    { "type": "link_list", "id": "menu_1", "label": "Menu 1", "default": "footer" },
+    { "type": "link_list", "id": "menu_2", "label": "Menu 2" },
+    { "type": "link_list", "id": "menu_3", "label": "Menu 3" }
+  ]
+}
+{% endschema %}

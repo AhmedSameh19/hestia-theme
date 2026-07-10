@@ -1,0 +1,25 @@
+<div class="pt-24 pb-section-padding px-margin-mobile max-w-md mx-auto">
+  <h1 class="font-display-lg text-headline-md mb-12">{{ 'customers.login' | t }}</h1>
+  {% form 'customer_login', class: 'space-y-6' %}
+    {{ form.errors | default_errors }}
+    <input type="email" name="customer[email]" placeholder="{{ 'general.email_placeholder' | t }}" autocomplete="email" required
+           class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+    <input type="password" name="customer[password]" placeholder="{{ 'general.password' | t }}" autocomplete="current-password" required
+           class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+    <button type="submit" class="w-full bg-terracotta text-white py-4 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">{{ 'customers.login' | t }}</button>
+    <div class="flex justify-between font-label-caps text-label-caps uppercase text-on-surface-variant">
+      <a href="#recover" class="hover:text-primary">{{ 'customers.forgot_password' | t }}</a>
+      <a href="{{ routes.account_register_url }}" class="hover:text-primary">{{ 'customers.create_account' | t }}</a>
+    </div>
+  {% endform %}
+  <div id="recover" class="mt-16 pt-12 border-t border-outline-variant/30">
+    <h2 class="font-headline-sm text-headline-sm mb-8">{{ 'customers.reset_password' | t }}</h2>
+    {% form 'recover_customer_password', class: 'space-y-6' %}
+      {{ form.errors | default_errors }}
+      {% if form.posted_successfully? %}<p class="text-sage">{{ 'customers.recover_sent' | t }}</p>{% endif %}
+      <input type="email" name="email" placeholder="{{ 'general.email_placeholder' | t }}" autocomplete="email" required
+             class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+      <button type="submit" class="w-full border border-primary text-primary py-4 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:bg-primary hover:text-surface transition-all">{{ 'customers.reset_password' | t }}</button>
+    {% endform %}
+  </div>
+</div>

@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main": { "type": "main-cart" },
+    "recommendations": {
+      "type": "featured-products",
+      "settings": { "eyebrow": "", "heading": "Complete the Look", "limit": 4 }
+    }
+  },
+  "order": ["main", "recommendations"]
+}

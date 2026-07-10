@@ -1,0 +1,17 @@
+{
+  "name": "hestia-theme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node gen-vars.js && tailwindcss -c tailwind.config.js -i src/theme.css -o assets/theme.css --minify",
+    "watch": "tailwindcss -c tailwind.config.js -i src/theme.css -o assets/theme.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

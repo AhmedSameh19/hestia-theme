@@ -1,0 +1,19 @@
+<div class="pt-24 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+  <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-16">{{ blog.title }}</h1>
+  {% paginate blog.articles by 9 %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      {% for article in blog.articles %}
+        <a href="{{ article.url }}" class="group block">
+          {% if article.image %}
+            <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 bento-card-zoom">
+              <img width="{{ article.image.width }}" height="{{ article.image.height }}" src="{{ article.image | image_url: width: 720 }}" alt="{{ article.image.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
+            </div>
+          {% endif %}
+          <h2 class="font-headline-sm text-headline-sm mb-2 group-hover:text-terracotta transition-colors">{{ article.title }}</h2>
+          <p class="font-body-md text-on-surface-variant">{{ article.excerpt_or_content | strip_html | truncatewords: 20 }}</p>
+        </a>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<div class="mt-24 text-center font-label-caps">{{ paginate | default_pagination }}</div>{% endif %}
+  {% endpaginate %}
+</div>

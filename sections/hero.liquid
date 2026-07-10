@@ -1,0 +1,41 @@
+<section class="relative h-[90vh] min-h-[600px] flex items-center overflow-hidden fade-in-section">
+  <div class="absolute inset-0 z-0">
+    {%- if section.settings.image -%}
+      <img width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" src="{{ section.settings.image | image_url: width: 2400 }}"
+           srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 2400 }} 2400w"
+           sizes="100vw" alt="{{ section.settings.image.alt | escape }}"
+           class="w-full h-full object-cover" fetchpriority="high">
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-beige' }}
+    {%- endif -%}
+    <div class="absolute inset-0 bg-black/5"></div>
+  </div>
+  <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+    <div class="max-w-2xl">
+      <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-8 leading-[1.1]">
+        {{ section.settings.heading }}
+      </h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-md">{{ section.settings.text }}</p>
+      {%- if section.settings.button_label != blank -%}
+        <a class="inline-block bg-terracotta text-cream px-10 py-5 rounded-xl font-label-caps text-label-caps uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-terracotta/20"
+           href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Comfort begins at home." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Discover our curated collection of premium loungewear crafted from the finest natural fibers for your slowest moments." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the Collection" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

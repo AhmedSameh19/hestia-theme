@@ -1,0 +1,118 @@
+<div class="pt-12 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto" data-cart>
+  <header class="mb-12">
+    <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">{{ 'cart.title' | t }}</h1>
+    {%- assign threshold = section.settings.free_shipping_threshold | times: 100 -%}
+    {%- if threshold > 0 and cart.item_count > 0 -%}
+      {%- assign remaining = threshold | minus: cart.total_price -%}
+      <div class="flex flex-col gap-2 max-w-xl">
+        <div class="flex justify-between text-label-caps font-label-caps text-primary uppercase">
+          <span>{{ 'cart.shipping_progress' | t }}</span>
+          <span>
+            {%- if remaining > 0 -%}
+              {{ 'cart.until_free_shipping' | t: amount: remaining | money }}
+            {%- else -%}
+              {{ 'cart.free_shipping_unlocked' | t }}
+            {%- endif -%}
+          </span>
+        </div>
+        <div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+          {%- assign pct = cart.total_price | times: 100 | divided_by: threshold | at_most: 100 -%}
+          <div class="bg-sage h-full transition-all duration-1000 ease-out" style="width: {{ pct }}%"></div>
+        </div>
+      </div>
+    {%- endif -%}
+  </header>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="py-24 text-center">
+      <p class="font-headline-md text-headline-md mb-8">{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}"
+         class="inline-block bg-terracotta text-white px-10 py-5 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">
+        {{ 'cart.continue_shopping' | t }}
+      </a>
+    </div>
+  {%- else -%}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+      <div class="lg:col-span-8 space-y-8">
+        {%- for item in cart.items -%}
+          <div class="flex flex-col md:flex-row gap-6 pb-8 border-b border-outline-variant/30" data-line="{{ forloop.index }}">
+            <a href="{{ item.url }}" class="w-full md:w-40 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-primary-container">
+              {%- if item.image -%}
+                <img width="{{ item.image.width }}" height="{{ item.image.height }}" src="{{ item.image | image_url: width: 320 }}" alt="{{ item.image.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
+              {%- endif -%}
+            </a>
+            <div class="flex flex-col justify-between flex-grow">
+              <div class="flex justify-between items-start gap-4">
+                <div>
+                  <h3 class="font-headline-sm text-headline-sm mb-1"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="text-on-surface-variant font-body-md">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+                </div>
+                <span class="font-headline-sm text-headline-sm">{{ item.final_line_price | money }}</span>
+              </div>
+              <div class="flex justify-between items-center mt-6">
+                <div class="flex items-center border border-outline-variant rounded-full px-4 py-2 gap-4">
+                  <button type="button" data-line-qty="{{ forloop.index }}" data-delta="-1" class="hover:text-terracotta transition-colors" aria-label="{{ 'general.decrease' | t }}">
+                    <span class="material-symbols-outlined text-sm">remove</span>
+                  </button>
+                  <span class="font-label-caps text-label-caps min-w-[20px] text-center">{{ item.quantity }}</span>
+                  <button type="button" data-line-qty="{{ forloop.index }}" data-delta="1" class="hover:text-terracotta transition-colors" aria-label="{{ 'general.increase' | t }}">
+                    <span class="material-symbols-outlined text-sm">add</span>
+                  </button>
+                </div>
+                <button type="button" data-line-remove="{{ forloop.index }}"
+                        class="font-label-caps text-label-caps text-on-surface-variant underline underline-offset-4 hover:text-error transition-colors uppercase">
+                  {{ 'cart.remove' | t }}
+                </button>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <aside class="lg:col-span-4">
+        <div class="bg-beige/30 p-8 rounded-xl sticky top-32">
+          <h2 class="font-headline-sm text-headline-sm mb-8">{{ 'cart.summary' | t }}</h2>
+          <div class="space-y-4 mb-8">
+            <div class="flex justify-between font-body-md">
+              <span class="text-on-surface-variant">{{ 'cart.subtotal' | t }}</span>
+              <span>{{ cart.items_subtotal_price | money }}</span>
+            </div>
+            <div class="flex justify-between font-body-md border-t border-outline-variant/30 pt-4">
+              <span class="font-bold">{{ 'cart.total' | t }}</span>
+              <span class="font-headline-sm">{{ cart.total_price | money }}</span>
+            </div>
+            <p class="text-[13px] text-on-surface-variant">{{ 'cart.taxes_note' | t }}</p>
+          </div>
+          <form action="{{ routes.cart_url }}" method="post">
+            <button type="submit" name="checkout"
+                    class="w-full bg-terracotta text-white py-5 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all duration-300 shadow-lg shadow-terracotta/20 mb-6">
+              {{ 'cart.checkout' | t }}
+            </button>
+          </form>
+          <div class="space-y-4">
+            {%- assign badges = section.settings.badges | newline_to_br | split: '<br />' -%}
+            {%- for badge in badges -%}
+              {%- assign parts = badge | split: '|' -%}
+              <div class="flex items-center gap-3 text-on-surface-variant">
+                <span class="material-symbols-outlined text-[20px]">{{ parts[0] | strip }}</span>
+                <span class="text-[13px] font-label-caps uppercase">{{ parts[1] | strip }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </aside>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    { "type": "number", "id": "free_shipping_threshold", "label": "Free shipping threshold", "info": "In store currency units. 0 hides the progress bar.", "default": 150 },
+    { "type": "textarea", "id": "badges", "label": "Trust badges (icon|text per line)", "default": "lock|Secure SSL Checkout\neco|Eco-Friendly Packaging\npackage_2|Carbon Neutral Delivery" }
+  ]
+}
+{% endschema %}
