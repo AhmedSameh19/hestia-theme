@@ -8,7 +8,8 @@
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-beige' }}
     {%- endif -%}
-    <div class="absolute inset-0 bg-black/5"></div>
+    {%- comment -%} Dark mode dims the photo so cream text stays readable (per dark mockup) {%- endcomment -%}
+    <div class="absolute inset-0 bg-black/5 dark:bg-black/50 transition-colors duration-500"></div>
   </div>
   <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
     <div class="max-w-2xl">

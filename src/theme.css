@@ -34,6 +34,27 @@
     background-color: rgb(var(--c-surface-container));
     color: rgb(var(--c-on-surface));
   }
+  /* Keyboard focus — terracotta ring, invisible to mouse users */
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-terracotta));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .fade-in-section {
+      opacity: 1;
+      transform: none;
+    }
+    *,
+    ::before,
+    ::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer components {

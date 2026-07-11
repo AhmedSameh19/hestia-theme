@@ -47,6 +47,9 @@
   </head>
 
   <body class="bg-background text-on-surface font-body-md selection:bg-secondary-container">
+    <a href="#MainContent" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-terracotta focus:text-cream focus:px-4 focus:py-2 focus:rounded-lg font-label-caps text-label-caps uppercase">
+      {{ 'general.skip_to_content' | t }}
+    </a>
     {% section 'header' %}
 
     <main id="MainContent" class="pt-20">
