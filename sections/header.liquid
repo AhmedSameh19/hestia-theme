@@ -1,3 +1,8 @@
+{%- if section.settings.announcement != blank -%}
+  <div class="bg-sage text-charcoal text-center py-2 px-margin-mobile font-label-caps text-[11px] uppercase tracking-widest">
+    {{ section.settings.announcement }}
+  </div>
+{%- endif -%}
 <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm">
   <nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto h-20">
     <div class="flex-1 flex justify-start items-center gap-4">
@@ -49,7 +54,8 @@
   "name": "Header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Defaults to the HESTIA Xi monogram" },
-    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "announcement", "label": "Announcement bar text", "default": "Free delivery across Egypt on orders over LE 2,500 — dummy copy" }
   ]
 }
 {% endschema %}
