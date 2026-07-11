@@ -20,6 +20,16 @@
   font-display: swap;
 }
 
+@layer base {
+  /* Native controls (select popups, inputs, scrollbars) follow the active mode */
+  :root {
+    color-scheme: light;
+  }
+  :root.dark {
+    color-scheme: dark;
+  }
+}
+
 @layer components {
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
