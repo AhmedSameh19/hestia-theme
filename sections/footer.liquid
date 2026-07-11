@@ -4,7 +4,7 @@
       {%- if section.settings.wordmark -%}
         <img width="{{ section.settings.wordmark.width }}" height="{{ section.settings.wordmark.height }}" src="{{ section.settings.wordmark | image_url: width: 480 }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
       {%- else -%}
-        <img width="9000" height="4500" src="{{ 'logo-wordmark-cream.png' | asset_url }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
+        <img width="827" height="256" src="{{ 'logo-wordmark-cream.png' | asset_url }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
       {%- endif -%}
       <p class="font-body-md text-primary-fixed/80 mb-8 max-w-sm">{{ section.settings.newsletter_text }}</p>
       {% form 'customer', class: 'flex gap-4 max-w-md' %}
@@ -36,7 +36,7 @@
     <p class="font-label-caps text-[10px] text-primary-fixed/60 tracking-widest uppercase">
       &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ powered_by_link }}
     </p>
-    <img width="24" height="24" src="{{ 'logo-monogram.png' | asset_url }}" alt="" class="w-6 h-6 object-contain opacity-30 invert">
+    <img width="752" height="1000" src="{{ 'logo-monogram.png' | asset_url }}" alt="" class="w-6 h-6 object-contain opacity-30 invert">
   </div>
 </footer>
 
