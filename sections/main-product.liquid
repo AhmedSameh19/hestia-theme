@@ -61,8 +61,23 @@
                     <input type="radio" name="option-{{ forloop.parentloop.index0 }}" value="{{ value | escape }}"
                            class="sr-only peer" {% if value == option.selected_value %}checked{% endif %}>
                     {%- if is_color -%}
+                      {%- comment -%} ponytail: dummy brand palette map; native swatches set in admin (value.swatch.color) override this {%- endcomment -%}
+                      {%- assign swatch_color = value.swatch.color -%}
+                      {%- if swatch_color == blank -%}
+                        {%- assign value_handle = value | handle -%}
+                        {%- case value_handle -%}
+                          {%- when 'champagne' -%}{%- assign swatch_color = '#F0E2C6' -%}
+                          {%- when 'terracotta' -%}{%- assign swatch_color = '#C97B63' -%}
+                          {%- when 'charcoal' -%}{%- assign swatch_color = '#2D2D2D' -%}
+                          {%- when 'sage' -%}{%- assign swatch_color = '#A9B29B' -%}
+                          {%- when 'ivory' -%}{%- assign swatch_color = '#FFFFF0' -%}
+                          {%- when 'sand' -%}{%- assign swatch_color = '#DCC9B6' -%}
+                          {%- when 'taupe' -%}{%- assign swatch_color = '#B9A08E' -%}
+                          {%- else -%}{%- assign swatch_color = '#DCC9B6' -%}
+                        {%- endcase -%}
+                      {%- endif -%}
                       <span class="block w-8 h-8 rounded-full ring-1 ring-outline-variant peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-primary transition-soft"
-                            style="background-color: {{ value.swatch.color | default: value | handle }};" title="{{ value }}"></span>
+                            style="background-color: {{ swatch_color }};" title="{{ value }}"></span>
                     {%- else -%}
                       <span class="block px-6 py-2 rounded-full border border-outline-variant font-label-caps text-[12px] hover:border-primary peer-checked:border-2 peer-checked:border-primary peer-checked:bg-primary-container transition-soft">{{ value }}</span>
                     {%- endif -%}
