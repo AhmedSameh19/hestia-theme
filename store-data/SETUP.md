@@ -1,81 +1,69 @@
-# HESTIA Dev Store — Admin Setup Guide
+# HESTIA Shopify Store Setup Guide
 
-Follow these steps in order after cloning/pushing the theme, to bring the dev
-store to a fully functional state using the data in `products.csv`.
+This guide details the steps required to configure the Shopify Admin so the store features and mock catalog are fully functional.
 
-## 1. Import the product CSV
+## 1. Import Product CSV
+1. Log in to your Shopify Admin.
+2. Go to **Products**.
+3. Click **Import** at the top right.
+4. Choose the generated `store-data/products.csv` file.
+5. Click **Upload and preview**, then click **Import products**.
 
-1. Shopify Admin → **Products** → **Import**.
-2. Choose file: `store-data/products.csv`.
-3. Leave "Overwrite existing products that have the same handle" unchecked
-   (first import).
-4. Click **Import products**, then **View import summary** once it finishes
-   — confirm 10 products / 39 variants were created.
+## 2. Create Automated Collections
+Navigate to **Products** → **Collections** and create the following 5 collections. Ensure they use the exact handles and rules specified below:
 
-## 2. Create automated collections
+1. **New Arrivals**
+   - **Collection type**: Automated
+   - **Conditions**: Product tag **is equal to** `new-arrivals`
+   - **Handle**: `new-arrivals` (or `/collections/new-arrivals`)
 
-Admin → **Products** → **Collections** → **Create collection** for each of
-the following (all: type = **Automated**):
+2. **The Silk Collection**
+   - **Collection type**: Automated
+   - **Conditions**: Product tag **is equal to** `silk`
+   - **Handle**: `silk` (or `/collections/silk`)
 
-| Title | Handle | Condition |
-|---|---|---|
-| The Silk Collection | `silk` | Product tag **is equal to** `silk` |
-| New Arrivals | `new-arrivals` | Product tag **is equal to** `new-arrivals` |
-| Sleepwear | `sleepwear` | Product type **is equal to** `Sleepwear` |
-| Loungewear | `loungewear` | Product type **is equal to** `Loungewear` |
-| Robes | `robes` | Product type **is equal to** `Robes` |
+3. **Sleepwear**
+   - **Collection type**: Automated
+   - **Conditions**: Product type **is equal to** `Sleepwear`
+   - **Handle**: `sleepwear`
 
-Set the collection **handle** explicitly in each collection's URL/SEO section
-if Shopify doesn't auto-generate the exact handle above (it usually does from
-the title, but verify — the theme's navigation and links below depend on
-these exact handles).
+4. **Loungewear**
+   - **Collection type**: Automated
+   - **Conditions**: Product type **is equal to** `Loungewear`
+   - **Handle**: `loungewear`
 
-## 3. Navigation
+5. **Robes**
+   - **Collection type**: Automated
+   - **Conditions**: Product type **is equal to** `Robes`
+   - **Handle**: `robes`
 
-Admin → **Content** → **Menus**.
+## 3. Navigation Setup
+Go to **Online Store** → **Navigation** to configure the menus.
 
-**Main menu** — add/edit items in this order:
-1. Shop → `/collections/all`
-2. Collections → `/collections`
-3. About → `/pages/about`
-4. Journal → `/blogs/news`
+### Main Menu (`main-menu`)
+Configure the main menu links as follows:
+- **Shop** → Link: `/collections/all` (All Products)
+- **Collections** → Link: `/collections` (All Collections)
+- **About** → Link: `/pages/about` (Create a blank page titled "About" under **Pages** if not present)
+- **Journal** → Link: `/blogs/news` (Default blog)
 
-**Footer menu** — add the same links (Shop, Collections, About, Journal) plus
-any policy pages the store already has (Shipping, Returns, Privacy) if
-present under Settings → Policies.
+### Footer Menus
+Configure footer menus to link to relevant policy/about pages or collection links.
 
-> Note: `/pages/about` and `/blogs/news` must exist first — create an
-> **About** page (Admin → Content → Pages) and confirm the default **News**
-> blog exists (Admin → Content → Blog posts) before linking to them, or the
-> links will 404.
+## 4. Search & Discovery App Configuration
+1. Install the free **Shopify Search & Discovery** app from the Shopify App Store.
+2. Go to **Apps** → **Search & Discovery** → **Filters**.
+3. Add the following filter options:
+   - **Availability**
+   - **Price**
+   - **Color** (Standard product options)
+   - **Size** (Standard product options)
+   - **Fabric** (Select **Tag** prefix or use tag filters)
+*Note: If the Search & Discovery app is not yet installed/configured, the theme will automatically fall back to native tag filtering (e.g. `fabric:Silk`, `color:Champagne`).*
 
-## 4. Search & Discovery app (filtering)
-
-1. Admin → **Apps** → **Shopify App Store** → search "Search & Discovery"
-   (free, published by Shopify) → **Install**.
-2. Open the app → **Filters** → **Add filter** for each of:
-   - Availability
-   - Price
-   - Color (variant option)
-   - Size (variant option)
-   - Fabric (product tag, prefix `fabric:`)
-3. Save.
-
-**Until this app is installed and configured**, the theme's collection page
-falls back to plain tag-based filtering (see Task 2) — product discovery
-still works, just without the native filter UI/facets.
-
-## 5. Payments (test checkout)
-
-1. Admin → **Settings** → **Payments**.
-2. Under "Payment providers" (or "Manage" if a provider prompt is shown),
-   activate the built-in test provider — **Bogus Gateway** (dev/test stores
-   only; on stores where it's hidden, use **Shopify Payments test mode** if
-   offered, and enable "Use test mode" instead).
-3. Save.
-4. Test checkout end-to-end with the standard test card number `1` (Bogus
-   Gateway accepts card number `1` for a successful test authorization, `2`
-   for a decline) — any future expiry date, any CVV, any name.
-
-Once steps 1–5 are complete, the storefront should have full product,
-navigation, filtering, and checkout coverage for demoing/QA.
+## 5. Enable Test Payments
+To test the checkout process end-to-end:
+1. Go to **Settings** → **Payments**.
+2. If Shopify Payments is active, click **Manage**, scroll down to **Test mode**, check **Enable test mode**, and click **Save**.
+3. Alternatively, under **Payment providers**, choose a test provider like **(for testing) Bogus Gateway** and activate it.
+4. Use credit card number `1` (or `1`, `2`, `3` for CVV/expiry) to complete checkout test transactions.
