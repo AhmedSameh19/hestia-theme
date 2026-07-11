@@ -7,14 +7,21 @@
         <img width="827" height="256" src="{{ 'logo-wordmark-cream.png' | asset_url }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
       {%- endif -%}
       <p class="font-body-md text-primary-fixed/80 mb-8 max-w-sm">{{ section.settings.newsletter_text }}</p>
-      {% form 'customer', class: 'flex gap-4 max-w-md' %}
-        <input type="hidden" name="contact[tags]" value="newsletter">
-        <input type="email" name="contact[email]" required
-               class="flex-1 bg-transparent border-b border-primary-fixed/30 py-3 text-primary-fixed placeholder:text-primary-fixed/40 focus:outline-none focus:border-primary-fixed transition-colors"
-               placeholder="{{ 'general.email_placeholder' | t }}">
-        <button type="submit" class="font-label-caps text-label-caps text-primary-fixed hover:text-white transition-colors tracking-widest uppercase">
-          {{ 'general.subscribe' | t }}
-        </button>
+      {% form 'customer', class: 'max-w-md' %}
+        {%- if form.posted_successfully? -%}
+          <p class="font-body-md text-sage">{{ 'general.subscribe_success' | t }}</p>
+        {%- else -%}
+          {{ form.errors | default_errors }}
+          <div class="flex gap-4">
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <input type="email" name="contact[email]" required value="{{ form.email }}"
+                   class="flex-1 bg-transparent border-b border-primary-fixed/30 py-3 text-primary-fixed placeholder:text-primary-fixed/40 focus:outline-none focus:border-primary-fixed transition-colors"
+                   placeholder="{{ 'general.email_placeholder' | t }}">
+            <button type="submit" class="font-label-caps text-label-caps text-primary-fixed hover:text-white transition-colors tracking-widest uppercase">
+              {{ 'general.subscribe' | t }}
+            </button>
+          </div>
+        {%- endif -%}
       {% endform %}
     </div>
 
