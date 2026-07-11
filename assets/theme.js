@@ -137,6 +137,7 @@
           return;
         }
         if (idInput) idInput.value = variant.id;
+        history.replaceState(null, '', window.location.pathname + '?variant=' + variant.id);
         if (price) price.textContent = money(variant.price);
         if (addBtn) addBtn.disabled = !variant.available;
         if (addLabel) addLabel.textContent = variant.available ? window.hestiaStrings.addToCart : window.hestiaStrings.soldOut;
