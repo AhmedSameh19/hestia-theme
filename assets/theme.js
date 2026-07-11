@@ -205,6 +205,16 @@
       var removeBtn = e.target.closest('[data-line-remove]');
       if (removeBtn) changeLine(Number(removeBtn.dataset.lineRemove), 0);
     });
+    var note = cartEl.querySelector('[data-cart-note]');
+    if (note) {
+      note.addEventListener('change', function () {
+        fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ note: note.value }),
+        });
+      });
+    }
   }
 
   /* ---------- Address forms (country -> province) ---------- */
