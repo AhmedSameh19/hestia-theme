@@ -50,8 +50,11 @@
         {%- unless product.has_only_default_variant -%}
           {%- for option in product.options_with_values -%}
             <fieldset data-option-index="{{ forloop.index0 }}">
-              <legend class="font-label-caps text-label-caps text-on-surface-variant uppercase block mb-4">
-                {{ option.name }}: <span data-option-label>{{ option.selected_value }}</span>
+              <legend class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-4 flex w-full items-baseline justify-between gap-4">
+                <span>{{ option.name }}: <span data-option-label>{{ option.selected_value }}</span></span>
+                {%- if option.name == 'Size' and pages['size-guide'] != blank -%}
+                  <a href="{{ pages['size-guide'].url }}" class="underline underline-offset-4 hover:text-primary normal-case">{{ 'products.size_guide' | t }}</a>
+                {%- endif -%}
               </legend>
               <div class="flex flex-wrap gap-2">
                 {%- assign is_color = false -%}

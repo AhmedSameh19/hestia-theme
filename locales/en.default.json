@@ -38,7 +38,8 @@
     "description": "Description",
     "fabric_care": "Fabric & Care",
     "shipping": "Shipping",
-    "placeholder_title": "Sample product"
+    "placeholder_title": "Sample product",
+    "size_guide": "Size guide"
   },
   "collections": {
     "filters": "Filters",
@@ -58,7 +59,8 @@
     "checkout": "Checkout",
     "shipping_progress": "Free Shipping Progress",
     "until_free_shipping": "{{ amount }} until free shipping",
-    "free_shipping_unlocked": "Free shipping unlocked"
+    "free_shipping_unlocked": "Free shipping unlocked",
+    "note_label": "Order note (optional)"
   },
   "customers": {
     "login": "Log in",

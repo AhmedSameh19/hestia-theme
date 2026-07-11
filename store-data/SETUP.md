@@ -44,8 +44,9 @@ Go to **Online Store** → **Navigation** to configure the menus.
 Configure the main menu links as follows:
 - **Shop** → Link: `/collections/all` (All Products)
 - **Collections** → Link: `/collections` (All Collections)
-- **About** → Link: `/pages/about` (Create a blank page titled "About" under **Pages** if not present)
-- **Journal** → Link: `/blogs/news` (Default blog)
+- **About** → Link: `/pages/about`
+
+> Note: /pages/about must exist first — create an **About** page (Admin → Content → Pages) before linking to it, or the link will 404.
 
 ### Footer Menus
 Configure footer menus to link to relevant policy/about pages or collection links.
