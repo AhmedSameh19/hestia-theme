@@ -66,11 +66,25 @@
               ceiling here, not a bug in this fallback.
             {%- endcomment -%}
             {%- assign tag_groups_found = false -%}
-            {%- assign tag_prefixes = 'fabric,color' | split: ',' -%}
+            {%- assign tag_prefixes = 'fabric,color,size' | split: ',' -%}
             {%- for prefix in tag_prefixes -%}
               {%- assign prefix_match = prefix | append: ':' -%}
+              {%- if prefix == 'size' -%}
+                {%- comment -%} all_tags sorts alphabetically (L, M, S, XL, XS) — force garment order {%- endcomment -%}
+                {%- assign group_tags = '' -%}
+                {%- assign size_order = 'XS,S,M,L,XL' | split: ',' -%}
+                {%- for size in size_order -%}
+                  {%- assign candidate = prefix_match | append: size -%}
+                  {%- if collection.all_tags contains candidate -%}
+                    {%- assign group_tags = group_tags | append: candidate | append: ',' -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- assign group_tags = group_tags | split: ',' -%}
+              {%- else -%}
+                {%- assign group_tags = collection.all_tags -%}
+              {%- endif -%}
               {%- capture group_links -%}
-                {%- for tag in collection.all_tags -%}
+                {%- for tag in group_tags -%}
                   {%- if tag contains prefix_match -%}
                     {%- assign tag_label = tag | split: ':' | last -%}
                     <a href="{% if current_tags contains tag %}{{ collection.url }}{% else %}{{ collection.url }}/{{ tag | handle }}{% endif %}"
@@ -83,7 +97,8 @@
               {%- if group_links != blank -%}
                 {%- assign tag_groups_found = true -%}
                 <section>
-                  <h3 class="font-label-caps text-label-caps text-primary mb-4 uppercase">{{ prefix }}</h3>
+                  {%- assign group_title = prefix | capitalize -%}
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 uppercase">{{ group_title }}</h3>
                   <div class="space-y-3">{{ group_links }}</div>
                 </section>
               {%- endif -%}
