@@ -11,8 +11,11 @@
   <input type="text" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customers.zip' | t }}" class="{{ input_class }}">
 </div>
 <div class="grid grid-cols-2 gap-4">
-  <select name="address[country]" data-default="{{ form.country }}" class="{{ input_class }}">
+  <select name="address[country]" data-address-country data-default="{{ form.country }}" class="{{ input_class }}">
     {{ all_country_option_tags }}
   </select>
+  <select name="address[province]" data-address-province data-default="{{ form.province }}" class="{{ input_class }} hidden" aria-label="{{ 'customers.province' | t }}"></select>
+</div>
+<div class="grid grid-cols-2 gap-4">
   <input type="tel" name="address[phone]" value="{{ form.phone }}" placeholder="{{ 'customers.phone' | t }}" class="{{ input_class }}">
 </div>

@@ -87,7 +87,8 @@
     "address2": "Apartment, suite, etc.",
     "city": "City",
     "zip": "Postal code",
-    "phone": "Phone"
+    "phone": "Phone",
+    "province": "Governorate / Province"
   },
   "contact": {
     "name": "Your name",

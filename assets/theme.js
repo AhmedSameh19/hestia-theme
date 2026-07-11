@@ -207,6 +207,24 @@
     });
   }
 
+  /* ---------- Address forms (country -> province) ---------- */
+  document.querySelectorAll('[data-address-country]').forEach(function (country) {
+    var province = country.closest('form').querySelector('[data-address-province]');
+    if (!province) return;
+    var update = function () {
+      var opt = country.options[country.selectedIndex];
+      var provinces = JSON.parse(opt.getAttribute('data-provinces') || '[]');
+      province.innerHTML = provinces.map(function (p) {
+        return '<option value="' + p[0] + '">' + p[1] + '</option>';
+      }).join('');
+      province.classList.toggle('hidden', provinces.length === 0);
+      if (province.dataset.default) province.value = province.dataset.default;
+    };
+    if (country.dataset.default) country.value = country.dataset.default;
+    country.addEventListener('change', update);
+    update();
+  });
+
   /* ---------- Collection filters (mobile toggle) ---------- */
   var filtersToggle = document.querySelector('[data-filters-toggle]');
   var filters = document.querySelector('[data-filters]');
