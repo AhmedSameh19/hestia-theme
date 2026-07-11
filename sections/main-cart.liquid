@@ -85,6 +85,11 @@
             </div>
             <p class="text-[13px] text-on-surface-variant">{{ 'cart.taxes_note' | t }}</p>
           </div>
+          <label class="block mb-6">
+            <span class="font-label-caps text-label-caps uppercase text-on-surface-variant block mb-2">{{ 'cart.note_label' | t }}</span>
+            <textarea data-cart-note rows="3"
+                      class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-1 focus:ring-terracotta outline-none">{{ cart.note }}</textarea>
+          </label>
           <form action="{{ routes.cart_url }}" method="post">
             <button type="submit" name="checkout"
                     class="w-full bg-terracotta text-white py-5 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all duration-300 shadow-lg shadow-terracotta/20 mb-6">
@@ -111,7 +116,7 @@
 {
   "name": "Cart",
   "settings": [
-    { "type": "number", "id": "free_shipping_threshold", "label": "Free shipping threshold", "info": "In store currency units. 0 hides the progress bar.", "default": 150 },
+    { "type": "number", "id": "free_shipping_threshold", "label": "Free shipping threshold", "info": "In store currency units. 0 hides the progress bar.", "default": 2500 },
     { "type": "textarea", "id": "badges", "label": "Trust badges (icon|text per line)", "default": "lock|Secure SSL Checkout\neco|Eco-Friendly Packaging\npackage_2|Carbon Neutral Delivery" }
   ]
 }
