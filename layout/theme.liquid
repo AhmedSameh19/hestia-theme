@@ -40,6 +40,7 @@
         soldOut: {{ 'products.sold_out' | t | json }},
         unavailable: {{ 'products.unavailable' | t | json }}
       };
+      window.hestiaMoneyFormat = {{ shop.money_format | json }};
     </script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
 

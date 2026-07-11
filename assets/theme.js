@@ -3,8 +3,14 @@
   'use strict';
 
   var money = function (cents) {
-    // ponytail: assumes $X.XX format; swap for Shopify.formatMoney if multi-currency formatting matters
-    return '$' + (cents / 100).toFixed(2);
+    // ponytail: handles {{amount}} / {{amount_no_decimals}} with comma thousands;
+    // add the European (dot-thousands) variants only if the store ever switches to one
+    var format = window.hestiaMoneyFormat || '${{amount}}';
+    var noDecimals = format.indexOf('amount_no_decimals') !== -1;
+    var amount = noDecimals ? String(Math.round(cents / 100)) : (cents / 100).toFixed(2);
+    var parts = amount.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return format.replace(/\{\{\s*amount[^}]*\}\}/, parts.join('.'));
   };
 
   /* ---------- Mobile menu ---------- */
