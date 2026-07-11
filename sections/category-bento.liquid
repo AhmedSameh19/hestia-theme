@@ -8,7 +8,7 @@
   {%- assign cards = section.blocks -%}
   <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[600px]">
     {%- for block in cards limit: 2 -%}
-      <a href="{{ block.settings.collection.url | default: '#' }}"
+      <a href="{{ block.settings.collection.url | default: routes.all_products_collection_url }}"
          class="{% if forloop.first %}md:col-span-4{% else %}md:col-span-8{% endif %} group relative overflow-hidden rounded-3xl bento-card-zoom cursor-pointer bg-secondary-container min-h-[300px]"
          {{ block.shopify_attributes }}>
         {%- assign img = block.settings.image | default: block.settings.collection.featured_image -%}
@@ -29,7 +29,7 @@
   {%- if cards.size > 2 -%}
     {%- assign block = cards[2] -%}
     <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mt-gutter">
-      <a href="{{ block.settings.collection.url | default: '#' }}"
+      <a href="{{ block.settings.collection.url | default: routes.all_products_collection_url }}"
          class="md:col-span-12 group relative overflow-hidden rounded-3xl h-64 bento-card-zoom cursor-pointer bg-tertiary-container block"
          {{ block.shopify_attributes }}>
         {%- assign img = block.settings.image | default: block.settings.collection.featured_image -%}

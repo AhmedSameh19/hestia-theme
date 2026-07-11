@@ -18,8 +18,10 @@
     </div>
   </div>
 
-  <div data-carousel class="flex gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto overflow-x-auto pb-10 no-scrollbar snap-x">
+  <div data-carousel class="flex gap-gutter px-margin-mobile md:px-margin-desktop scroll-pl-margin-mobile md:scroll-pl-margin-desktop max-w-container-max mx-auto overflow-x-auto pb-10 no-scrollbar snap-x">
     {%- assign products = section.settings.collection.products -%}
+    {%- comment -%} ponytail: falls back to the auto "all" collection until the merchant creates the configured one. `== blank` matches both nil and empty {%- endcomment -%}
+    {%- if products == blank -%}{%- assign products = collections['all'].products -%}{%- endif -%}
     {%- if products.size > 0 -%}
       {%- for product in products limit: section.settings.limit -%}
         <div class="min-w-[280px] md:min-w-[360px] snap-start group">

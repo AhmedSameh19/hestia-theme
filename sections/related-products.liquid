@@ -5,16 +5,17 @@
       <p class="font-label-caps text-label-caps text-on-surface-variant uppercase">{{ section.settings.subheading }}</p>
     </div>
   </div>
+  {%- comment -%} ponytail: recommendations is only populated via the Section Rendering API;
+      static render falls back to the product's first collection, then the auto "all" collection {%- endcomment -%}
+  {%- assign recs = recommendations.products -%}
+  {%- if recs == blank -%}{%- assign recs = product.collections.first.products -%}{%- endif -%}
+  {%- if recs == blank -%}{%- assign recs = collections['all'].products -%}{%- endif -%}
   <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-    {%- for rec in recommendations.products limit: 3 -%}
+    {%- assign shown = 0 -%}
+    {%- for rec in recs -%}
+      {%- if rec.id == product.id or shown >= 3 -%}{%- continue -%}{%- endif -%}
       {% render 'product-card', product: rec, show_quick_add: true %}
-    {%- else -%}
-      {%- comment -%} Recommendations need the storefront to warm up; fall back to the product's collection {%- endcomment -%}
-      {%- for rec in collection.products limit: 3 -%}
-        {%- unless rec.id == product.id -%}
-          {% render 'product-card', product: rec, show_quick_add: true %}
-        {%- endunless -%}
-      {%- endfor -%}
+      {%- assign shown = shown | plus: 1 -%}
     {%- endfor -%}
   </div>
 </section>

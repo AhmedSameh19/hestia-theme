@@ -4,9 +4,9 @@
     "bento": {
       "type": "category-bento",
       "blocks": {
-        "cat1": { "type": "category", "settings": { "title": "Sleepwear" } },
-        "cat2": { "type": "category", "settings": { "title": "Loungewear" } },
-        "cat3": { "type": "category", "settings": { "title": "The Robe Edit", "subtitle": "Explore textures" } }
+        "cat1": { "type": "category", "settings": { "collection": "sleepwear", "title": "Sleepwear" } },
+        "cat2": { "type": "category", "settings": { "collection": "loungewear", "title": "Loungewear" } },
+        "cat3": { "type": "category", "settings": { "collection": "robes", "title": "The Robe Edit", "subtitle": "Explore textures" } }
       },
       "block_order": ["cat1", "cat2", "cat3"]
     },
