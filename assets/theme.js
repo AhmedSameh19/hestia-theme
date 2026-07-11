@@ -17,6 +17,16 @@
     });
   }
 
+  /* ---------- Dark mode toggle ---------- */
+  var themeToggle = document.querySelector('[data-theme-toggle]');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      var dark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('hestia:appearance', dark ? 'dark' : 'light');
+      document.querySelector('meta[name="theme-color"]').content = dark ? '#2D2D2D' : '#F8F3EE';
+    });
+  }
+
   /* ---------- Scroll fade-in ---------- */
   var observer = new IntersectionObserver(
     function (entries) {

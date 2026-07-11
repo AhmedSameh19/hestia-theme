@@ -22,6 +22,7 @@
         var mode = localStorage.getItem('hestia:appearance') || '{{ settings.appearance | default: "light" }}';
         if (mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');
+          document.querySelector('meta[name="theme-color"]').content = '#2D2D2D';
         }
       })();
     </script>

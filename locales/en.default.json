@@ -3,6 +3,7 @@
     "page": "Page",
     "menu": "Menu",
     "search": "Search",
+    "toggle_theme": "Toggle dark mode",
     "search_placeholder": "Search products, stories...",
     "no_results": "No results found.",
     "account": "Account",

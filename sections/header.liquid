@@ -20,6 +20,9 @@
     </div>
 
     <div class="flex-1 flex justify-end items-center gap-6">
+      <button data-theme-toggle class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.toggle_theme' | t }}">
+        <span class="dark:hidden">dark_mode</span><span class="hidden dark:inline">light_mode</span>
+      </button>
       <a href="{{ routes.search_url }}" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.search' | t }}">search</a>
       <a href="{{ routes.account_url }}" class="hidden md:block material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.account' | t }}">person</a>
       <a href="{{ routes.cart_url }}" class="relative material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.cart' | t }}">
