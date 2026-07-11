@@ -28,6 +28,12 @@
   :root.dark {
     color-scheme: dark;
   }
+  /* Chrome paints the option popup from the select's bg; with bg-transparent
+     that falls back to white, so set option colors from the tokens directly */
+  select option {
+    background-color: rgb(var(--c-surface-container));
+    color: rgb(var(--c-on-surface));
+  }
 }
 
 @layer components {
