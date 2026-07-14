@@ -57,6 +57,16 @@
 
     {{ 'theme.css' | asset_url | stylesheet_tag }}
     <script>
+      {% comment %} Reveal Material Symbols icons only once the font is ready, to avoid ligature-text flash {% endcomment %}
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+          document.documentElement.classList.add('fonts-ready');
+        });
+      } else {
+        document.documentElement.classList.add('fonts-ready');
+      }
+    </script>
+    <script>
       window.hestiaStrings = {
         addToCart: {{ 'products.add_to_cart' | t | json }},
         added: {{ 'products.added' | t | json }},

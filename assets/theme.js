@@ -23,6 +23,29 @@
     });
   }
 
+  /* ---------- Account dropdown ---------- */
+  var accountBtn = document.querySelector('[data-account-open]');
+  var account = document.querySelector('[data-account]');
+  if (accountBtn && account) {
+    accountBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      account.hidden = !account.hidden;
+      accountBtn.setAttribute('aria-expanded', account.hidden ? 'false' : 'true');
+    });
+    document.addEventListener('click', function (e) {
+      if (!account.hidden && !account.contains(e.target)) {
+        account.hidden = true;
+        accountBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !account.hidden) {
+        account.hidden = true;
+        accountBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
   /* ---------- Dark mode toggle ---------- */
   var themeToggle = document.querySelector('[data-theme-toggle]');
   if (themeToggle) {

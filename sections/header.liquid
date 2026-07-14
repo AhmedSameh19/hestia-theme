@@ -11,7 +11,8 @@
         {%- if section.settings.logo -%}
           <img width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}" src="{{ section.settings.logo | image_url: height: 64 }}" alt="{{ shop.name }}" class="h-full w-auto object-contain">
         {%- else -%}
-          <img width="752" height="1000" src="{{ 'logo-monogram.png' | asset_url }}" alt="{{ shop.name }}" class="h-full w-auto object-contain dark:invert">
+          {%- comment -%} Cream wordmark: invert to charcoal on the light header, keep cream on dark {%- endcomment -%}
+          <img width="826" height="248" src="{{ 'logo-wordmark-cream.png' | asset_url }}" alt="{{ shop.name }}" class="h-full w-auto object-contain invert dark:invert-0">
         {%- endif -%}
       </a>
     </div>
@@ -29,7 +30,36 @@
         <span class="dark:hidden">dark_mode</span><span class="hidden dark:inline">light_mode</span>
       </button>
       <a href="{{ routes.search_url }}" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.search' | t }}">search</a>
-      <a href="{{ routes.account_url }}" class="hidden md:block material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.account' | t }}">person</a>
+      <div class="relative hidden md:block">
+        <button data-account-open class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.account' | t }}" aria-expanded="false">person</button>
+
+        {%- comment -%} Account dropdown — keeps sign-in / account access in-context instead of a full-page nav {%- endcomment -%}
+        <div data-account hidden class="absolute right-0 top-full mt-3 w-72 bg-surface border border-outline-variant/30 rounded-xl shadow-lg p-6 z-50">
+          {%- if customer -%}
+            <p class="font-body-md mb-1">{{ 'customers.account' | t }}</p>
+            <p class="font-body-md text-on-surface-variant mb-6 truncate">{{ customer.email }}</p>
+            <div class="flex flex-col gap-4 font-label-caps text-label-caps uppercase">
+              <a href="{{ routes.account_url }}" class="text-on-surface-variant hover:text-primary">{{ 'customers.order_history' | t }}</a>
+              <a href="{{ routes.account_addresses_url }}" class="text-on-surface-variant hover:text-primary">{{ 'customers.manage_addresses' | t }}</a>
+              <a href="{{ routes.account_logout_url }}" class="text-on-surface-variant hover:text-primary pt-4 border-t border-outline-variant/30">{{ 'customers.logout' | t }}</a>
+            </div>
+          {%- else -%}
+            <h2 class="font-headline-sm text-headline-sm mb-6">{{ 'customers.login' | t }}</h2>
+            {% form 'customer_login', class: 'space-y-4' %}
+              {{ form.errors | default_errors }}
+              <input type="email" name="customer[email]" placeholder="{{ 'general.email_placeholder' | t }}" autocomplete="email" required
+                     class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+              <input type="password" name="customer[password]" placeholder="{{ 'general.password' | t }}" autocomplete="current-password" required
+                     class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
+              <button type="submit" class="w-full bg-terracotta text-white py-3 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">{{ 'customers.login' | t }}</button>
+            {% endform %}
+            <div class="flex justify-between mt-4 font-label-caps text-label-caps uppercase text-on-surface-variant">
+              <a href="{{ routes.account_login_url }}#recover" class="hover:text-primary">{{ 'customers.forgot_password' | t }}</a>
+              <a href="{{ routes.account_register_url }}" class="hover:text-primary">{{ 'customers.create_account' | t }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
       <a href="{{ routes.cart_url }}" class="relative material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.cart' | t }}">
         shopping_bag
         <span data-cart-count

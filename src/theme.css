@@ -61,6 +61,13 @@
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   }
+  /* ponytail: hide icon ligature text until the symbols font loads, else "search"/"person"/"menu" flash as words */
+  .material-symbols-outlined {
+    visibility: hidden;
+  }
+  .fonts-ready .material-symbols-outlined {
+    visibility: visible;
+  }
   .material-symbols-outlined.icon-fill {
     font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   }

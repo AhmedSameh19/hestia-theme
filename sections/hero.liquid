@@ -1,22 +1,48 @@
+{%- liquid
+  assign text_color_class = 'text-on-surface'
+  assign text_variant_class = 'text-on-surface-variant'
+  if section.settings.text_color == 'light'
+    assign text_color_class = 'text-cream'
+    assign text_variant_class = 'text-cream/80'
+  endif
+
+  assign bg_style = ''
+  if section.settings.bg_type == 'color'
+    if section.settings.custom_bg_color != blank and section.settings.custom_bg_color != 'rgba(0,0,0,0)' and section.settings.custom_bg_color != 'transparent'
+      assign bg_style = 'style="background-color: ' | append: section.settings.custom_bg_color | append: ';"'
+    endif
+  endif
+-%}
+
 <section class="relative h-[90vh] min-h-[600px] flex items-center overflow-hidden fade-in-section">
-  <div class="absolute inset-0 z-0">
-    {%- if section.settings.image -%}
-      <img width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" src="{{ section.settings.image | image_url: width: 2400 }}"
-           srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 2400 }} 2400w"
-           sizes="100vw" alt="{{ section.settings.image.alt | escape }}"
-           class="w-full h-full object-cover" fetchpriority="high">
+  <div class="absolute inset-0 z-0" {{ bg_style }}>
+    {%- if section.settings.bg_type == 'image' -%}
+      {%- if section.settings.image -%}
+        <img width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" src="{{ section.settings.image | image_url: width: 2400 }}"
+             srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 2400 }} 2400w"
+             sizes="100vw" alt="{{ section.settings.image.alt | escape }}"
+             class="w-full h-full object-cover" fetchpriority="high">
+      {%- else -%}
+        {%- if bg_style == blank -%}
+          <div class="w-full h-full bg-{{ section.settings.bg_color }}"></div>
+        {%- endif -%}
+      {%- endif -%}
     {%- else -%}
-      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-beige' }}
+      {%- if bg_style == blank -%}
+        <div class="w-full h-full bg-{{ section.settings.bg_color }}"></div>
+      {%- endif -%}
     {%- endif -%}
     {%- comment -%} Dark mode dims the photo so cream text stays readable (per dark mockup) {%- endcomment -%}
-    <div class="absolute inset-0 bg-black/5 dark:bg-black/50 transition-colors duration-500"></div>
+    {%- if section.settings.bg_type == 'image' -%}
+      <div class="absolute inset-0 bg-black/5 dark:bg-black/50 transition-colors duration-500"></div>
+    {%- endif -%}
   </div>
   <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
     <div class="max-w-2xl">
-      <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-8 leading-[1.1]">
+      <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-8 leading-[1.1] {{ text_color_class }}">
         {{ section.settings.heading }}
       </h1>
-      <p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-md">{{ section.settings.text }}</p>
+      <p class="font-body-lg text-body-lg mb-10 max-w-md {{ text_variant_class }}">{{ section.settings.text }}</p>
       {%- if section.settings.button_label != blank -%}
         <a class="inline-block bg-terracotta text-cream px-10 py-5 rounded-xl font-label-caps text-label-caps uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-terracotta/20"
            href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
@@ -31,6 +57,45 @@
 {
   "name": "Hero",
   "settings": [
+    {
+      "type": "select",
+      "id": "bg_type",
+      "label": "Background Type",
+      "options": [
+        { "value": "image", "label": "Background Image" },
+        { "value": "color", "label": "Solid Color" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Preset Background Color",
+      "options": [
+        { "value": "cream", "label": "Cream" },
+        { "value": "beige", "label": "Beige" },
+        { "value": "sage", "label": "Sage" },
+        { "value": "terracotta", "label": "Terracotta" },
+        { "value": "warm-brown", "label": "Warm Brown" },
+        { "value": "charcoal", "label": "Charcoal" }
+      ],
+      "default": "beige"
+    },
+    {
+      "type": "color",
+      "id": "custom_bg_color",
+      "label": "Custom Background Color (Overrides preset)"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text Color Scheme",
+      "options": [
+        { "value": "dark", "label": "Dark (Charcoal)" },
+        { "value": "light", "label": "Light (Cream)" }
+      ],
+      "default": "dark"
+    },
     { "type": "image_picker", "id": "image", "label": "Background image" },
     { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Comfort begins at home." },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Discover our curated collection of premium loungewear crafted from the finest natural fibers for your slowest moments." },
