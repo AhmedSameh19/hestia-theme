@@ -11,7 +11,7 @@
     </ol>
   </nav>
 
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter" data-product data-product-json="{{ product.variants | json | escape }}">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter" data-product data-product-handle="{{ product.handle }}" data-product-json="{{ product.variants | json | escape }}">
     {%- comment -%} Gallery {%- endcomment -%}
     <div class="lg:col-span-7 flex flex-col-reverse md:flex-row-reverse gap-4">
       <div class="flex-grow aspect-[4/5] rounded-xl overflow-hidden bg-surface-container-low shadow-sm">
@@ -19,7 +19,7 @@
           <img width="{{ product.featured_media.width }}" height="{{ product.featured_media.height }}" data-main-image src="{{ product.featured_media | image_url: width: 1400 }}"
                alt="{{ product.featured_media.alt | escape }}" class="w-full h-full object-cover transition-soft hover:scale-105">
         {%- else -%}
-          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+          {% render 'swatch', item: product %}
         {%- endif -%}
       </div>
       {%- if product.media.size > 1 -%}

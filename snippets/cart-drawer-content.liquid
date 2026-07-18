@@ -1,0 +1,73 @@
+{%- comment -%}
+  Inner markup of the cart side drawer. Rendered inline in the header shell and
+  re-fetched via /?section_id=cart-drawer after every cart mutation (theme.js).
+{%- endcomment -%}
+<div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/30 shrink-0">
+  <h2 class="font-headline-sm text-headline-sm">{{ 'cart.title' | t }} ({{ cart.item_count }})</h2>
+  <button type="button" data-cart-close class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.close' | t }}">close</button>
+</div>
+
+{%- if cart.item_count == 0 -%}
+  <div class="flex-1 flex flex-col items-center justify-center gap-6 px-6 text-center">
+    <p class="font-headline-sm text-headline-sm">{{ 'cart.empty' | t }}</p>
+    <a href="{{ routes.all_products_collection_url }}" data-cart-close
+       class="inline-block bg-terracotta text-white px-8 py-4 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">
+      {{ 'cart.continue_shopping' | t }}
+    </a>
+  </div>
+{%- else -%}
+  <div class="flex-1 overflow-y-auto px-6 divide-y divide-outline-variant/30">
+    {%- for item in cart.items -%}
+      <div class="flex gap-4 py-6">
+        <a href="{{ item.url }}" class="w-20 h-24 rounded-lg overflow-hidden shrink-0 bg-primary-container">
+          {%- if item.image -%}
+            <img width="{{ item.image.width }}" height="{{ item.image.height }}" src="{{ item.image | image_url: width: 160 }}" alt="{{ item.image.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
+          {%- endif -%}
+        </a>
+        <div class="flex flex-col justify-between flex-1 min-w-0 gap-3">
+          <div class="flex justify-between items-start gap-3">
+            <div class="min-w-0">
+              <h3 class="font-body-md font-bold truncate"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
+              {%- unless item.product.has_only_default_variant -%}
+                <p class="text-on-surface-variant font-body-md text-[13px]">{{ item.variant.title }}</p>
+              {%- endunless -%}
+            </div>
+            <span class="font-body-md shrink-0">{{ item.final_line_price | money }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="flex items-center border border-outline-variant rounded-full px-3 py-1 gap-3">
+              <button type="button" data-drawer-qty="{{ forloop.index }}" data-delta="-1" class="hover:text-terracotta transition-colors" aria-label="{{ 'general.decrease' | t }}">
+                <span class="material-symbols-outlined text-sm">remove</span>
+              </button>
+              <span class="font-label-caps text-label-caps min-w-[16px] text-center" data-drawer-line-qty>{{ item.quantity }}</span>
+              <button type="button" data-drawer-qty="{{ forloop.index }}" data-delta="1" class="hover:text-terracotta transition-colors" aria-label="{{ 'general.increase' | t }}">
+                <span class="material-symbols-outlined text-sm">add</span>
+              </button>
+            </div>
+            <button type="button" data-drawer-remove="{{ forloop.index }}"
+                    class="font-label-caps text-label-caps text-on-surface-variant underline underline-offset-4 hover:text-error transition-colors uppercase">
+              {{ 'cart.remove' | t }}
+            </button>
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="px-6 py-5 border-t border-outline-variant/30 shrink-0 space-y-4">
+    <div class="flex justify-between font-body-md">
+      <span class="text-on-surface-variant">{{ 'cart.subtotal' | t }}</span>
+      <span class="font-headline-sm">{{ cart.items_subtotal_price | money }}</span>
+    </div>
+    <p class="text-[13px] text-on-surface-variant">{{ 'cart.taxes_note' | t }}</p>
+    <form action="{{ routes.cart_url }}" method="post">
+      <button type="submit" name="checkout"
+              class="w-full bg-terracotta text-white py-4 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-terracotta/20">
+        {{ 'cart.checkout' | t }}
+      </button>
+    </form>
+    <a href="{{ routes.cart_url }}" class="block text-center font-label-caps text-label-caps uppercase text-on-surface-variant underline underline-offset-4 hover:text-primary transition-colors">
+      {{ 'cart.view_cart' | t }}
+    </a>
+  </div>
+{%- endif -%}

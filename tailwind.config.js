@@ -23,9 +23,11 @@ module.exports = {
   theme: {
     extend: {
       colors,
+      // Brand decision: sharp corners everywhere — the whole radius scale renders square.
+      // (rounded-* classes stay in the markup; flip these back to restore curves.)
       borderRadius: {
-        DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem',
-        '2xl': '1rem', '3xl': '1.5rem', full: '9999px',
+        none: '0', sm: '0', DEFAULT: '0', md: '0', lg: '0', xl: '0',
+        '2xl': '0', '3xl': '0', full: '0',
       },
       spacing: {
         'container-max': '1440px', 'section-padding': '120px',

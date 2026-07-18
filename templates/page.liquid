@@ -16,6 +16,8 @@
         <input type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'general.email_placeholder' | t }}"
                class="bg-transparent border-b border-outline-variant py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors">
       </div>
+      <input type="tel" name="contact[phone]" autocomplete="tel" placeholder="{{ 'contact.phone' | t }}"
+             class="bg-transparent border-b border-outline-variant py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors">
       <textarea name="contact[body]" rows="6" required placeholder="{{ 'contact.message' | t }}"
                 class="bg-transparent border-b border-outline-variant py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors resize-y"></textarea>
       <button type="submit" class="self-start font-label-caps text-label-caps uppercase tracking-widest bg-primary text-on-primary rounded-full px-10 py-4 hover:opacity-90 transition-opacity">

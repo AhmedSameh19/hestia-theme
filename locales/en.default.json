@@ -7,6 +7,7 @@
     "skip_to_content": "Skip to content",
     "search_placeholder": "Search products, stories...",
     "no_results": "No results found.",
+    "close": "Close",
     "account": "Account",
     "cart": "Cart",
     "home": "Home",
@@ -57,6 +58,7 @@
     "total": "Total",
     "taxes_note": "Taxes and shipping calculated at checkout.",
     "checkout": "Checkout",
+  "view_cart": "View cart",
     "shipping_progress": "Free Shipping Progress",
     "until_free_shipping": "{{ amount }} until free shipping",
     "free_shipping_unlocked": "Free shipping unlocked",
@@ -94,6 +96,7 @@
   },
   "contact": {
     "name": "Your name",
+    "phone": "Phone number",
     "message": "How can we help?",
     "send": "Send message",
     "success": "Thank you for reaching out. We'll reply within one business day."

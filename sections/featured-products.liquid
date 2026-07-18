@@ -29,7 +29,7 @@
             {%- if product.featured_image -%}
               <img width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" src="{{ product.featured_image | image_url: width: 720 }}" alt="{{ product.featured_image.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
             {%- else -%}
-              {{ 'product-2' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+              {% render 'swatch', item: product %}
             {%- endif -%}
           </a>
           <h4 class="font-headline-sm text-[20px] mb-1"><a href="{{ product.url }}">{{ product.title }}</a></h4>

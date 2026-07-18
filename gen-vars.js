@@ -16,7 +16,7 @@ const light = {
   'on-error-container': '#93000a', 'primary-fixed': '#e6e2dd',
   'primary-fixed-dim': '#cac6c1', 'secondary-fixed': '#f3dfcc',
   'secondary-fixed-dim': '#d6c3b1', 'tertiary-fixed': '#dde6cd',
-  background: '#fcf9f8', 'on-background': '#1b1c1c', 'surface-variant': '#e4e2e1',
+  background: '#f8f3ee', 'on-background': '#1b1c1c', 'surface-variant': '#e4e2e1',
 };
 const dark = {
   surface: '#2D2D2D', 'surface-dim': '#1b1c1c', 'surface-bright': '#3d3d3d',

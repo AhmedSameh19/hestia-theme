@@ -1,12 +1,24 @@
-<footer class="bg-warm-brown text-primary-fixed w-full rounded-t-[3rem] mt-20">
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-24 max-w-container-max mx-auto">
-    <div class="md:col-span-5 mb-12 md:mb-0">
+<footer class="bg-beige text-charcoal w-full mt-12">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-12 max-w-container-max mx-auto">
+    <div class="md:col-span-5 mb-8 md:mb-0">
       {%- if section.settings.wordmark -%}
-        <img width="{{ section.settings.wordmark.width }}" height="{{ section.settings.wordmark.height }}" src="{{ section.settings.wordmark | image_url: width: 480 }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
+        <img width="{{ section.settings.wordmark.width }}" height="{{ section.settings.wordmark.height }}" src="{{ section.settings.wordmark | image_url: width: 480 }}" alt="{{ shop.name }}" class="h-12 w-auto object-contain mb-4">
       {%- else -%}
-        <img width="827" height="256" src="{{ 'logo-wordmark-cream.png' | asset_url }}" alt="{{ shop.name }}" class="h-16 w-auto object-contain mb-8">
+        {%- comment -%} HESTIA wordmark (branding/main-logo) {%- endcomment -%}
+        <svg viewBox="322 492 436 95" class="h-12 w-auto mb-4" role="img" aria-label="{{ shop.name }}">
+          <g fill="#2d2d2d">
+            <path d="m480.2,549.41h-1.05c0-2.32-.97-4.16-2.91-5.51-1.94-1.36-4.79-2.04-8.54-2.04h-18.13c-3.75,0-6.6.68-8.54,2.04-1.94,1.35-2.91,3.19-2.91,5.51h-1.05v-18.66h1.05c0,2.32.97,4.16,2.91,5.51,1.94,1.36,4.8,2.04,8.54,2.04h18.13c3.76,0,6.6-.68,8.54-2.04,1.94-1.35,2.91-3.19,2.91-5.51h1.05v18.66Z"/>
+            <path d="m550.07,495c-8.62,5.51-8.07,2.69-21.67.26-4.61-.83-18.1-.07-26.1,9.67-2.77,3.37-5.57,5.9-5.58,13.85-.01,6.14,2.09,8.82,3.97,11.67,1.87,2.86,5.55,5.18,8.55,7.4,3,2.22,4.91,3.17,8.19,5.25,3.38,2.09,6.61,4.28,9.71,6.58,3.1,2.3,5.63,4.98,7.6,8.01,1.97,3.04,2.95,6.68,2.95,10.94,0,3.35-.63,5.98-1.9,7.88-1.26,1.9-2.88,3.22-4.85,3.94-1.97.73-4.03,1.09-6.19,1.09-3.38,0-6.38-.84-9.01-2.51-2.62-1.68-4.99-3.83-7.1-6.46-2.11-2.63-4.01-5.5-5.7-8.62-1.69-3.13-3.24-6.09-4.65-8.9-.09-.36-.4-.52-.91-.47-.52.05-.73.29-.63.74l-.03,20.87c0,.82.59,2.11.87,2.42.28.32.61.62.99.88,1.12.91,2.93,1.78,5.41,2.59,2.49.82,5.26,1.5,8.31,2.04,3.04.55,5.98.82,8.79.82,5.82,0,11-1.02,15.55-3.06,4.55-2.04,8.16-4.87,10.83-8.49,2.68-3.62,4.01-7.84,4.01-12.64,0-4.34-1.05-8.08-3.16-11.21-2.11-3.13-4.79-5.89-8.02-8.28-3.24-2.4-6.64-4.69-10.2-6.86-3.29-2.09-6.41-4.16-9.36-6.25-2.96-2.09-5.35-4.41-7.18-7-1.83-2.58-2.74-5.59-2.74-9.04,0-2.8.58-5.09,1.76-6.86,1.17-1.77,2.72-3.1,4.64-4.01,1.92-.91,4.06-1.26,6.4-1.36,14.99-.66,23.75,10.15,26.39,22.22h1.47v-27.09h-1.41Z"/>
+            <path d="m755.71,583.97v.86c0,.06,0,.11-.01.16h-31.78c.03-.47.14-1.03.14-1.03,3.53,0,5.57-.8,6.13-2.39.55-1.59-.24-4.73-2.39-9.46l-25.55-56.38-14.92,36.8-1.16,2.83h-4.06l1.28-3.16,3.4-8.33,19.86-48.79h2.49l32.21,70.84c2.07,4.52,3.86,8.1,5.37,10.75,1.51,2.65,2.92,4.52,4.26,5.63,1.34,1.11,3.33,1.66,4.72,1.66Z"/>
+            <path d="m490.22,495v17.3h-2.64c0-2.67-.34-4.46-1.01-5.38-.68-.91-1.83-1.37-3.45-1.37h-47.45c-1.49,0-2.6.46-3.35,1.37-.74.91-1.12,2.71-1.12,5.38h-2.64v-17.3h61.64Z"/>
+            <path d="m490.22,584.89v-17.3h-2.64c0,2.67-.34,4.46-1.01,5.38-.68.91-1.83,1.37-3.45,1.37h-47.45c-1.49,0-2.6-.46-3.35-1.37-.74-.91-1.12-2.71-1.12-5.38h-2.64v17.3h61.64Z"/>
+            <path d="m422.07,583.52v1.42h-38.41v-1.42c3.28,0,5.77-.24,7.46-.72,1.68-.48,2.81-1.45,3.37-2.89.57-1.44.85-3.56.85-6.35v-33.21h-44.32v33.21c0,2.79.28,4.92.85,6.35.56,1.45,1.69,2.41,3.37,2.89,1.69.48,4.18.72,7.46.72v1.42h-38.41v-1.42c3.18,0,5.56-.24,7.1-.72,1.55-.48,2.61-1.45,3.17-2.89.56-1.44.84-3.56.84-6.35v-66.86c0-2.79-.26-4.88-.77-6.28-.52-1.4-1.55-2.36-3.1-2.88-1.54-.53-3.87-.8-6.96-.8v-1.73h38.13v1.73c-3.28,0-5.77.29-7.46.87-1.68.57-2.81,1.58-3.37,3.03-.57,1.45-.85,3.56-.85,6.35v29.32h44.32v-29.32c0-2.79-.28-4.91-.85-6.35-.56-1.45-1.69-2.45-3.37-3.03-1.69-.58-4.18-.87-7.46-.87v-1.73h38.41v1.73c-3.09,0-5.7.27-7.24.8-1.55.52-2.58,1.49-3.1,2.88-.51,1.4-.77,3.49-.77,6.28v66.86c0,2.79.28,4.92.84,6.35.56,1.45,1.62,2.41,3.17,2.89,1.54.48,3.92.72,7.1.72Z"/>
+            <path d="m664.84,521.11v37.3c0,7.94,1.54,13.97,4.62,18.07,3.08,4.1,7.3,6.16,12.66,6.16v2.24l-39.13-.05v-2.24c5.36,0,9.58-2.06,12.66-6.16,3.08-4.1,4.62-10.13,4.62-18.07v-37.3c0-7.94-1.54-13.97-4.62-18.07-3.08-4.11-7.3-6.26-12.66-6.26v-1.72l39.13.05v1.72c-5.36,0-9.58,2.15-12.66,6.26-3.08,4.1-4.62,10.13-4.62,18.07Z"/>
+            <path d="m636.49,495v27.67h-1.5c-5.08-25.14-30.49-24.14-30.49-11.77,0,0-.05,3.57-.05,5.66v56.76c0,2.75.31,4.84.92,6.26.61,1.42,1.76,2.38,3.45,2.85,1.68.48,4.17.7,7.45.7v1.71c-2.72,0-35.35.04-38.07.04v-1.71c3.28,0,5.77-.23,7.45-.71,1.69-.47,2.84-1.42,3.45-2.85.61-1.42.92-3.51.92-6.26v-56.76c0-2.08-.05-5.65-.05-5.65,0-12.38-25.41-13.38-30.49,11.76h-1.5v-27.66h1.5c0,.94,4.73,3.12,9.99,3.12,7.8.27,47.73.24,55.53-.03,5.26,0,9.99-2.18,9.99-3.13h1.5Z"/>
+          </g>
+        </svg>
       {%- endif -%}
-      <p class="font-body-md text-primary-fixed/80 mb-8 max-w-sm">{{ section.settings.newsletter_text }}</p>
+      <p class="font-body-md text-charcoal/80 mb-4 max-w-sm">{{ section.settings.newsletter_text }}</p>
       {% form 'customer', class: 'max-w-md' %}
         {%- if form.posted_successfully? -%}
           <p class="font-body-md text-sage">{{ 'general.subscribe_success' | t }}</p>
@@ -15,9 +27,9 @@
           <div class="flex gap-4">
             <input type="hidden" name="contact[tags]" value="newsletter">
             <input type="email" name="contact[email]" required value="{{ form.email }}"
-                   class="flex-1 bg-transparent border-b border-primary-fixed/30 py-3 text-primary-fixed placeholder:text-primary-fixed/40 focus:outline-none focus:border-primary-fixed transition-colors"
+                   class="flex-1 bg-transparent border-b border-charcoal/30 py-3 text-charcoal placeholder:text-charcoal/50 focus:outline-none focus:border-charcoal transition-colors"
                    placeholder="{{ 'general.email_placeholder' | t }}">
-            <button type="submit" class="font-label-caps text-label-caps text-primary-fixed hover:text-white transition-colors tracking-widest uppercase">
+            <button type="submit" class="font-label-caps text-label-caps text-charcoal hover:text-terracotta transition-colors tracking-widest uppercase">
               {{ 'general.subscribe' | t }}
             </button>
           </div>
@@ -30,36 +42,36 @@
       {%- assign menu = section.settings[id] -%}
       {%- if menu != blank -%}
         <div class="md:col-span-2 {% if forloop.first %}md:col-start-7{% endif %} flex flex-col gap-4">
-          <h4 class="font-label-caps text-label-caps text-primary-fixed font-bold mb-4 uppercase">{{ menu.title }}</h4>
+          <h4 class="font-label-caps text-label-caps text-charcoal font-bold mb-4 uppercase">{{ menu.title }}</h4>
           {%- for link in menu.links -%}
-            <a class="font-label-caps text-label-caps text-primary-fixed/80 hover:text-white transition-colors uppercase" href="{{ link.url }}">{{ link.title }}</a>
+            <a class="font-label-caps text-label-caps text-charcoal/80 hover:text-terracotta transition-colors uppercase" href="{{ link.url }}">{{ link.title }}</a>
           {%- endfor -%}
         </div>
       {%- endif -%}
     {%- endfor -%}
   </div>
 
-  <div class="px-margin-mobile md:px-margin-desktop py-8 border-t border-primary-fixed/10 max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-    <p class="font-label-caps text-[10px] text-primary-fixed/60 tracking-widest uppercase">
+  <div class="px-margin-mobile md:px-margin-desktop py-6 border-t border-charcoal/10 max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="font-label-caps text-[10px] text-charcoal/60 tracking-widest uppercase">
       &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ powered_by_link }}
     </p>
     <div class="flex items-center gap-6">
       {%- if section.settings.social_instagram != blank -%}
-        <a href="{{ section.settings.social_instagram }}" aria-label="Instagram" class="text-primary-fixed/60 hover:text-white transition-colors">
+        <a href="{{ section.settings.social_instagram }}" aria-label="Instagram" class="text-charcoal/60 hover:text-terracotta transition-colors">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
         </a>
       {%- endif -%}
       {%- if section.settings.social_facebook != blank -%}
-        <a href="{{ section.settings.social_facebook }}" aria-label="Facebook" class="text-primary-fixed/60 hover:text-white transition-colors">
+        <a href="{{ section.settings.social_facebook }}" aria-label="Facebook" class="text-charcoal/60 hover:text-terracotta transition-colors">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.7c0-.9.3-1.6 1.7-1.6h1.5V3.2c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.9H8v3.2h2.8v8h2.7z"/></svg>
         </a>
       {%- endif -%}
       {%- if section.settings.social_tiktok != blank -%}
-        <a href="{{ section.settings.social_tiktok }}" aria-label="TikTok" class="text-primary-fixed/60 hover:text-white transition-colors">
+        <a href="{{ section.settings.social_tiktok }}" aria-label="TikTok" class="text-charcoal/60 hover:text-terracotta transition-colors">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.1 1.8 3.5 3.9 3.6v3c-1.5 0-2.8-.5-3.9-1.3v5.7c0 3.6-2.6 5.9-5.7 5.9-3 0-5.4-2.2-5.4-5.3 0-3 2.3-5.3 5.5-5.3.3 0 .7 0 1 .1v3.1c-.3-.1-.6-.2-1-.2-1.4 0-2.5 1-2.5 2.4 0 1.4 1.1 2.3 2.4 2.3 1.5 0 2.6-1 2.6-2.9V3h3.1z"/></svg>
         </a>
       {%- endif -%}
-      <img width="752" height="1000" src="{{ 'logo-monogram.png' | asset_url }}" alt="" class="w-6 h-6 object-contain opacity-30 invert">
+      <img width="752" height="1000" src="{{ 'logo-monogram.png' | asset_url }}" alt="" class="w-6 h-6 object-contain opacity-30">
     </div>
   </div>
 </footer>
@@ -68,7 +80,7 @@
 {
   "name": "Footer",
   "settings": [
-    { "type": "image_picker", "id": "wordmark", "label": "Wordmark", "info": "Defaults to the cream HESTIA wordmark" },
+    { "type": "image_picker", "id": "wordmark", "label": "Wordmark", "info": "Defaults to the HESTIA caption-bar lockup" },
     { "type": "textarea", "id": "newsletter_text", "label": "Newsletter text", "default": "Join our inner circle for early access to collections and editorial musings on the art of living." },
     { "type": "link_list", "id": "menu_1", "label": "Menu 1", "default": "footer" },
     { "type": "link_list", "id": "menu_2", "label": "Menu 2" },

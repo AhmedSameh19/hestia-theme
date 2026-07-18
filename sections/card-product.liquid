@@ -1,0 +1,9 @@
+{%- comment -%}
+  One product card, for the Section Rendering API: /products/<handle>?section_id=card-product
+  Used by the recently-viewed section (theme.js).
+{%- endcomment -%}
+{% render 'product-card', product: product, show_quick_add: true %}
+
+{% schema %}
+{ "name": "Product card (API)" }
+{% endschema %}

@@ -12,6 +12,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Cormorant Garamond';
   src: url('cormorant-garamond-italic.ttf') format('truetype-variations');
@@ -21,33 +22,44 @@
 }
 
 @layer base {
+
   /* Native controls (select popups, inputs, scrollbars) follow the active mode */
   :root {
     color-scheme: light;
   }
+
   :root.dark {
     color-scheme: dark;
   }
+
   /* Chrome paints the option popup from the select's bg; with bg-transparent
      that falls back to white, so set option colors from the tokens directly */
   select option {
     background-color: rgb(var(--c-surface-container));
     color: rgb(var(--c-on-surface));
   }
+
   /* Keyboard focus — terracotta ring, invisible to mouse users */
   :focus-visible {
     outline: 2px solid rgb(var(--c-terracotta));
     outline-offset: 2px;
-    border-radius: 2px;
   }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
+
     .fade-in-section {
       opacity: 1;
       transform: none;
     }
+
+    /* a .01ms infinite loop would flicker — stop the divider outright */
+    .pattern-divider {
+      animation: none;
+    }
+
     *,
     ::before,
     ::after {
@@ -61,16 +73,20 @@
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   }
+
   /* ponytail: hide icon ligature text until the symbols font loads, else "search"/"person"/"menu" flash as words */
   .material-symbols-outlined {
     visibility: hidden;
   }
+
   .fonts-ready .material-symbols-outlined {
     visibility: visible;
   }
+
   .material-symbols-outlined.icon-fill {
     font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   }
+
   .nav-link-hover::after {
     content: '';
     position: absolute;
@@ -81,36 +97,88 @@
     background-color: currentColor;
     transition: width 0.3s ease;
   }
+
   .nav-link-hover:hover::after {
     width: 100%;
   }
+
   .bento-card-zoom img {
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   .bento-card-zoom:hover img {
     transform: scale(1.05);
   }
+
   .product-shadow {
     box-shadow: 0 4px 20px -2px rgba(45, 45, 45, 0.05);
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Brand pattern divider — drifts sideways forever; one loop = exactly one tile, so the wrap is invisible.
+     ponytail: --tile-w is the tile width at the band's rendered height (h-12 = 48px); recompute if the height changes */
+  .pattern-divider {
+    --tile-w: 48px; /* square tile */
+    background-image: url('pattern-dark.svg');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    animation: pattern-drift 5s linear infinite;
+  }
+  @keyframes pattern-drift {
+    to {
+      background-position-x: var(--tile-w);
+    }
   }
   .transition-soft {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   /* Scroll fade-in (theme.js adds .in-view) */
   .fade-in-section {
     opacity: 0;
     transform: translateY(2.5rem);
     transition: opacity 1s ease, transform 1s ease;
   }
+
   .fade-in-section.in-view {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Premium Glassmorphism Button */
+  .glass-btn {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    color: #ffffff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  :host-context(.dark) .glass-btn,
+  .dark .glass-btn {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  :host-context(.dark) .glass-btn:hover,
+  .dark .glass-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
   }
 }

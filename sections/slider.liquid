@@ -1,0 +1,69 @@
+{%- comment -%}
+  Home carousel — native CSS scroll-snap does the swiping (no arrows),
+  theme.js auto-advances every 5s. Slides ship as theme assets.
+  ponytail: images/links hardcoded; add image_picker blocks if the merchant ever needs to swap slides from the editor.
+{%- endcomment -%}
+<section class="fade-in-section">
+  <div class="relative">
+  {%- comment -%} h-svh: full first screen, no gap below; svh so mobile URL-bar collapse doesn't resize it {%- endcomment -%}
+  <div data-slider class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar w-full h-svh">
+    {%- comment -%} Clones of the last/first slide at each end make the loop seamless; theme.js teleports off them {%- endcomment -%}
+    <img src="{{ 'slider-5.jpg' | asset_url }}" alt="" aria-hidden="true" width="2400" height="1350"
+         class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+    {%- for i in (1..5) -%}
+      {%- assign img = 'slider-' | append: forloop.index | append: '.jpg' -%}
+      <img src="{{ img | asset_url }}" alt="{{ shop.name }} lookbook {{ forloop.index }}"
+           width="2400" height="1350"
+           class="w-full h-full object-cover shrink-0 snap-center"
+           {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+    {%- endfor -%}
+    <img src="{{ 'slider-1.jpg' | asset_url }}" alt="" aria-hidden="true" width="2400" height="1350"
+         class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+  </div>
+  <script>
+    // Position on the real first slide before paint, so the leading clone never flashes
+    (function () {
+      var s = document.querySelector('[data-slider]');
+      s.scrollLeft = s.clientWidth;
+    })();
+  </script>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-3">
+    {%- comment -%} label | brand bg | text color — brand colors also used on the matching collection headers {%- endcomment -%}
+    {%- assign items = 'Men|#626263|#FFFFFF,Women|#DCC9B6|#2D2D2D,Together|#CB7E67|#FFFFFF' | split: ',' -%}
+    {%- for item in items -%}
+      {%- assign parts = item | split: '|' -%}
+      <a href="/collections/{{ parts[0] | downcase }}"
+         class="glass-btn px-6 py-3 font-label-caps text-label-caps uppercase tracking-widest"
+         style="background-color:{{ parts[1] }}b3;border-color:{{ parts[1] }};color:{{ parts[2] }}">
+        {{ parts[0] }}
+      </a>
+    {%- endfor -%}
+  </div>
+  </div>
+
+  {%- comment -%} Brand pattern ribbon separating the slider from the page (see .pattern-divider) {%- endcomment -%}
+  <div class="pattern-divider h-12 bg-surface my-[5px]" aria-hidden="true"></div>
+
+  {%- comment -%} Lifestyle triptych (branding/after the slider) — links to the three lines, zoom on hover {%- endcomment -%}
+  <div class="grid grid-cols-3 gap-[5px]">
+    {%- assign trip_alts = 'Women,Men,Together' | split: ',' -%}
+    {%- for i in (1..3) -%}
+      {%- assign trip = 'triptych-' | append: forloop.index | append: '.jpg' -%}
+      <a href="/collections/{{ trip_alts[forloop.index0] | downcase }}" class="bento-card-zoom block overflow-hidden">
+        <img src="{{ trip | asset_url }}" alt="{{ shop.name }} — {{ trip_alts[forloop.index0] }}"
+             width="960" height="1620" loading="lazy" class="w-full h-auto object-cover">
+      </a>
+    {%- endfor -%}
+  </div>
+
+  <div class="pattern-divider h-12 bg-surface my-[5px]" aria-hidden="true"></div>
+</section>
+
+{% schema %}
+{
+  "name": "Slider",
+  "settings": [],
+  "presets": [{ "name": "Slider" }]
+}
+{% endschema %}

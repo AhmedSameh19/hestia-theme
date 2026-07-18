@@ -1,0 +1,16 @@
+{%- comment -%}
+  Rendered via the Section Rendering API by the header search popup:
+  /search/suggest?q=...&section_id=predictive-search — theme.js swaps the inner grid in.
+{%- endcomment -%}
+<div data-search-results-inner>
+  {%- for product in predictive_search.resources.products -%}
+    {% render 'product-card', product: product %}
+  {%- endfor -%}
+  {%- if predictive_search.resources.products.size == 0 -%}
+    <p class="col-span-full font-body-md text-on-surface-variant py-8 text-center">{{ 'general.no_results' | t }}</p>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Predictive search" }
+{% endschema %}

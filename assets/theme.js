@@ -13,6 +13,154 @@
     return format.replace(/\{\{\s*amount[^}]*\}\}/, parts.join('.'));
   };
 
+  /* ---------- Header: transparent at top, colored + logo on scroll ---------- */
+  var header = document.querySelector('[data-header]');
+  if (header) {
+    // Only the home page header is transparent at the top; elsewhere liquid renders it already "scrolled"
+    if (header.hasAttribute('data-transparent')) {
+      var onScroll = function () {
+        header.classList.toggle('scrolled', window.scrollY > 10);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    // pt-20 only covers the nav bar; announcement bar adds height, so measure the real offset
+    var main = document.getElementById('MainContent');
+    if (main && main.classList.contains('pt-20')) {
+      var offset = function () { main.style.paddingTop = header.offsetHeight + 'px'; };
+      window.addEventListener('resize', offset);
+      offset();
+    }
+  }
+
+  /* ---------- Home slider: swipe via native scroll-snap, auto-advance every 5s, seamless loop ---------- */
+  document.querySelectorAll('[data-slider]').forEach(function (slider) {
+    var timer, settle;
+    var count = slider.children.length; // real slides plus one clone at each end
+    var w = function () { return slider.clientWidth; };
+    var advance = function () {
+      slider.scrollTo({ left: (Math.round(slider.scrollLeft / w()) + 1) * w(), behavior: 'smooth' });
+    };
+    var start = function () {
+      clearInterval(timer);
+      timer = setInterval(advance, 5000);
+    };
+    // Once scrolling settles on an end clone, teleport to its real twin — the loop never rewinds
+    slider.addEventListener('scroll', function () {
+      clearTimeout(settle);
+      settle = setTimeout(function () {
+        var idx = Math.round(slider.scrollLeft / w());
+        if (idx === 0) slider.scrollLeft = (count - 2) * w();
+        if (idx === count - 1) slider.scrollLeft = w();
+      }, 120);
+    }, { passive: true });
+    // ponytail: a user swipe just restarts the 5s clock; no pause-on-hover or visibility handling
+    slider.addEventListener('pointerdown', start);
+    start();
+  });
+
+  /* ---------- Search popup: default grid server-rendered, predictive results on type ---------- */
+  var searchModal = document.querySelector('[data-search-modal]');
+  if (searchModal) {
+    var searchInput = searchModal.querySelector('[data-search-input]');
+    var searchResults = searchModal.querySelector('[data-search-results]');
+    var searchDefault = searchResults.innerHTML;
+    var closeSearch = function () {
+      searchModal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.querySelectorAll('[data-search-open]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault(); // the icon links to the search page as a no-JS fallback
+        searchModal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        searchInput.focus();
+      });
+    });
+    searchModal.addEventListener('click', function (e) {
+      if (e.target.closest('[data-search-close]') || !e.target.closest('[data-search-panel]')) closeSearch();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !searchModal.hidden) closeSearch();
+    });
+    var searchDebounce;
+    var searchSeq = 0;
+    searchInput.addEventListener('input', function () {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(function () {
+        var q = searchInput.value.trim();
+        var seq = ++searchSeq;
+        if (!q) {
+          searchResults.innerHTML = searchDefault;
+          return;
+        }
+        fetch('/search/suggest?q=' + encodeURIComponent(q) + '&resources[type]=product&resources[limit]=4&section_id=predictive-search')
+          .then(function (r) { return r.text(); })
+          .then(function (html) {
+            if (seq !== searchSeq) return; // a newer query is in flight
+            var inner = new DOMParser().parseFromString(html, 'text/html').querySelector('[data-search-results-inner]');
+            if (inner) searchResults.innerHTML = inner.innerHTML;
+          });
+      }, 250);
+    });
+  }
+
+  /* ---------- Cart drawer: opens instead of the cart page, re-renders via section API ---------- */
+  var cartDrawer = document.querySelector('[data-cart-drawer]');
+  var refreshCartDrawer, openCartDrawer;
+  if (cartDrawer) {
+    var cartDrawerContent = cartDrawer.querySelector('[data-cart-drawer-content]');
+    refreshCartDrawer = function () {
+      return fetch('/?section_id=cart-drawer')
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var section = new DOMParser().parseFromString(html, 'text/html').querySelector('.shopify-section');
+          if (section) cartDrawerContent.innerHTML = section.innerHTML;
+        });
+    };
+    openCartDrawer = function () {
+      cartDrawer.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    var closeCartDrawer = function () {
+      cartDrawer.hidden = true;
+      document.body.style.overflow = '';
+    };
+    var changeDrawerLine = function (line, quantity) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line: line, quantity: quantity }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) {
+          setCartCount(cart.item_count);
+          refreshCartDrawer();
+        });
+    };
+    document.querySelectorAll('[data-cart-open]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault(); // href stays /cart as the no-JS fallback
+        refreshCartDrawer();
+        openCartDrawer();
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !cartDrawer.hidden) closeCartDrawer();
+    });
+    cartDrawer.addEventListener('click', function (e) {
+      if (e.target.closest('[data-cart-close]') || !e.target.closest('[data-cart-panel]')) closeCartDrawer();
+      var qtyBtn = e.target.closest('[data-drawer-qty]');
+      if (qtyBtn) {
+        var current = Number(qtyBtn.parentElement.querySelector('[data-drawer-line-qty]').textContent);
+        changeDrawerLine(Number(qtyBtn.dataset.drawerQty), Math.max(0, current + Number(qtyBtn.dataset.delta)));
+      }
+      var removeBtn = e.target.closest('[data-drawer-remove]');
+      if (removeBtn) changeDrawerLine(Number(removeBtn.dataset.drawerRemove), 0);
+    });
+  }
+
   /* ---------- Mobile menu ---------- */
   var menuBtn = document.querySelector('[data-menu-open]');
   var menu = document.querySelector('[data-menu]');
@@ -104,7 +252,10 @@
     })
       .then(function (r) { return r.json(); })
       .then(function () { return fetch('/cart.js').then(function (r) { return r.json(); }); })
-      .then(function (cart) { setCartCount(cart.item_count); });
+      .then(function (cart) {
+        setCartCount(cart.item_count);
+        if (refreshCartDrawer) refreshCartDrawer().then(openCartDrawer);
+      });
   });
 
   /* ---------- Product page ---------- */
@@ -184,6 +335,7 @@
           .then(function (r) { return r.json(); })
           .then(function (cart) {
             setCartCount(cart.item_count);
+            if (refreshCartDrawer) refreshCartDrawer().then(openCartDrawer);
             if (addLabel) {
               var original = addLabel.textContent;
               addLabel.textContent = window.hestiaStrings.added;
@@ -206,6 +358,32 @@
         });
       });
     }
+  }
+
+  /* ---------- Recently viewed: handles in localStorage, cards via section rendering ---------- */
+  var RV_KEY = 'hestia:recently-viewed';
+  var rvList = [];
+  try { rvList = JSON.parse(localStorage.getItem(RV_KEY) || '[]'); } catch (e) { /* corrupt entry — start fresh */ }
+  var rvCurrent = productEl && productEl.dataset.productHandle;
+  if (rvCurrent) {
+    rvList = [rvCurrent].concat(rvList.filter(function (h) { return h !== rvCurrent; })).slice(0, 13);
+    localStorage.setItem(RV_KEY, JSON.stringify(rvList));
+  }
+  var rvSection = document.querySelector('[data-recently-viewed]');
+  if (rvSection) {
+    var rvGrid = rvSection.querySelector('[data-recently-viewed-grid]');
+    var rvHandles = rvList.filter(function (h) { return h !== rvCurrent; }).slice(0, 4);
+    Promise.all(rvHandles.map(function (h) {
+      return fetch('/products/' + encodeURIComponent(h) + '?section_id=card-product')
+        .then(function (r) { return r.ok ? r.text() : ''; }) // deleted products 404 and drop out
+        .catch(function () { return ''; });
+    })).then(function (results) {
+      results.forEach(function (html) {
+        var card = html && new DOMParser().parseFromString(html, 'text/html').querySelector('.product-card');
+        if (card) rvGrid.appendChild(card);
+      });
+      if (rvGrid.children.length) rvSection.hidden = false;
+    });
   }
 
   /* ---------- Cart page ---------- */

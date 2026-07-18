@@ -86,7 +86,8 @@
     </a>
     {% section 'header' %}
 
-    <main id="MainContent" class="pt-20">
+    {%- comment -%} Home: hero slides under the transparent header. Other pages: offset for the fixed header (theme.js corrects for announcement height). {%- endcomment -%}
+    <main id="MainContent" class="{% unless request.page_type == 'index' %}pt-20{% endunless %}">
       {{ content_for_layout }}
     </main>
 

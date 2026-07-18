@@ -1,0 +1,22 @@
+{%- comment -%}
+  Solid brand-color block derived from the product's `color:` tag — used instead of
+  photo placeholders (products ship without images; see store-data/SETUP.md).
+  Accepts: item (product)
+{%- endcomment -%}
+{%- assign sw = '#DCC9B6' -%}
+{%- for tag in item.tags -%}
+  {%- if tag contains 'color:' -%}
+    {%- assign cname = tag | remove: 'color:' | strip | downcase -%}
+    {%- case cname -%}
+      {%- when 'champagne' -%}{%- assign sw = '#EFD9B4' -%}
+      {%- when 'charcoal' -%}{%- assign sw = '#2D2D2D' -%}
+      {%- when 'sage' -%}{%- assign sw = '#A9B29B' -%}
+      {%- when 'terracotta' -%}{%- assign sw = '#C97B63' -%}
+      {%- when 'ivory' -%}{%- assign sw = '#F6F1E7' -%}
+      {%- when 'sand' -%}{%- assign sw = '#DCC9B6' -%}
+      {%- when 'taupe' -%}{%- assign sw = '#B5A08C' -%}
+    {%- endcase -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+<div class="w-full h-full" style="background-color:{{ sw }}"></div>

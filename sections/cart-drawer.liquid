@@ -1,0 +1,9 @@
+{%- comment -%}
+  Section wrapper so theme.js can re-render the drawer after cart changes:
+  fetch('/?section_id=cart-drawer') — content lives in the cart-drawer-content snippet.
+{%- endcomment -%}
+{% render 'cart-drawer-content' %}
+
+{% schema %}
+{ "name": "Cart drawer (API)" }
+{% endschema %}

@@ -1,7 +1,8 @@
 {
   "sections": {
     "main": { "type": "main-product" },
-    "related": { "type": "related-products" }
+    "related": { "type": "related-products" },
+    "recently-viewed": { "type": "recently-viewed" }
   },
-  "order": ["main", "related"]
+  "order": ["main", "related", "recently-viewed"]
 }

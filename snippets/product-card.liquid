@@ -16,7 +16,7 @@
              alt="{{ product.featured_image.alt | escape }}" loading="lazy"
              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
       {%- else -%}
-        {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+        {% render 'swatch', item: product %}
       {%- endif -%}
     </a>
     {%- if show_quick_add and product.variants.size == 1 and product.available -%}

@@ -28,47 +28,45 @@ The CSV contains a `Fabric & Care (product.metafields.custom.fabric_care)` colum
 3. Click **Import** at the top right.
 4. Choose the generated `store-data/products.csv` file.
 5. Click **Upload and preview**, then click **Import products**.
-*Note: Re-import with **Overwrite existing products** checked if products were imported before this revision (prices are now EGP; size tags and fabric-care metafields were added).*
+*Note: Re-import with **Overwrite existing products** checked if products were imported before this revision (prices are now EGP; size tags, fabric-care metafields, and `men`/`women`/`together` line tags were added). The `men` / `women` / `together` tags will NOT appear on the dashboard until this re-import is done — the CSV carries them, but an earlier import won't update itself.*
+
+*Products intentionally ship without photos — the theme renders a brand color block per product (from its `color:` tag) wherever an image would appear. Skip any image upload step; `store-data/images/` is a leftover archive and is not referenced by the CSV.*
 
 ## 2. Create Automated Collections
-Navigate to **Products** → **Collections** and create the following 5 collections. Ensure they use the exact handles and rules specified below:
+Navigate to **Products** → **Collections** and create the following 3 collections. Ensure they use the exact handles and rules specified below:
 
-1. **New Arrivals**
+1. **Men**
    - **Collection type**: Automated
-   - **Conditions**: Product tag **is equal to** `new-arrivals`
-   - **Handle**: `new-arrivals` (or `/collections/new-arrivals`)
+   - **Conditions**: Product tag **is equal to** `men`
+   - **Handle**: `men` — the navbar and home slider link to `/collections/men`, and the theme gives this page its charcoal (#2D2D2D) branded header
 
-2. **The Silk Collection**
+2. **Women**
    - **Collection type**: Automated
-   - **Conditions**: Product tag **is equal to** `silk`
-   - **Handle**: `silk` (or `/collections/silk`)
+   - **Conditions**: Product tag **is equal to** `women`
+   - **Handle**: `women` — linked from the navbar/slider; beige (#DCC9B6) branded header
 
-3. **Sleepwear**
+3. **Together**
    - **Collection type**: Automated
-   - **Conditions**: Product type **is equal to** `Sleepwear`
-   - **Handle**: `sleepwear`
+   - **Conditions**: Product tag **is equal to** `together`
+   - **Handle**: `together` — linked from the navbar/slider; terracotta (#CB7E67) branded header
 
-4. **Loungewear**
-   - **Collection type**: Automated
-   - **Conditions**: Product type **is equal to** `Loungewear`
-   - **Handle**: `loungewear`
-
-5. **Robes**
-   - **Collection type**: Automated
-   - **Conditions**: Product type **is equal to** `Robes`
-   - **Handle**: `robes`
+> The handles must match exactly — the theme's branded collection headers key off `men` / `women` / `together`. The products.csv in this folder already carries the matching tags.
 
 ## 3. Navigation Setup
 
 Go to **Online Store** → **Navigation** to configure the menus.
 
 ### Main Menu (`main-menu`)
-Configure the main menu links as follows:
-- **Shop** → Link: `/collections/all` (All Products)
-- **Collections** → Link: `/collections` (All Collections)
-- **About** → Link: `/pages/about`
+Configure the main menu links as follows (this is the header navbar — the theme renders whatever is in `main-menu`):
+- **Home** → Link: `/`
+- **Men** → Link: `/collections/men`
+- **Women** → Link: `/collections/women`
+- **Together** → Link: `/collections/together`
+- **Catalog** → Link: `/collections/all`
+- **Contact us** → Link: `/pages/contact`
+- **About us** → Link: `/pages/about`
 
-> Note: /pages/about must exist first — create an **About** page (Admin → Content → Pages) before linking to it, or the link will 404.
+> Note: the Men / Women / Together links require the collections from section 2 (items 6–8). `/pages/about` and `/pages/contact` must also exist first — create an **About** page and a **Contact** page (Admin → Content → Pages, the contact page using the `contact` template) before linking, or the links will 404.
 
 ### Footer Menus
 Configure footer menus to link to relevant policy/about pages or collection links. Include the following links:
@@ -114,7 +112,7 @@ To test the checkout process end-to-end:
 
 | Item | Where | Status |
 |---|---|---|
-| Product photos (1 per product, AI-generated, external CDN) | products.csv Image Src / store-data/images/ | DUMMY |
+| Product visuals (brand color block per product, from `color:` tag) | theme snippets/swatch.liquid | INTENTIONAL — no photos to upload |
 | Product titles, descriptions, prices (EGP) | products.csv | DUMMY |
 | Fabric & care copy | products.csv metafield column | DUMMY |
 | Shipping rates & delivery promises | Admin shipping + product shipping accordion + announcement bar | DUMMY |
