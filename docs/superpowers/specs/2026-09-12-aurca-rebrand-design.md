@@ -88,7 +88,25 @@ tokens/fonts/logo only — layout unchanged; the reference has no other pages de
 - **Language switcher**: dropped from this pass — English only, no Arabic strings or
   RTL layout. Remove the `عربي` control from the header rather than ship it inert.
 
+## 6. Addendum (confirmed after spec review)
+
+- **Currency**: store is Egypt-only/EGP-only per `store-data/SETUP.md` (single market,
+  no other markets configured). Ship the theme-side localization form/selector so it
+  works automatically once more markets are added in the admin, but do not require or
+  assume USD/EUR/GBP/AED markets exist now — EGP-only is correct for this pass.
+- **Product images**: this catalog intentionally ships with no product photos (a flat
+  brand-color block per product, driven by a `color:` tag, via `snippets/swatch.liquid`)
+  — confirmed in `store-data/SETUP.md`, and `aurca assets/` has no product photography
+  either. Build the new "Featured Pieces" card design (badges, eyebrow, color-swatch
+  dots, wishlist) around that existing color-block fallback; it degrades gracefully to
+  real photos later with no further theme changes.
+
 ## Out of scope
 - New product/collection data model — same catalog.
 - Arabic translation/RTL (see §5).
 - Licensing/embedding the `Bagnard` display font.
+- Adding new Shopify Markets/currencies — admin-side, not this pass.
+- Renaming internal-only JS identifiers/localStorage keys (`hestia:appearance`,
+  `hestiaStrings`, etc.) — no user-visible impact, not worth the churn/risk.
+- `snippets/swatch.liquid`'s named color-tag hex map — tied to existing product data,
+  not brand identity; left as-is.
