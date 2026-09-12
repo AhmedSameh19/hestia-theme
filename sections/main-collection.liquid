@@ -13,17 +13,17 @@
   </nav>
 
   {%- liquid
-    # Brand colors for the three lines — keep in sync with the slider pills
+    # Brand colors for the three lines (men/women/together)
     assign brand_bg = ''
     case collection.handle
       when 'men'
-        assign brand_bg = '#626263'
+        assign brand_bg = '#2D2E2D'
         assign brand_text = '#FFFFFF'
       when 'women'
-        assign brand_bg = '#DCC9B6'
-        assign brand_text = '#2D2D2D'
+        assign brand_bg = '#E5D7CD'
+        assign brand_text = '#2D2E2D'
       when 'together'
-        assign brand_bg = '#CB7E67'
+        assign brand_bg = '#A87052'
         assign brand_text = '#FFFFFF'
     endcase
   -%}
