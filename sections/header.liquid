@@ -1,7 +1,7 @@
 {%- comment -%} Transparent-at-top (white text over the slider) only makes sense on the home page; everywhere else the header starts in its solid "scrolled" state {%- endcomment -%}
 <header data-header {% if request.page_type == 'index' %}data-transparent{% endif %} class="group fixed top-0 w-full z-50 transition-all duration-300 [&.scrolled]:bg-surface/80 [&.scrolled]:backdrop-blur-md [&.scrolled]:shadow-sm {% unless request.page_type == 'index' %}scrolled{% endunless %}">
   {%- if section.settings.announcement != blank -%}
-    <div class="bg-sage text-charcoal text-center py-2 px-margin-mobile font-label-caps text-[11px] uppercase tracking-widest">
+    <div class="bg-charcoal text-cream text-center py-2 px-margin-mobile font-label-caps text-[11px] uppercase tracking-widest">
       {{ section.settings.announcement }}
     </div>
   {%- endif -%}
@@ -29,6 +29,21 @@
     </div>
 
     <div class="flex items-center gap-6">
+      {%- if localization.available_countries.size > 1 -%}
+        <details class="relative group/currency">
+          <summary class="list-none cursor-pointer font-label-caps text-label-caps text-cream group-[.scrolled]:text-on-surface-variant transition-colors">{{ localization.country.currency.iso_code }}</summary>
+          {% form 'localization' %}
+            <div class="absolute right-0 top-full mt-2 bg-surface border border-outline-variant/30 rounded-xl shadow-lg py-2 z-50 min-w-[100px]">
+              {%- for country in localization.available_countries -%}
+                <button type="submit" name="country_code" value="{{ country.iso_code }}"
+                        class="w-full text-left px-4 py-2 font-label-caps text-label-caps hover:bg-surface-container {% if country.iso_code == localization.country.iso_code %}text-primary{% else %}text-on-surface-variant{% endif %}">
+                  {{ country.currency.iso_code }}
+                </button>
+              {%- endfor -%}
+            </div>
+          {% endform %}
+        </details>
+      {%- endif -%}
       <button data-theme-toggle class="material-symbols-outlined text-cream group-[.scrolled]:text-on-surface-variant group-[.scrolled]:hover:text-primary transition-colors" aria-label="{{ 'general.toggle_theme' | t }}">
         <span class="dark:hidden">dark_mode</span><span class="hidden dark:inline">light_mode</span>
       </button>
@@ -121,7 +136,7 @@
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Defaults to the Aurca wordmark" },
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
-    { "type": "text", "id": "announcement", "label": "Announcement bar text" }
+    { "type": "text", "id": "announcement", "label": "Announcement bar text", "default": "Free shipping over $150 · Complimentary gift wrapping · 30-day returns" }
   ]
 }
 {% endschema %}
