@@ -18,9 +18,15 @@
           {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
         {%- endif -%}
         <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        {%- if block.settings.badge != blank -%}
+          <span class="absolute top-6 left-6 bg-maroon text-white px-3 py-1 font-label-caps text-[10px] tracking-widest uppercase">{{ block.settings.badge }}</span>
+        {%- endif -%}
         <div class="absolute bottom-8 left-8">
-          <span class="font-label-caps text-label-caps text-white mb-2 block tracking-widest">{{ forloop.index | prepend: '0' }}</span>
-          <h3 class="font-headline-sm text-headline-sm text-white">{{ block.settings.title | default: block.settings.collection.title }}</h3>
+          {%- if block.settings.eyebrow != blank -%}
+            <span class="font-label-caps text-label-caps text-white/70 mb-2 block tracking-widest uppercase">{{ block.settings.eyebrow }}</span>
+          {%- endif -%}
+          <h3 class="font-headline-sm text-headline-sm text-white mb-2">{{ block.settings.title | default: block.settings.collection.title }}</h3>
+          <span class="font-label-caps text-label-caps text-white/90 uppercase tracking-widest border-b border-white/50 pb-1">{{ 'general.explore' | t }} &rarr;</span>
         </div>
       </a>
     {%- endfor -%}
@@ -53,8 +59,8 @@
   "name": "Category bento",
   "max_blocks": 3,
   "settings": [
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Curated Comfort" },
-    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all categories" }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Collection" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View All" }
   ],
   "blocks": [
     {
@@ -63,6 +69,8 @@
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
         { "type": "image_picker", "id": "image", "label": "Image", "info": "Falls back to the collection image" },
+        { "type": "text", "id": "badge", "label": "Badge (optional)", "info": "e.g. New Arrivals, Limited Edition" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "e.g. The Feminine Edit" },
         { "type": "text", "id": "title", "label": "Title override" },
         { "type": "text", "id": "subtitle", "label": "Subtitle (wide card only)", "default": "Explore textures" }
       ]
@@ -71,7 +79,11 @@
   "presets": [
     {
       "name": "Category bento",
-      "blocks": [{ "type": "category" }, { "type": "category" }, { "type": "category" }]
+      "blocks": [
+        { "type": "category", "settings": { "title": "Women", "eyebrow": "The Feminine Edit", "badge": "New Arrivals" } },
+        { "type": "category", "settings": { "title": "Men", "eyebrow": "The Essential Range" } },
+        { "type": "category", "settings": { "title": "Together", "eyebrow": "The Luxury Reserve", "badge": "Limited Edition" } }
+      ]
     }
   ]
 }
