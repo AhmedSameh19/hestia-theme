@@ -461,4 +461,46 @@
   if (sort) {
     sort.addEventListener('change', function () { sort.form.submit(); });
   }
+
+  /* ---------- Featured Pieces filter pills ---------- */
+  var filterBar = document.querySelector('[data-product-filters]');
+  if (filterBar) {
+    filterBar.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-filter]');
+      if (!btn) return;
+      filterBar.querySelectorAll('[data-filter]').forEach(function (b) {
+        b.dataset.active = 'false';
+      });
+      btn.dataset.active = 'true';
+      var type = btn.dataset.filter;
+      document.querySelectorAll('[data-product-type]').forEach(function (card) {
+        var show = type === 'all' || card.dataset.productType === type;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  }
+
+  /* ---------- Wishlist — localStorage-only, no backend ---------- */
+  var WISHLIST_KEY = 'aurca:wishlist';
+  var getWishlist = function () {
+    try { return JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]'); } catch (e) { return []; }
+  };
+  var setWishlistButtonState = function (btn, active) {
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btn.classList.toggle('text-terracotta', active);
+  };
+  document.querySelectorAll('[data-wishlist-toggle]').forEach(function (btn) {
+    var id = btn.getAttribute('data-wishlist-toggle');
+    setWishlistButtonState(btn, getWishlist().indexOf(id) !== -1);
+  });
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-wishlist-toggle]');
+    if (!btn) return;
+    var id = btn.getAttribute('data-wishlist-toggle');
+    var list = getWishlist();
+    var i = list.indexOf(id);
+    if (i === -1) { list.push(id); } else { list.splice(i, 1); }
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+    setWishlistButtonState(btn, i === -1);
+  });
 })();

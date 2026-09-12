@@ -13,6 +13,10 @@
     "home": "Home",
     "collections": "Collections",
     "explore": "Explore",
+    "all": "All",
+    "women": "Women",
+    "men": "Men",
+    "together": "Together",
     "email_placeholder": "email@address.com",
     "subscribe": "Subscribe",
     "previous": "Previous",
@@ -41,7 +45,10 @@
     "fabric_care": "Fabric & Care",
     "shipping": "Shipping",
     "placeholder_title": "Sample product",
-    "size_guide": "Size guide"
+    "size_guide": "Size guide",
+    "new": "New",
+    "add_to_wishlist": "Add to wishlist",
+    "ask_a_question": "Ask a question"
   },
   "collections": {
     "filters": "Filters",

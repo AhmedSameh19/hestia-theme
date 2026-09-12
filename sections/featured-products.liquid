@@ -1,20 +1,24 @@
 <section class="py-section-padding bg-surface-container-low overflow-hidden fade-in-section">
   <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-16">
-    <div class="flex justify-between items-end">
-      <div>
-        {%- if section.settings.eyebrow != blank -%}
-          <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ section.settings.eyebrow }}</span>
-        {%- endif -%}
-        <h2 class="font-headline-md text-headline-md">{{ section.settings.heading }}</h2>
-      </div>
-      <div class="hidden md:flex gap-4">
-        <button type="button" data-carousel-prev class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface transition-colors" aria-label="{{ 'general.previous' | t }}">
-          <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button type="button" data-carousel-next class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface transition-colors" aria-label="{{ 'general.next' | t }}">
-          <span class="material-symbols-outlined">chevron_right</span>
-        </button>
-      </div>
+    <div class="text-center mb-8">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 class="font-headline-md text-headline-md">{{ section.settings.heading }}</h2>
+    </div>
+    <div data-product-filters class="flex justify-center gap-2">
+      <button type="button" data-filter="all" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta" data-active="true">{{ 'general.all' | t }}</button>
+      <button type="button" data-filter="women" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta hover:border-primary" data-active="false">{{ 'general.women' | t }}</button>
+      <button type="button" data-filter="men" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta hover:border-primary" data-active="false">{{ 'general.men' | t }}</button>
+      <button type="button" data-filter="together" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta hover:border-primary" data-active="false">{{ 'general.together' | t }}</button>
+    </div>
+    <div class="hidden md:flex justify-end gap-4 mt-4">
+      <button type="button" data-carousel-prev class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface transition-colors" aria-label="{{ 'general.previous' | t }}">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <button type="button" data-carousel-next class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface transition-colors" aria-label="{{ 'general.next' | t }}">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
     </div>
   </div>
 
@@ -24,21 +28,14 @@
     {%- if products == blank -%}{%- assign products = collections['all'].products -%}{%- endif -%}
     {%- if products.size > 0 -%}
       {%- for product in products limit: section.settings.limit -%}
-        <div class="min-w-[280px] md:min-w-[360px] snap-start group">
-          <a href="{{ product.url }}" class="block aspect-[3/4] rounded-2xl overflow-hidden mb-6 product-shadow bg-surface-container-lowest transition-transform duration-500 group-hover:-translate-y-2">
-            {%- if product.featured_image -%}
-              <img width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" src="{{ product.featured_image | image_url: width: 720 }}" alt="{{ product.featured_image.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
-            {%- else -%}
-              {% render 'swatch', item: product %}
-            {%- endif -%}
-          </a>
-          <h4 class="font-headline-sm text-[20px] mb-1"><a href="{{ product.url }}">{{ product.title }}</a></h4>
-          {% render 'price', item: product %}
+        <div class="min-w-[280px] md:min-w-[360px] snap-start"
+             data-product-type="{% if product.tags contains 'women' %}women{% elsif product.tags contains 'men' %}men{% elsif product.tags contains 'together' %}together{% else %}all{% endif %}">
+          {% render 'product-card', product: product, show_quick_add: true %}
         </div>
       {%- endfor -%}
     {%- else -%}
       {%- for i in (1..4) -%}
-        <div class="min-w-[280px] md:min-w-[360px] snap-start group">
+        <div class="min-w-[280px] md:min-w-[360px] snap-start group" data-product-type="all">
           <div class="aspect-[3/4] rounded-2xl overflow-hidden mb-6 product-shadow bg-surface-container-lowest">
             {{ 'product-' | append: i | placeholder_svg_tag: 'w-full h-full object-cover' }}
           </div>
@@ -54,8 +51,8 @@
   "name": "Featured products",
   "settings": [
     { "type": "collection", "id": "collection", "label": "Collection" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Seasonal essentials" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "New Arrivals" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Curated for you" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured Pieces" },
     { "type": "range", "id": "limit", "label": "Products", "min": 2, "max": 12, "step": 1, "default": 8 }
   ],
   "presets": [{ "name": "Featured products" }]
