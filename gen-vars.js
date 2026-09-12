@@ -7,7 +7,7 @@ const light = {
   'surface-container-highest': '#e4e2e1', 'on-surface': '#1b1c1c',
   'on-surface-variant': '#494740', 'inverse-surface': '#303030',
   'inverse-on-surface': '#f3f0f0', outline: '#7a776f', 'outline-variant': '#cbc6bd',
-  primary: '#605e5a', 'on-primary': '#ffffff', 'primary-container': '#f8f3ee',
+  primary: '#605e5a', 'on-primary': '#ffffff', 'primary-container': '#f8f6f1',
   'on-primary-container': '#716f6b', 'inverse-primary': '#cac6c1',
   secondary: '#6a5c4d', 'on-secondary': '#ffffff', 'secondary-container': '#f0dcc9',
   'on-secondary-container': '#6f6051', tertiary: '#59614e', 'on-tertiary': '#ffffff',
@@ -16,7 +16,7 @@ const light = {
   'on-error-container': '#93000a', 'primary-fixed': '#e6e2dd',
   'primary-fixed-dim': '#cac6c1', 'secondary-fixed': '#f3dfcc',
   'secondary-fixed-dim': '#d6c3b1', 'tertiary-fixed': '#dde6cd',
-  background: '#f8f3ee', 'on-background': '#1b1c1c', 'surface-variant': '#e4e2e1',
+  background: '#f8f6f1', 'on-background': '#1b1c1c', 'surface-variant': '#e4e2e1',
 };
 const dark = {
   surface: '#2D2D2D', 'surface-dim': '#1b1c1c', 'surface-bright': '#3d3d3d',
@@ -25,16 +25,17 @@ const dark = {
   'surface-container-highest': '#494740', 'on-surface': '#F8F3EE',
   'on-surface-variant': '#cbc6bd', 'inverse-surface': '#fcf9f8',
   'inverse-on-surface': '#1b1c1c', 'outline-variant': '#494740',
-  primary: '#F8F3EE', 'on-primary': '#2D2D2D', 'primary-container': '#6F5648',
+  primary: '#F8F3EE', 'on-primary': '#2D2D2D', 'primary-container': '#97606C',
   'on-primary-container': '#F8F3EE', 'inverse-primary': '#605e5a',
   'secondary-container': '#6F5648', 'on-secondary-container': '#F8F3EE',
   'tertiary-container': '#414937', 'on-tertiary-container': '#eef7de',
-  background: '#2D2D2D', 'on-background': '#F8F3EE', 'surface-variant': '#494740',
+  background: '#2D2E2D', 'on-background': '#F8F6F1', 'surface-variant': '#494D57',
 };
-// Brand card (hestia webstite material-03.png) — anchor tokens, identical in both modes
+// Brand card (Aurca asset kit) — anchor tokens, identical in both modes
 const brand = {
-  cream: '#F8F3EE', beige: '#DCC9B6', terracotta: '#C97B63',
-  'warm-brown': '#6F5648', sage: '#A9B29B', charcoal: '#2D2D2D',
+  cream: '#F8F6F1', beige: '#E5D7CD', terracotta: '#A87052',
+  'warm-brown': '#97606C', sage: '#494D57', charcoal: '#2D2E2D',
+  maroon: '#4A1A28',
 };
 const rgb = (hex) => {
   const h = hex.replace('#', '');

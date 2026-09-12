@@ -16,7 +16,7 @@
   --c-outline-variant: 203 198 189;
   --c-primary: 96 94 90;
   --c-on-primary: 255 255 255;
-  --c-primary-container: 248 243 238;
+  --c-primary-container: 248 246 241;
   --c-on-primary-container: 113 111 107;
   --c-inverse-primary: 202 198 193;
   --c-secondary: 106 92 77;
@@ -36,15 +36,16 @@
   --c-secondary-fixed: 243 223 204;
   --c-secondary-fixed-dim: 214 195 177;
   --c-tertiary-fixed: 221 230 205;
-  --c-background: 248 243 238;
+  --c-background: 248 246 241;
   --c-on-background: 27 28 28;
   --c-surface-variant: 228 226 225;
-  --c-cream: 248 243 238;
-  --c-beige: 220 201 182;
-  --c-terracotta: 201 123 99;
-  --c-warm-brown: 111 86 72;
-  --c-sage: 169 178 155;
-  --c-charcoal: 45 45 45;
+  --c-cream: 248 246 241;
+  --c-beige: 229 215 205;
+  --c-terracotta: 168 112 82;
+  --c-warm-brown: 151 96 108;
+  --c-sage: 73 77 87;
+  --c-charcoal: 45 46 45;
+  --c-maroon: 74 26 40;
 }
 .dark {
   --c-surface: 45 45 45;
@@ -62,14 +63,14 @@
   --c-outline-variant: 73 71 64;
   --c-primary: 248 243 238;
   --c-on-primary: 45 45 45;
-  --c-primary-container: 111 86 72;
+  --c-primary-container: 151 96 108;
   --c-on-primary-container: 248 243 238;
   --c-inverse-primary: 96 94 90;
   --c-secondary-container: 111 86 72;
   --c-on-secondary-container: 248 243 238;
   --c-tertiary-container: 65 73 55;
   --c-on-tertiary-container: 238 247 222;
-  --c-background: 45 45 45;
-  --c-on-background: 248 243 238;
-  --c-surface-variant: 73 71 64;
+  --c-background: 45 46 45;
+  --c-on-background: 248 246 241;
+  --c-surface-variant: 73 77 87;
 }
