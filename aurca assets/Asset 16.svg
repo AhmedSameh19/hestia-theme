@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1080 1087.41">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        fill: url(#radial-gradient-3);
+      }
+
+      .cls-3 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-4 {
+        fill: url(#radial-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="40.7" y1="690.23" x2="1052.74" y2="1276.15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#494d57"/>
+      <stop offset=".13" stop-color="#40434a"/>
+      <stop offset=".35" stop-color="#2d2e2d"/>
+    </linearGradient>
+    <radialGradient id="radial-gradient" cx="-75.88" cy="390.12" fx="-75.88" fy="390.12" r="1028.62" gradientTransform="translate(-1.71 -1.25) scale(1.26 .52)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8f6f1"/>
+      <stop offset=".12" stop-color="#efe9e5"/>
+      <stop offset=".35" stop-color="#d9c6c7"/>
+      <stop offset=".65" stop-color="#b58f96"/>
+      <stop offset=".89" stop-color="#97606c"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="44.77" cy="1424.55" fx="-80" fy="1446.66" r="1762.99" gradientTransform="translate(-.3 -1.25) scale(1.26 .52)" gradientUnits="userSpaceOnUse">
+      <stop offset=".4" stop-color="#494d57"/>
+      <stop offset=".49" stop-color="#555962"/>
+      <stop offset=".65" stop-color="#787a80"/>
+      <stop offset=".87" stop-color="#afafb0"/>
+      <stop offset=".92" stop-color="#bcbcbc"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-3" cx="-3782.15" cy="1208.72" fx="-3782.15" fy="1208.72" r="584.97" gradientTransform="translate(11830.72 -95.76) scale(3.14 .82)" gradientUnits="userSpaceOnUse">
+      <stop offset=".07" stop-color="#4a1a28"/>
+      <stop offset=".92" stop-color="#2d2e2d"/>
+    </radialGradient>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <rect class="cls-1" x="1.14" y="869.94" width="1075.56" height="217.47"/>
+      <rect class="cls-4" x="3.3" y="216.83" width="1073.41" height="217.47"/>
+      <rect class="cls-3" x="1.14" y="434.31" width="1075.56" height="217.47"/>
+      <rect class="cls-2" x="1.14" y="651.78" width="1075.56" height="218.16"/>
+    </g>
+  </g>
+</svg>

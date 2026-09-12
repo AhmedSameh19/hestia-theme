@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F8F3EE">
     <link rel="canonical" href="{{ canonical_url }}">
-    <link rel="icon" type="image/png" href="{{ settings.favicon | default: 'logo-monogram-cream-bg.png' | asset_url }}">
+    <link rel="icon" type="image/png" href="{{ settings.favicon | default: 'logo-monogram-clay.svg' | asset_url }}">
 
     <title>
       {{- page_title -}}
@@ -34,7 +34,7 @@
           "@type": "Organization",
           "name": {{ shop.name | json }},
           "url": {{ shop.url | json }},
-          "logo": {{ 'logo-monogram.png' | asset_url | prepend: 'https:' | json }}
+          "logo": {{ 'logo-monogram-clay.svg' | asset_url | prepend: 'https:' | json }}
         }
       </script>
     {% endif %}

@@ -21,7 +21,7 @@
         ],
         "default": "light"
       },
-      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Defaults to the Xi monogram" }
+      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Defaults to the Aurca monogram" }
     ]
   }
 ]
