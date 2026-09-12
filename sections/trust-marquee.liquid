@@ -1,0 +1,33 @@
+{%- comment -%}
+  Scrolling trust-strip ticker (Free Shipping / Handcrafted With Love / etc).
+  Two copies of the same list rendered back to back — .animate-marquee scrolls
+  exactly 50% (one full list-width) so the loop is seamless.
+{%- endcomment -%}
+<section class="bg-charcoal text-cream py-4 overflow-hidden fade-in-section" aria-label="{{ section.settings.heading | default: 'Store benefits' }}">
+  <div class="flex w-max animate-marquee">
+    {%- assign items = section.settings.items | split: '|' -%}
+    {%- for rep in (1..2) -%}
+      <div class="flex items-center shrink-0">
+        {%- for item in items -%}
+          <span class="font-label-caps text-label-caps uppercase tracking-widest px-8 whitespace-nowrap">{{ item | strip }}</span>
+          <span class="text-cream/40" aria-hidden="true">&bull;</span>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust marquee",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "items",
+      "label": "Items (pipe-separated)",
+      "default": "Free Shipping Over $150|Handcrafted With Love|New Arrivals Weekly|Ethically Sourced Fabrics|Complimentary Gift Wrapping|Free Returns Within 30 Days"
+    }
+  ],
+  "presets": [{ "name": "Trust marquee" }]
+}
+{% endschema %}

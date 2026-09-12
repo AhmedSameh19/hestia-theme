@@ -137,6 +137,20 @@
       background-position-x: var(--tile-w);
     }
   }
+
+  /* Trust-marquee ticker — two copies of the item list sit back to back;
+     scrolling exactly 50% (one list-width) makes the loop seamless. */
+  @keyframes marquee {
+    0% {
+      transform: translate(0);
+    }
+    to {
+      transform: translate(-50%);
+    }
+  }
+  .animate-marquee {
+    animation: 28s linear infinite marquee;
+  }
   .transition-soft {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
