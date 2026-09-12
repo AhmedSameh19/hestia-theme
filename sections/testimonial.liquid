@@ -1,6 +1,9 @@
 <section class="py-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center fade-in-section">
   <div class="max-w-3xl mx-auto">
-    <span class="material-symbols-outlined icon-fill text-terracotta text-4xl mb-6">format_quote</span>
+    <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ 'general.customer_love' | t }}</span>
+    <div class="flex justify-center gap-1 mb-6 text-terracotta" aria-hidden="true">
+      {%- for i in (1..5) -%}<span class="material-symbols-outlined icon-fill text-[18px]">star</span>{%- endfor -%}
+    </div>
     <blockquote class="font-headline-md text-headline-md mb-8 leading-snug text-primary">
       &ldquo;{{ section.settings.quote }}&rdquo;
     </blockquote>
@@ -22,10 +25,10 @@
 {
   "name": "Testimonial",
   "settings": [
-    { "type": "textarea", "id": "quote", "label": "Quote", "default": "The quality of the silk is unlike anything I've ever owned. It makes coming home the best part of my day." },
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "The Midnight Silk Set is the most luxurious thing I own. Every morning feels like a five-star ritual." },
     { "type": "image_picker", "id": "avatar", "label": "Avatar" },
-    { "type": "text", "id": "author", "label": "Author", "default": "Eleanor M." },
-    { "type": "text", "id": "author_note", "label": "Author note", "default": "Verified Collector" }
+    { "type": "text", "id": "author", "label": "Author", "default": "Isabelle M." },
+    { "type": "text", "id": "author_note", "label": "Author note", "default": "Paris, France" }
   ],
   "presets": [{ "name": "Testimonial" }]
 }
