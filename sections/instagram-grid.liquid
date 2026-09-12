@@ -1,0 +1,73 @@
+{%- comment -%}
+  "Life in Aurca" UGC/Instagram-style masonry grid. Each block is one photo;
+  the first block renders large (spans 2 rows), the rest render as a 2-col grid —
+  matches the reference site's asymmetric layout. Merchant-editable via blocks
+  (no product/Instagram API dependency).
+{%- endcomment -%}
+<section class="py-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto fade-in-section">
+  <div class="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">
+    <div>
+      <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ section.settings.eyebrow }}</span>
+      <h2 class="font-headline-md text-headline-md">{{ section.settings.heading }}</h2>
+    </div>
+    {%- if section.settings.instagram_url != blank -%}
+      <a class="font-label-caps text-label-caps uppercase text-on-surface-variant border-b border-outline-variant hover:border-primary transition-colors pb-1"
+         href="{{ section.settings.instagram_url }}">{{ section.settings.link_label }}</a>
+    {%- endif -%}
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-gutter">
+    {%- for block in section.blocks -%}
+      <a href="{{ section.settings.instagram_url | default: '#' }}"
+         class="relative overflow-hidden rounded-2xl bento-card-zoom block {% if forloop.first %}col-span-2 row-span-2 aspect-square md:aspect-auto{% else %}aspect-square{% endif %}"
+         {{ block.shopify_attributes }}>
+        {%- if block.settings.image -%}
+          <img width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.caption | escape }}" loading="lazy" class="w-full h-full object-cover">
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+        {%- endif -%}
+        {%- if block.settings.caption != blank -%}
+          <div class="absolute bottom-4 left-4">
+            {%- if block.settings.tag != blank -%}
+              <span class="font-label-caps text-[10px] text-white/80 uppercase tracking-widest block mb-1">{{ block.settings.tag }}</span>
+            {%- endif -%}
+            <span class="font-headline-sm text-[16px] text-white">{{ block.settings.caption }}</span>
+          </div>
+        {%- endif -%}
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram grid",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "@aurca" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Life in Aurca" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Follow on Instagram" }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "tag", "label": "Tag (optional)", "info": "e.g. Women · Silk Edit" },
+        { "type": "text", "id": "caption", "label": "Caption", "info": "e.g. Morning Ritual" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram grid",
+      "blocks": [
+        { "type": "photo" }, { "type": "photo" }, { "type": "photo" },
+        { "type": "photo" }, { "type": "photo" }
+      ]
+    }
+  ]
+}
+{% endschema %}
