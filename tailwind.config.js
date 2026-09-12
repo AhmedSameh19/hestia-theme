@@ -34,14 +34,14 @@ module.exports = {
         'margin-mobile': '20px', gutter: '24px', 'margin-desktop': '80px',
       },
       fontFamily: {
-        // Brand font (hestia/ kit) for all headline utilities; DM Sans for body/labels
+        // Display: Cormorant Garamond (self-hosted). Section headings: Playfair Display. Body/labels: Inter.
         'display-lg': ['"Cormorant Garamond"', 'serif'],
-        'headline-md': ['"Cormorant Garamond"', 'serif'],
-        'headline-sm': ['"Cormorant Garamond"', 'serif'],
         'display-lg-mobile': ['"Cormorant Garamond"', 'serif'],
-        'body-lg': ['"DM Sans"', 'sans-serif'],
-        'body-md': ['"DM Sans"', 'sans-serif'],
-        'label-caps': ['"DM Sans"', 'sans-serif'],
+        'headline-md': ['"Playfair Display"', 'serif'],
+        'headline-sm': ['"Playfair Display"', 'serif'],
+        'body-lg': ['"Inter"', 'sans-serif'],
+        'body-md': ['"Inter"', 'sans-serif'],
+        'label-caps': ['"Inter"', 'sans-serif'],
       },
       fontSize: {
         'display-lg': ['64px', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '500' }],
