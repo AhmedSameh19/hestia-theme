@@ -1,7 +1,9 @@
 {%- comment -%}
   Home carousel — native CSS scroll-snap does the swiping (no arrows),
   theme.js auto-advances every 5s. Slides ship as theme assets.
-  ponytail: images/links hardcoded; add image_picker blocks if the merchant ever needs to swap slides from the editor.
+  Per-slide copy lives in `eyebrows`/`headlines`/`subheads`/`ctas`/`cta_links`
+  below — ponytail: hardcoded, add blocks/schema settings if the merchant
+  ever needs to edit this from the editor.
 {%- endcomment -%}
 <section class="fade-in-section">
   <div class="relative">
@@ -10,12 +12,33 @@
     {%- comment -%} Clones of the last/first slide at each end make the loop seamless; theme.js teleports off them {%- endcomment -%}
     <img src="{{ 'slider-5.jpg' | asset_url }}" alt="" aria-hidden="true" width="2400" height="1350"
          class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+    {%- assign eyebrows = "Women's Essentials|Men's Essentials|Together Edition|New Collection — 2024|Limited Edition" | split: '|' -%}
+    {%- assign headlines = "Graceful silhouettes, made to be lived in.|Refined comfort, without compromise.|Shared mornings, shared ease.|Dressed for the Hours Between|Quiet luxury for every hour." | split: '|' -%}
+    {%- assign subheads = "From mulberry silk to organic cotton — every piece shaped around a woman who actually lives.|Premium natural fabrics in precise cuts. Ease and elegance, at every hour.|Matching sets for the moments you share.|Luxurious pyjamas and homewear for morning rituals, afternoon ease, and quiet evenings.|Our most considered pieces, in limited runs." | split: '|' -%}
+    {%- assign ctas = "Explore Women's|Explore Men's|Explore Together|Shop the Collection|Explore Limited Edition" | split: '|' -%}
+    {%- assign cta_links = '/collections/women|/collections/men|/collections/together|/collections/all|/collections/all' | split: '|' -%}
     {%- for i in (1..5) -%}
+      {%- assign idx = forloop.index0 -%}
       {%- assign img = 'slider-' | append: forloop.index | append: '.jpg' -%}
-      <img src="{{ img | asset_url }}" alt="{{ shop.name }} lookbook {{ forloop.index }}"
-           width="2400" height="1350"
-           class="w-full h-full object-cover shrink-0 snap-center"
-           {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+      <div class="relative w-full h-full shrink-0 snap-center">
+        <img src="{{ img | asset_url }}" alt="{{ shop.name }} lookbook {{ forloop.index }}"
+             width="2400" height="1350"
+             class="w-full h-full object-cover"
+             {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent"></div>
+        <div class="absolute inset-0 flex items-center">
+          <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+            <div class="max-w-xl">
+              <span class="font-label-caps text-label-caps uppercase text-cream/80 tracking-widest mb-4 block">{{ eyebrows[idx] }}</span>
+              <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-cream mb-6 italic">{{ headlines[idx] }}</h1>
+              <p class="font-body-lg text-cream/90 max-w-md mb-8">{{ subheads[idx] }}</p>
+              <a href="{{ cta_links[idx] }}" class="inline-block bg-terracotta text-white px-8 py-4 font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">
+                {{ ctas[idx] }} &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     {%- endfor -%}
     <img src="{{ 'slider-1.jpg' | asset_url }}" alt="" aria-hidden="true" width="2400" height="1350"
          class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
@@ -28,17 +51,8 @@
     })();
   </script>
 
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-3">
-    {%- comment -%} label | brand bg | text color — brand colors also used on the matching collection headers {%- endcomment -%}
-    {%- assign items = 'Men|#626263|#FFFFFF,Women|#DCC9B6|#2D2D2D,Together|#CB7E67|#FFFFFF' | split: ',' -%}
-    {%- for item in items -%}
-      {%- assign parts = item | split: '|' -%}
-      <a href="/collections/{{ parts[0] | downcase }}"
-         class="glass-btn px-6 py-3 font-label-caps text-label-caps uppercase tracking-widest"
-         style="background-color:{{ parts[1] }}b3;border-color:{{ parts[1] }};color:{{ parts[2] }}">
-        {{ parts[0] }}
-      </a>
-    {%- endfor -%}
+  <div data-slide-counter class="absolute bottom-8 right-8 z-10 font-label-caps text-label-caps text-cream tracking-widest">
+    <span data-slide-current>01</span> <span class="opacity-50">— 05</span>
   </div>
   </div>
 

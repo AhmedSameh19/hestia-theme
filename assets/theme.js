@@ -58,6 +58,19 @@
     // ponytail: a user swipe just restarts the 5s clock; no pause-on-hover or visibility handling
     slider.addEventListener('pointerdown', start);
     start();
+
+    // Bottom-right "01 — 05" counter, if this slider has one
+    var counterEl = slider.parentElement.querySelector('[data-slide-current]');
+    if (counterEl) {
+      var realSlides = count - 2; // minus the leading/trailing clone
+      var updateCounter = function () {
+        var idx = Math.round(slider.scrollLeft / w()) - 1; // -1 to drop the leading clone
+        idx = ((idx % realSlides) + realSlides) % realSlides;
+        counterEl.textContent = String(idx + 1).padStart(2, '0');
+      };
+      slider.addEventListener('scroll', updateCounter, { passive: true });
+      updateCounter();
+    }
   });
 
   /* ---------- Search popup: default grid server-rendered, predictive results on type ---------- */
