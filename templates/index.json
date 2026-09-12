@@ -1,14 +1,29 @@
 {
   "sections": {
-    "slider": {
-      "type": "slider"
+    "slider": { "type": "slider" },
+    "marquee": { "type": "trust-marquee" },
+    "categories": {
+      "type": "category-bento",
+      "blocks": {
+        "women": { "type": "category", "settings": { "title": "Women", "eyebrow": "The Feminine Edit", "badge": "New Arrivals" } },
+        "men": { "type": "category", "settings": { "title": "Men", "eyebrow": "The Essential Range" } },
+        "together": { "type": "category", "settings": { "title": "Together", "eyebrow": "The Luxury Reserve", "badge": "Limited Edition" } }
+      },
+      "block_order": ["women", "men", "together"]
     },
-    "featured": {
-      "type": "featured-products"
+    "featured": { "type": "featured-products" },
+    "testimonial": { "type": "testimonial" },
+    "instagram": {
+      "type": "instagram-grid",
+      "blocks": {
+        "p1": { "type": "photo" },
+        "p2": { "type": "photo" },
+        "p3": { "type": "photo" },
+        "p4": { "type": "photo" },
+        "p5": { "type": "photo" }
+      },
+      "block_order": ["p1", "p2", "p3", "p4", "p5"]
     }
   },
-  "order": [
-    "slider",
-    "featured"
-  ]
+  "order": ["slider", "marquee", "categories", "featured", "testimonial", "instagram"]
 }
