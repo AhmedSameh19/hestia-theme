@@ -1,142 +1,144 @@
-{%- comment -%} Transparent-at-top (white text over the slider) only makes sense on the home page; everywhere else the header starts in its solid "scrolled" state {%- endcomment -%}
-<header data-header {% if request.page_type == 'index' %}data-transparent{% endif %} class="group fixed top-0 w-full z-50 transition-all duration-300 [&.scrolled]:bg-surface/80 [&.scrolled]:backdrop-blur-md [&.scrolled]:shadow-sm {% unless request.page_type == 'index' %}scrolled{% endunless %}">
-  {%- if section.settings.announcement != blank -%}
-    <div class="bg-charcoal text-cream text-center py-2 px-margin-mobile font-label-caps text-[11px] uppercase tracking-widest">
-      {{ section.settings.announcement }}
-    </div>
-  {%- endif -%}
-  <nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto h-20">
-    <div class="flex items-center gap-0 group-[.scrolled]:gap-6 transition-all duration-300">
-      <button data-menu-open class="md:hidden material-symbols-outlined text-cream group-[.scrolled]:text-on-surface-variant transition-colors" aria-label="{{ 'general.menu' | t }}">menu</button>
-      {%- comment -%} Logo is collapsed at the top of the page (links sit flush left) and expands + fades in once the header gains its scrolled background {%- endcomment -%}
-      <a class="block h-8 max-w-0 group-[.scrolled]:max-w-52 overflow-hidden opacity-0 pointer-events-none group-[.scrolled]:opacity-100 group-[.scrolled]:pointer-events-auto transition-all duration-300" href="{{ routes.root_url }}">
-        {%- if section.settings.logo -%}
-          <img width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}" src="{{ section.settings.logo | image_url: height: 64 }}" alt="{{ shop.name }}" class="h-full w-auto object-contain">
-        {%- else -%}
-          {%- comment -%} Aurca wordmark — dark:hidden picks the clay mark once scrolled/light, light mode/dark mode both stay legible {%- endcomment -%}
-          <img src="{{ 'logo-wordmark-clay.svg' | asset_url }}" alt="{{ shop.name }}" width="322" height="65" class="h-full w-auto object-contain dark:hidden">
-          <img src="{{ 'logo-wordmark-cream.svg' | asset_url }}" alt="{{ shop.name }}" width="322" height="65" class="h-full w-auto object-contain hidden dark:block">
-        {%- endif -%}
+<header data-header class="sticky top-0 w-full z-50 transition-all duration-300" style="background: #A87052;">
+  {%- comment -%} Announcement bar {%- endcomment -%}
+  <div style="background: #2D2E2D;" class="text-center py-2 px-4">
+    <p class="text-white/40 text-[9px] tracking-[0.32em] uppercase" data-i18n="announcement">
+      {{ section.settings.announcement | default: "Free shipping over 2,500 EGP · Complimentary gift wrapping · 30-day returns" }}
+    </p>
+  </div>
+
+  {%- comment -%} Main Header Bar (110px height) {%- endcomment -%}
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="flex items-center justify-between" style="height: 110px;">
+      
+      {%- comment -%} Left Navigation (Desktop) {%- endcomment -%}
+      <nav class="hidden lg:flex items-center gap-10">
+        <a href="#featured-products" data-nav-filter="Women" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="women">
+          Women
+        </a>
+        <a href="#featured-products" data-nav-filter="Men" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="men">
+          Men
+        </a>
+        <a href="#featured-products" data-nav-filter="Together" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="together">
+          Together
+        </a>
+        <a href="#lookbook" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="lookbook">
+          Lookbook
+        </a>
+      </nav>
+
+      {%- comment -%} Mobile Hamburger Menu Button {%- endcomment -%}
+      <div class="lg:hidden flex items-center">
+        <button type="button" data-menu-open class="text-white/80 hover:text-white p-2" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+
+      {%- comment -%} Center Brand Monogram Logo (110px x 110px) {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="flex-1 lg:flex-none flex justify-center items-center">
+        <img src="{{ 'logo-monogram-copper.svg' | asset_url }}" alt="Aurca — Luxury Homewear" width="110" height="110" class="object-contain flex-shrink-0" style="width: 110px; height: 110px;">
       </a>
 
-      <div class="hidden md:flex items-center gap-10">
-        {%- for link in section.settings.menu.links -%}
-          <a class="font-label-caps text-label-caps uppercase relative transition-colors
-                    {% if link.current %}text-cream border-cream group-[.scrolled]:text-primary group-[.scrolled]:border-primary border-b pb-1 font-bold{% else %}text-cream group-[.scrolled]:text-on-surface-variant group-[.scrolled]:hover:text-primary nav-link-hover{% endif %}"
-             href="{{ link.url }}">{{ link.title }}</a>
-        {%- endfor -%}
+      {%- comment -%} Right Controls (Desktop) {%- endcomment -%}
+      <div class="hidden lg:flex items-center gap-5">
+        {%- comment -%} Language Switcher (AR / EN) {%- endcomment -%}
+        <button type="button" data-lang-toggle class="text-white/65 hover:text-white transition-colors text-[9px] tracking-[0.18em] uppercase border border-white/25 px-2.5 py-1 hover:border-white/50">
+          <span data-lang-text>عربي</span>
+        </button>
+
+        {%- comment -%} Dark Mode Toggle {%- endcomment -%}
+        <button type="button" data-theme-toggle class="text-white/65 hover:text-white transition-colors p-1" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <span class="dark:hidden">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+          <span class="hidden dark:inline">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </span>
+        </button>
+
+        {%- comment -%} Search Button {%- endcomment -%}
+        <button type="button" data-search-open class="text-white/65 hover:text-white transition-colors p-1" title="Search" aria-label="Search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
+
+        {%- comment -%} Account Button {%- endcomment -%}
+        <button type="button" data-account-open class="text-white/65 hover:text-white transition-colors p-1" title="Account" aria-label="Account">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+
+        {%- comment -%} Wishlist Button {%- endcomment -%}
+        <button type="button" data-wishlist-open class="text-white/65 hover:text-white transition-colors p-1 relative" title="Wishlist" aria-label="Wishlist">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span data-wishlist-count class="absolute -top-1.5 -right-1.5 bg-[#2D2E2D] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-medium hidden">0</span>
+        </button>
+
+        {%- comment -%} Bag Button {%- endcomment -%}
+        <button type="button" data-cart-open class="text-white/65 hover:text-white transition-colors p-1 relative flex items-center gap-1.5" title="Bag" aria-label="Bag">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span data-cart-count class="bg-[#2D2E2D] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-medium {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
+        </button>
+      </div>
+
+      {%- comment -%} Right Controls (Mobile) {%- endcomment -%}
+      <div class="lg:hidden flex items-center gap-3">
+        <button type="button" data-wishlist-open class="text-white/80 p-1 relative" aria-label="Wishlist">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span data-wishlist-count class="absolute -top-1.5 -right-1.5 bg-[#2D2E2D] text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-medium hidden">0</span>
+        </button>
+        <button type="button" data-cart-open class="text-white/80 p-1 relative" aria-label="Bag">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span data-cart-count class="absolute -top-1.5 -right-1.5 bg-[#2D2E2D] text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-medium {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
+        </button>
       </div>
     </div>
+  </div>
 
-    <div class="flex items-center gap-6">
-      {%- if localization.available_countries.size > 1 -%}
-        <details class="relative group/currency">
-          <summary class="list-none cursor-pointer font-label-caps text-label-caps text-cream group-[.scrolled]:text-on-surface-variant transition-colors">{{ localization.country.currency.iso_code }}</summary>
-          {% form 'localization' %}
-            <div class="absolute right-0 top-full mt-2 bg-surface border border-outline-variant/30 rounded-xl shadow-lg py-2 z-50 min-w-[100px]">
-              {%- for country in localization.available_countries -%}
-                <button type="submit" name="country_code" value="{{ country.iso_code }}"
-                        class="w-full text-left px-4 py-2 font-label-caps text-label-caps hover:bg-surface-container {% if country.iso_code == localization.country.iso_code %}text-primary{% else %}text-on-surface-variant{% endif %}">
-                  {{ country.currency.iso_code }}
-                </button>
-              {%- endfor -%}
-            </div>
-          {% endform %}
-        </details>
-      {%- endif -%}
-      <button data-theme-toggle class="material-symbols-outlined text-cream group-[.scrolled]:text-on-surface-variant group-[.scrolled]:hover:text-primary transition-colors" aria-label="{{ 'general.toggle_theme' | t }}">
-        <span class="dark:hidden">dark_mode</span><span class="hidden dark:inline">light_mode</span>
+  {%- comment -%} Mobile Navigation Drawer {%- endcomment -%}
+  <div data-menu hidden class="lg:hidden bg-[#2D2E2D] text-white border-t border-white/10 px-6 py-6 transition-all duration-300 shadow-2xl">
+    <div class="flex flex-col gap-4 mb-6">
+      <a href="#featured-products" data-nav-filter="Women" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="women">Women</a>
+      <a href="#featured-products" data-nav-filter="Men" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="men">Men</a>
+      <a href="#featured-products" data-nav-filter="Together" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="together">Together</a>
+      <a href="#lookbook" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="lookbook">Lookbook</a>
+    </div>
+    <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+      <button type="button" data-lang-toggle class="text-white/80 text-[10px] tracking-[0.18em] uppercase border border-white/20 px-3 py-1.5">
+        <span data-lang-text>عربي</span>
       </button>
-      <a href="{{ routes.search_url }}" data-search-open class="material-symbols-outlined text-cream group-[.scrolled]:text-on-surface-variant group-[.scrolled]:hover:text-primary transition-colors" aria-label="{{ 'general.search' | t }}">search</a>
-      <div class="relative hidden md:block">
-        <button data-account-open class="material-symbols-outlined text-cream group-[.scrolled]:text-on-surface-variant group-[.scrolled]:hover:text-primary transition-colors" aria-label="{{ 'general.account' | t }}" aria-expanded="false">person</button>
-
-        {%- comment -%} Account dropdown — keeps sign-in / account access in-context instead of a full-page nav {%- endcomment -%}
-        <div data-account hidden class="absolute right-0 top-full mt-3 w-72 bg-surface border border-outline-variant/30 rounded-xl shadow-lg p-6 z-50">
-          {%- if customer -%}
-            <p class="font-body-md mb-1">{{ 'customers.account' | t }}</p>
-            <p class="font-body-md text-on-surface-variant mb-6 truncate">{{ customer.email }}</p>
-            <div class="flex flex-col gap-4 font-label-caps text-label-caps uppercase">
-              <a href="{{ routes.account_url }}" class="text-on-surface-variant hover:text-primary">{{ 'customers.order_history' | t }}</a>
-              <a href="{{ routes.account_addresses_url }}" class="text-on-surface-variant hover:text-primary">{{ 'customers.manage_addresses' | t }}</a>
-              <a href="{{ routes.account_logout_url }}" class="text-on-surface-variant hover:text-primary pt-4 border-t border-outline-variant/30">{{ 'customers.logout' | t }}</a>
-            </div>
-          {%- else -%}
-            <h2 class="font-headline-sm text-headline-sm mb-6">{{ 'customers.login' | t }}</h2>
-            {% form 'customer_login', class: 'space-y-4' %}
-              {{ form.errors | default_errors }}
-              <input type="email" name="customer[email]" placeholder="{{ 'general.email_placeholder' | t }}" autocomplete="email" required
-                     class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
-              <input type="password" name="customer[password]" placeholder="{{ 'general.password' | t }}" autocomplete="current-password" required
-                     class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-terracotta outline-none">
-              <button type="submit" class="w-full bg-terracotta text-white py-3 rounded-xl font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">{{ 'customers.login' | t }}</button>
-            {% endform %}
-            <div class="flex justify-between mt-4 font-label-caps text-label-caps uppercase text-on-surface-variant">
-              <a href="{{ routes.account_login_url }}#recover" class="hover:text-primary">{{ 'customers.forgot_password' | t }}</a>
-              <a href="{{ routes.account_register_url }}" class="hover:text-primary">{{ 'customers.create_account' | t }}</a>
-            </div>
-          {%- endif -%}
-        </div>
-      </div>
-      <a href="{{ routes.cart_url }}" data-cart-open class="relative material-symbols-outlined text-cream group-[.scrolled]:text-on-surface-variant group-[.scrolled]:hover:text-primary transition-colors" aria-label="{{ 'general.cart' | t }}">
-        shopping_bag
-        <span data-cart-count
-              class="absolute -top-1 -right-1 bg-terracotta text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
-      </a>
-    </div>
-  </nav>
-
-  {%- comment -%} Mobile menu drawer {%- endcomment -%}
-  <div data-menu hidden class="md:hidden bg-surface border-t border-outline-variant/30 px-margin-mobile py-8">
-    <div class="flex flex-col gap-6">
-      {%- for link in section.settings.menu.links -%}
-        <a class="font-label-caps text-label-caps uppercase {% if link.current %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
-      {%- endfor -%}
-      <a class="font-label-caps text-label-caps uppercase text-on-surface-variant" href="{{ routes.account_url }}">{{ 'general.account' | t }}</a>
+      <button type="button" data-theme-toggle class="text-white/80 text-[10px] tracking-[0.18em] uppercase border border-white/20 px-3 py-1.5 flex items-center gap-2">
+        <span class="dark:hidden">Dark Mode</span><span class="hidden dark:inline">Light Mode</span>
+      </button>
+      <button type="button" data-search-open class="text-white/80 text-[10px] tracking-[0.18em] uppercase border border-white/20 px-3 py-1.5">Search</button>
+      <button type="button" data-account-open class="text-white/80 text-[10px] tracking-[0.18em] uppercase border border-white/20 px-3 py-1.5">Account</button>
     </div>
   </div>
 </header>
-
-{%- comment -%}
-  Search popup — opens pre-filled with the newest products, then live-replaces the grid
-  from the predictive search API as the user types (theme.js). Enter still submits to the
-  full search page. Kept outside <header>: its backdrop-filter would trap this fixed overlay.
-{%- endcomment -%}
-<div data-search-modal hidden class="fixed inset-0 z-[60]">
-  <div class="absolute inset-0 bg-charcoal/50 backdrop-blur-sm"></div>
-  <div data-search-panel class="relative bg-surface w-[calc(100%-40px)] max-w-3xl mx-auto mt-[8vh] rounded-2xl shadow-xl p-6 md:p-8 max-h-[80vh] overflow-y-auto">
-    <form action="{{ routes.search_url }}" method="get" class="flex items-center gap-4 border-b border-outline-variant/50 pb-4 mb-6">
-      <span class="material-symbols-outlined text-on-surface-variant" aria-hidden="true">search</span>
-      <input data-search-input type="search" name="q" autocomplete="off"
-             placeholder="{{ 'general.search_placeholder' | t }}"
-             class="flex-1 bg-transparent outline-none font-body-lg text-body-lg placeholder:text-on-surface-variant/60">
-      <button type="button" data-search-close class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="{{ 'general.close' | t }}">close</button>
-    </form>
-    <div data-search-results class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {%- for product in collections.all.products limit: 4 -%}
-        {% render 'product-card', product: product %}
-      {%- endfor -%}
-    </div>
-  </div>
-</div>
-
-{%- comment -%} Cart side drawer — same fixed-overlay pattern as the search popup (kept outside <header>) {%- endcomment -%}
-<div data-cart-drawer hidden class="fixed inset-0 z-[60]">
-  <div class="absolute inset-0 bg-charcoal/50 backdrop-blur-sm"></div>
-  <aside data-cart-panel class="absolute right-0 top-0 h-full w-full max-w-md bg-surface shadow-2xl">
-    <div data-cart-drawer-content class="flex flex-col h-full">
-      {% render 'cart-drawer-content' %}
-    </div>
-  </aside>
-</div>
 
 {% schema %}
 {
   "name": "Header",
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Defaults to the Aurca wordmark" },
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Defaults to the Aurca copper monogram" },
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
-    { "type": "text", "id": "announcement", "label": "Announcement bar text", "default": "Free shipping over $150 · Complimentary gift wrapping · 30-day returns" }
+    { "type": "text", "id": "announcement", "label": "Announcement bar text", "default": "Free shipping over 2,500 EGP · Complimentary gift wrapping · 30-day returns" }
   ]
 }
 {% endschema %}

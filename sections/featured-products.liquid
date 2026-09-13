@@ -1,60 +1,518 @@
-<section class="py-section-padding bg-surface-container-low overflow-hidden fade-in-section">
-  <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-16">
-    <div class="text-center mb-8">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ section.settings.eyebrow }}</span>
-      {%- endif -%}
-      <h2 class="font-headline-md text-headline-md">{{ section.settings.heading }}</h2>
-    </div>
-    <div data-product-filters class="flex justify-center gap-2">
-      <button type="button" data-filter="all" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta" data-active="true">{{ 'general.all' | t }}</button>
-      <button type="button" data-filter="women" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta hover:border-primary" data-active="false">{{ 'general.women' | t }}</button>
-      <button type="button" data-filter="men" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta hover:border-primary" data-active="false">{{ 'general.men' | t }}</button>
-      <button type="button" data-filter="together" class="font-label-caps text-label-caps uppercase px-5 py-2 border border-outline-variant data-[active=true]:bg-terracotta data-[active=true]:text-white data-[active=true]:border-terracotta hover:border-primary" data-active="false">{{ 'general.together' | t }}</button>
-    </div>
-    <div class="hidden md:flex justify-end gap-4 mt-4">
-      <button type="button" data-carousel-prev class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface transition-colors" aria-label="{{ 'general.previous' | t }}">
-        <span class="material-symbols-outlined">chevron_left</span>
-      </button>
-      <button type="button" data-carousel-next class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface transition-colors" aria-label="{{ 'general.next' | t }}">
-        <span class="material-symbols-outlined">chevron_right</span>
-      </button>
-    </div>
-  </div>
+<section id="featured-products" class="py-20 px-6 lg:px-10 transition-colors duration-300 bg-white dark:bg-[#141414]">
+  <div class="max-w-7xl mx-auto">
+    {%- comment -%} Section Header {%- endcomment -%}
+    <div class="text-center mb-12">
+      <p class="text-[9px] tracking-[0.42em] uppercase mb-3 font-medium" style="color: #A87052;" data-i18n="curatedForYou">
+        Curated for You
+      </p>
+      <h2 class="font-light mb-8 font-display text-[clamp(36px,5vw,52px)] text-[#2D2E2D] dark:text-[#F8F6F1] transition-colors" data-i18n="featuredPieces">
+        Featured Pieces
+      </h2>
 
-  <div data-carousel class="flex gap-gutter px-margin-mobile md:px-margin-desktop scroll-pl-margin-mobile md:scroll-pl-margin-desktop max-w-container-max mx-auto overflow-x-auto pb-10 no-scrollbar snap-x">
-    {%- assign products = section.settings.collection.products -%}
-    {%- comment -%} ponytail: falls back to the auto "all" collection until the merchant creates the configured one. `== blank` matches both nil and empty {%- endcomment -%}
-    {%- if products == blank -%}{%- assign products = collections['all'].products -%}{%- endif -%}
-    {%- if products.size > 0 -%}
-      {%- for product in products limit: section.settings.limit -%}
-        <div class="min-w-[280px] md:min-w-[360px] snap-start"
-             data-product-type="{% if product.tags contains 'women' %}women{% elsif product.tags contains 'men' %}men{% elsif product.tags contains 'together' %}together{% else %}all{% endif %}">
-          {% render 'product-card', product: product, show_quick_add: true %}
-        </div>
-      {%- endfor -%}
-    {%- else -%}
-      {%- for i in (1..4) -%}
-        <div class="min-w-[280px] md:min-w-[360px] snap-start group" data-product-type="all">
-          <div class="aspect-[3/4] rounded-2xl overflow-hidden mb-6 product-shadow bg-surface-container-lowest">
-            {{ 'product-' | append: i | placeholder_svg_tag: 'w-full h-full object-cover' }}
+      {%- comment -%} Filter Tabs {%- endcomment -%}
+      <div class="inline-flex border" style="border-color: #BCBCBC;">
+        {%- assign tabs = "All,Women,Men,Together" | split: "," -%}
+        {%- for tab in tabs -%}
+          <button type="button" data-product-tab="{{ tab }}"
+                  class="product-tab-btn text-[9px] tracking-[0.22em] uppercase px-6 py-2.5 transition-all duration-200 font-medium {% if forloop.first %}active-tab text-white{% else %}text-[#494D57] dark:text-[#9A9690] hover:text-[#2D2E2D]{% endif %}"
+                  style="{% if forloop.first %}background: #A87052;{% else %}background: transparent;{% endif %}">
+            <span data-i18n="tab_{{ tab | downcase }}">{{ tab }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Products Grid (2 cols mobile, 3 cols md+) {%- endcomment -%}
+    <div data-featured-grid class="grid grid-cols-2 md:grid-cols-3 gap-5 lg:gap-8">
+      {%- comment -%} Product 1: Midnight Silk Set {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item" data-id="1" data-cat="Women">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="1">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278944-ca0e4f49e61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Midnight Silk Set" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
           </div>
-          <h4 class="font-headline-sm text-[20px] mb-1">{{ 'products.placeholder_title' | t }}</h4>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #A87052;">Bestseller</div>
+          <button type="button" data-wishlist-toggle="1" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="1" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
         </div>
-      {%- endfor -%}
-    {%- endif -%}
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Women · Mulberry Silk</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Midnight Silk Set</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">12,325 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #1a2240;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #9E6E7A;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #B87150;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Midnight Silk Set" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 2: Morning Bloom {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item" data-id="2" data-cat="Women">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="2">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278967-c0646b1bfd67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Morning Bloom" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #494D57;">New</div>
+          <button type="button" data-wishlist-toggle="2" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="2" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Women · Premium Modal</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Morning Bloom</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">9,355 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #D4C8B4;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #9E6E7A;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #3D4147;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Morning Bloom" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 3: Lavender Reverie {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item" data-id="3" data-cat="Together">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="3">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278825-55168658f120?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Lavender Reverie" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #4A1A28;">Together</div>
+          <button type="button" data-wishlist-toggle="3" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="3" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Together · Mulberry Silk</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Lavender Reverie</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">17,275 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #C9BADC;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #5C1C2A;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Lavender Reverie" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 4: Cloud White {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item" data-id="4" data-cat="Women">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="4">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278842-b754f1e093c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Cloud White" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #97606C;">-20%</div>
+          <button type="button" data-wishlist-toggle="4" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="4" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Women · Organic Cotton</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Cloud White</h4>
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-baseline gap-2">
+              <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">9,850 EGP</span>
+              <span class="text-xs line-through text-[#BCBCBC]">12,325 EGP</span>
+            </div>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #E8D5C9;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #9E6E7A;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Cloud White" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 5: Dusk Robe {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item" data-id="5" data-cat="Men">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="5">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1718963892337-b6729c302b8f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Dusk Robe" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #494D57;">New</div>
+          <button type="button" data-wishlist-toggle="5" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="5" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Men · Velour Cotton</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Dusk Robe</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">10,840 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #3D4147;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #B87150;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #C0BFC0;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Dusk Robe" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 6: Noir Prestige {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item" data-id="6" data-cat="Together">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="6">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1584061606850-a57652a323a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Noir Prestige" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #4A1A28;">Together</div>
+          <button type="button" data-wishlist-toggle="6" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="6" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Together · Cashmere Blend</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Noir Prestige</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">20,740 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #1E1E1E;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #B87150;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Noir Prestige" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 7: Ivory Embrace {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item hidden" data-id="7" data-cat="Women">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="7">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278842-b754f1e093c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Ivory Embrace" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <button type="button" data-wishlist-toggle="7" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="7" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Women · Organic Cotton</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Ivory Embrace</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">8,860 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #D4C8B4;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #9E6E7A;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Ivory Embrace" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 8: Slate Essential {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item hidden" data-id="8" data-cat="Men">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="8">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1718963892337-b6729c302b8f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Slate Essential" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <button type="button" data-wishlist-toggle="8" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="8" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Men · Premium Modal</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Slate Essential</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">9,850 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #3D4147;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #1E1E1E;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #C0BFC0;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Slate Essential" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 9: Rose Atelier {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item hidden" data-id="9" data-cat="Together">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="9">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278825-55168658f120?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Rose Atelier" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #4A1A28;">Together</div>
+          <button type="button" data-wishlist-toggle="9" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="9" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Together · Mulberry Silk</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Rose Atelier</h4>
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">19,255 EGP</span>
+              <span class="text-xs line-through text-[#BCBCBC]">21,235 EGP</span>
+            </div>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #9E6E7A;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #5C1C2A;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Rose Atelier" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 10: Pearl Morning {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item hidden" data-id="10" data-cat="Women">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="10">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278967-c0646b1bfd67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Pearl Morning" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <button type="button" data-wishlist-toggle="10" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="10" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Women · Premium Modal</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Pearl Morning</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">10,840 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #D4C8B4;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #B87150;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Pearl Morning" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 11: Onyx Classic {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item hidden" data-id="11" data-cat="Men">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="11">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1584061606850-a57652a323a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Onyx Classic" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <button type="button" data-wishlist-toggle="11" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="11" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Men · Velour Cotton</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Onyx Classic</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">11,830 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #1E1E1E;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #3D4147;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #B87150;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Onyx Classic" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+
+      {%- comment -%} Product 12: Champagne Dreams {%- endcomment -%}
+      <div class="group cursor-pointer product-card-item hidden" data-id="12" data-cat="Together">
+        <div class="relative overflow-hidden mb-4" style="background: #E5D7CD;" data-open-quickview="12">
+          <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+            <img src="https://images.unsplash.com/photo-1766056278944-ca0e4f49e61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                 alt="Champagne Dreams" loading="lazy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute top-4 left-4 text-white text-[7px] tracking-[0.28em] uppercase px-2.5 py-1.5 font-medium" style="background: #4A1A28;">Together</div>
+          <button type="button" data-wishlist-toggle="12" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57]" aria-label="Wishlist">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0" style="background: #2D2E2D;" onclick="event.stopPropagation();">
+            <div class="flex items-center justify-between">
+              <div class="flex gap-1 size-selector-group">
+                <button type="button" data-size="XS" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XS</button>
+                <button type="button" data-size="S" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">S</button>
+                <button type="button" data-size="M" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors active-size bg-[#A87052] text-white">M</button>
+                <button type="button" data-size="L" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">L</button>
+                <button type="button" data-size="XL" class="size-btn w-7 h-7 text-[8px] font-medium transition-colors bg-white/10 text-white">XL</button>
+              </div>
+              <button type="button" data-quick-add="12" class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium" style="background: #A87052;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-[8px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Together · Cashmere Blend</p>
+          <h4 class="font-light mb-2 font-display text-[20px] text-[#2D2E2D] dark:text-[#F0EDE8]">Champagne Dreams</h4>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">22,720 EGP</span>
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #D4C8B4;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #F5F0EA;"></div>
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: #5C1C2A;"></div>
+            </div>
+          </div>
+          <button type="button" data-ask-question="Champagne Dreams" class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/40 border-[#494D57]/40 dark:text-white/40">Ask a question</button>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Bottom Buttons: Load More & View All Products {%- endcomment -%}
+    <div class="text-center mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <button type="button" data-load-more
+              class="inline-flex items-center gap-3 text-[10px] tracking-[0.22em] uppercase px-10 py-4 border transition-colors hover:text-white font-medium border-[#494D57] text-[#494D57] hover:bg-[#494D57] dark:border-[#9A9690] dark:text-[#9A9690] dark:hover:bg-[#494D57]">
+        <span data-i18n="loadMore">Load More</span>
+      </button>
+      <a href="{{ routes.all_products_collection_url }}"
+         class="inline-flex items-center gap-3 text-[10px] tracking-[0.22em] uppercase px-10 py-4 border transition-colors hover:text-white font-medium border-[#494D57] text-[#494D57] hover:bg-[#494D57] dark:border-[#9A9690] dark:text-[#9A9690] dark:hover:bg-[#494D57]">
+        <span data-i18n="viewAllProducts">View All Products</span>
+      </a>
+    </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Featured products",
-  "settings": [
-    { "type": "collection", "id": "collection", "label": "Collection" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Curated for you" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured Pieces" },
-    { "type": "range", "id": "limit", "label": "Products", "min": 2, "max": 12, "step": 1, "default": 8 }
-  ],
-  "presets": [{ "name": "Featured products" }]
+  "name": "Featured pieces",
+  "settings": [],
+  "presets": [{ "name": "Featured pieces" }]
 }
 {% endschema %}

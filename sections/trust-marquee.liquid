@@ -1,18 +1,15 @@
-{%- comment -%}
-  Scrolling trust-strip ticker (Free Shipping / Handcrafted With Love / etc).
-  Two copies of the same list rendered back to back — .animate-marquee scrolls
-  exactly 50% (one full list-width) so the loop is seamless.
-{%- endcomment -%}
-<section class="bg-charcoal text-cream py-4 overflow-hidden fade-in-section" aria-label="{{ section.settings.heading | default: 'Store benefits' }}">
-  <div class="flex w-max animate-marquee">
-    {%- assign items = section.settings.items | split: '|' -%}
-    {%- for rep in (1..2) -%}
-      <div class="flex items-center shrink-0">
-        {%- for item in items -%}
-          <span class="font-label-caps text-label-caps uppercase tracking-widest px-8 whitespace-nowrap">{{ item | strip }}</span>
-          <span class="text-cream/40" aria-hidden="true">&bull;</span>
-        {%- endfor -%}
-      </div>
+<section class="overflow-hidden py-3.5" style="background: #494D57;" aria-label="Benefits ticker">
+  <div class="flex animate-marquee whitespace-nowrap">
+    {%- assign items = "FREE SHIPPING OVER 2,500 EGP|HANDCRAFTED WITH LOVE|NEW ARRIVALS WEEKLY|ETHICALLY SOURCED FABRICS|COMPLIMENTARY GIFT WRAPPING|FREE RETURNS WITHIN 30 DAYS" | split: "|" -%}
+    {%- for i in (1..3) -%}
+      {%- for item in items -%}
+        <span class="inline-flex items-center">
+          <span class="text-white/55 text-[9px] tracking-[0.35em] uppercase mx-8 font-medium">
+            {{ item }}
+          </span>
+          <img src="{{ 'logo-monogram-flower.svg' | asset_url }}" alt="" class="w-2 h-2 object-contain brightness-0 invert opacity-25" loading="lazy">
+        </span>
+      {%- endfor -%}
     {%- endfor -%}
   </div>
 </section>
@@ -20,14 +17,7 @@
 {% schema %}
 {
   "name": "Trust marquee",
-  "settings": [
-    {
-      "type": "textarea",
-      "id": "items",
-      "label": "Items (pipe-separated)",
-      "default": "Free Shipping Over $150|Handcrafted With Love|New Arrivals Weekly|Ethically Sourced Fabrics|Complimentary Gift Wrapping|Free Returns Within 30 Days"
-    }
-  ],
+  "settings": [],
   "presets": [{ "name": "Trust marquee" }]
 }
 {% endschema %}
