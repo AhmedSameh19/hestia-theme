@@ -30,18 +30,18 @@
   };
 
   const PRODUCTS = [
-    { id: 1, name: 'Midnight Silk Set', cat: 'Women', price: 249, originalPrice: null, tag: 'Bestseller', img: IMAGES.prod1, colors: ['#1a2240', '#9E6E7A', '#B87150'], fabric: 'Mulberry Silk' },
-    { id: 2, name: 'Morning Bloom', cat: 'Women', price: 189, originalPrice: null, tag: 'New', img: IMAGES.prod2, colors: ['#D4C8B4', '#9E6E7A', '#3D4147'], fabric: 'Premium Modal' },
-    { id: 3, name: 'Lavender Reverie', cat: 'Together', price: 349, originalPrice: null, tag: 'Together', img: IMAGES.prod3, colors: ['#C9BADC', '#F5F0EA', '#5C1C2A'], fabric: 'Mulberry Silk' },
-    { id: 4, name: 'Cloud White', cat: 'Women', price: 199, originalPrice: 249, tag: null, img: IMAGES.prod4, colors: ['#F5F0EA', '#E8D5C9', '#9E6E7A'], fabric: 'Organic Cotton' },
-    { id: 5, name: 'Dusk Robe', cat: 'Men', price: 219, originalPrice: null, tag: 'New', img: IMAGES.prod5, colors: ['#3D4147', '#B87150', '#C0BFC0'], fabric: 'Velour Cotton' },
-    { id: 6, name: 'Noir Prestige', cat: 'Together', price: 419, originalPrice: null, tag: 'Together', img: IMAGES.prod6, colors: ['#1E1E1E', '#B87150', '#F5F0EA'], fabric: 'Cashmere Blend' },
-    { id: 7, name: 'Ivory Embrace', cat: 'Women', price: 179, originalPrice: null, tag: null, img: IMAGES.prod4, colors: ['#F5F0EA', '#D4C8B4', '#9E6E7A'], fabric: 'Organic Cotton' },
-    { id: 8, name: 'Slate Essential', cat: 'Men', price: 199, originalPrice: null, tag: null, img: IMAGES.prod5, colors: ['#3D4147', '#1E1E1E', '#C0BFC0'], fabric: 'Premium Modal' },
-    { id: 9, name: 'Rose Atelier', cat: 'Together', price: 389, originalPrice: 429, tag: 'Together', img: IMAGES.prod3, colors: ['#9E6E7A', '#F5F0EA', '#5C1C2A'], fabric: 'Mulberry Silk' },
-    { id: 10, name: 'Pearl Morning', cat: 'Women', price: 219, originalPrice: null, tag: null, img: IMAGES.prod2, colors: ['#F5F0EA', '#D4C8B4', '#B87150'], fabric: 'Premium Modal' },
-    { id: 11, name: 'Onyx Classic', cat: 'Men', price: 239, originalPrice: null, tag: null, img: IMAGES.prod6, colors: ['#1E1E1E', '#3D4147', '#B87150'], fabric: 'Velour Cotton' },
-    { id: 12, name: 'Champagne Dreams', cat: 'Together', price: 459, originalPrice: null, tag: 'Together', img: IMAGES.prod1, colors: ['#D4C8B4', '#F5F0EA', '#5C1C2A'], fabric: 'Cashmere Blend' }
+    { id: 1, name: 'Midnight Silk Set', cat: 'Women', price: 12326, originalPrice: null, tag: 'Bestseller', img: IMAGES.prod1, colors: ['#1a2240', '#9E6E7A', '#B87150'], fabric: 'Mulberry Silk' },
+    { id: 2, name: 'Morning Bloom', cat: 'Women', price: 9356, originalPrice: null, tag: 'New', img: IMAGES.prod2, colors: ['#D4C8B4', '#9E6E7A', '#3D4147'], fabric: 'Premium Modal' },
+    { id: 3, name: 'Lavender Reverie', cat: 'Together', price: 17276, originalPrice: null, tag: 'Together', img: IMAGES.prod3, colors: ['#C9BADC', '#F5F0EA', '#5C1C2A'], fabric: 'Mulberry Silk' },
+    { id: 4, name: 'Cloud White', cat: 'Women', price: 9851, originalPrice: 12326, tag: null, img: IMAGES.prod4, colors: ['#F5F0EA', '#E8D5C9', '#9E6E7A'], fabric: 'Organic Cotton' },
+    { id: 5, name: 'Dusk Robe', cat: 'Men', price: 10841, originalPrice: null, tag: 'New', img: IMAGES.prod5, colors: ['#3D4147', '#B87150', '#C0BFC0'], fabric: 'Velour Cotton' },
+    { id: 6, name: 'Noir Prestige', cat: 'Together', price: 20741, originalPrice: null, tag: 'Together', img: IMAGES.prod6, colors: ['#1E1E1E', '#B87150', '#F5F0EA'], fabric: 'Cashmere Blend' },
+    { id: 7, name: 'Ivory Embrace', cat: 'Women', price: 8861, originalPrice: null, tag: null, img: IMAGES.prod4, colors: ['#F5F0EA', '#D4C8B4', '#9E6E7A'], fabric: 'Organic Cotton' },
+    { id: 8, name: 'Slate Essential', cat: 'Men', price: 9851, originalPrice: null, tag: null, img: IMAGES.prod5, colors: ['#3D4147', '#1E1E1E', '#C0BFC0'], fabric: 'Premium Modal' },
+    { id: 9, name: 'Rose Atelier', cat: 'Together', price: 19256, originalPrice: 21236, tag: 'Together', img: IMAGES.prod3, colors: ['#9E6E7A', '#F5F0EA', '#5C1C2A'], fabric: 'Mulberry Silk' },
+    { id: 10, name: 'Pearl Morning', cat: 'Women', price: 10841, originalPrice: null, tag: null, img: IMAGES.prod2, colors: ['#F5F0EA', '#D4C8B4', '#B87150'], fabric: 'Premium Modal' },
+    { id: 11, name: 'Onyx Classic', cat: 'Men', price: 11831, originalPrice: null, tag: null, img: IMAGES.prod6, colors: ['#1E1E1E', '#3D4147', '#B87150'], fabric: 'Velour Cotton' },
+    { id: 12, name: 'Champagne Dreams', cat: 'Together', price: 22721, originalPrice: null, tag: 'Together', img: IMAGES.prod1, colors: ['#D4C8B4', '#F5F0EA', '#5C1C2A'], fabric: 'Cashmere Blend' }
   ];
 
   const PRODUCT_DETAILS = {
@@ -122,13 +122,6 @@
     12: [IMAGES.prod1, IMAGES.prod3, IMAGES.lifestyle4, IMAGES.lifestyle5]
   };
 
-  const CURRENCY_RATES = {
-    USD: { symbol: '$', rate: 1, suffix: '' },
-    EUR: { symbol: '€', rate: 0.92, suffix: '' },
-    GBP: { symbol: '£', rate: 0.79, suffix: '' },
-    AED: { symbol: '', rate: 3.67, suffix: ' د.إ' },
-    EGP: { symbol: '', rate: 49.5, suffix: ' ج.م' }
-  };
 
   const TRANSLATIONS = {
     en: {
@@ -205,13 +198,12 @@
   /* ==========================================================================
      3. HELPER FUNCTIONS
      ========================================================================== */
-  function formatPrice(amountInUSD) {
-    const rate = 49.5;
-    const converted = Math.round(amountInUSD * rate);
+  function formatPrice(amount) {
+    const rounded = Math.round(amount || 0);
     if (currentLang === 'ar') {
-      return `${converted.toLocaleString('ar-EG')} ج.م`;
+      return `${rounded.toLocaleString('ar-EG')} ج.م`;
     }
-    return `${converted.toLocaleString('en-US')} EGP`;
+    return `${rounded.toLocaleString('en-US')} EGP`;
   }
 
   function showToast(message, type = 'success') {
@@ -346,16 +338,15 @@
     const progressBar = document.querySelector('[data-shipping-progress-bar]');
     const progressText = document.querySelector('[data-shipping-progress-text]');
     if (progressBar && progressText) {
-      const thresholdEGP = 2500;
-      const subtotalEGP = subtotal * 49.5;
-      const pct = Math.min(100, Math.round((subtotalEGP / thresholdEGP) * 100));
+      const threshold = 2500;
+      const pct = Math.min(100, Math.round((subtotal / threshold) * 100));
       progressBar.style.width = `${pct}%`;
-      if (subtotalEGP >= thresholdEGP) {
+      if (subtotal >= threshold) {
         progressText.textContent = currentLang === 'en' ? '✓ You qualify for free shipping!' : '✓ أنت مؤهل للشحن المجاني!';
         progressBar.style.background = '#494D57';
       } else {
-        const remainingEGP = thresholdEGP - subtotalEGP;
-        const formattedRemaining = currentLang === 'ar' ? `${Math.round(remainingEGP).toLocaleString('ar-EG')} ج.م` : `${Math.round(remainingEGP).toLocaleString('en-US')} EGP`;
+        const remaining = threshold - subtotal;
+        const formattedRemaining = formatPrice(remaining);
         progressText.textContent = currentLang === 'en' ? `Add ${formattedRemaining} for free shipping` : `أضف ${formattedRemaining} للشحن المجاني`;
         progressBar.style.background = '#A87052';
       }
