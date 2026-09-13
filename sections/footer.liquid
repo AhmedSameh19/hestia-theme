@@ -1,71 +1,81 @@
-<footer class="bg-beige text-charcoal w-full mt-12">
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-12 max-w-container-max mx-auto">
-    <div class="md:col-span-5 mb-8 md:mb-0">
-      {%- if section.settings.wordmark -%}
-        <img width="{{ section.settings.wordmark.width }}" height="{{ section.settings.wordmark.height }}" src="{{ section.settings.wordmark | image_url: width: 480 }}" alt="{{ shop.name }}" class="h-12 w-auto object-contain mb-4">
-      {%- else -%}
-        {%- comment -%} Aurca wordmark, clay fill reads on the beige/light footer and dark-mode charcoal alike {%- endcomment -%}
-        <img src="{{ 'logo-wordmark-clay.svg' | asset_url }}" alt="{{ shop.name }}" width="322" height="65" class="h-12 w-auto object-contain mb-4">
-      {%- endif -%}
-      <p class="font-body-md text-charcoal/80 mb-4 max-w-sm">{{ section.settings.newsletter_text }}</p>
-      {% form 'customer', class: 'max-w-md' %}
-        {%- if form.posted_successfully? -%}
-          <p class="font-body-md text-sage">{{ 'general.subscribe_success' | t }}</p>
-        {%- else -%}
-          {{ form.errors | default_errors }}
-          <div class="flex gap-4">
-            <input type="hidden" name="contact[tags]" value="newsletter">
-            <input type="email" name="contact[email]" required value="{{ form.email }}"
-                   class="flex-1 bg-transparent border-b border-charcoal/30 py-3 text-charcoal placeholder:text-charcoal/50 focus:outline-none focus:border-charcoal transition-colors"
-                   placeholder="{{ 'general.email_placeholder' | t }}">
-            <button type="submit" class="font-label-caps text-label-caps text-charcoal hover:text-terracotta transition-colors tracking-widest uppercase">
-              {{ 'general.subscribe' | t }}
-            </button>
-          </div>
-        {%- endif -%}
-      {% endform %}
-    </div>
+<footer class="text-white w-full transition-colors duration-300" style="background: #2D2E2D;">
+  {%- comment -%} Main Row: Brand & Navigation {%- endcomment -%}
+  <div class="px-6 lg:px-10 py-12" style="border-bottom: 1px solid rgba(255,255,255,0.07);">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10 lg:gap-16">
+      {%- comment -%} Left: Brand Monogram, Tagline & Socials {%- endcomment -%}
+      <div class="max-w-sm">
+        <img src="{{ 'logo-monogram-dark.svg' | asset_url }}" alt="Aurca" width="64" height="64"
+             class="object-contain mb-4" style="width: 64px; height: 64px;">
+        <p class="text-xs leading-relaxed mb-6" style="color: rgba(255,255,255,0.4);" data-i18n="brandTagline">
+          Luxury homewear for the sacred hours between waking and sleeping. Est. 2018.
+        </p>
 
-    {%- assign menus = 'menu_1,menu_2,menu_3' | split: ',' -%}
-    {%- for id in menus -%}
-      {%- assign menu = section.settings[id] -%}
-      {%- if menu != blank -%}
-        <div class="md:col-span-2 {% if forloop.first %}md:col-start-7{% endif %} flex flex-col gap-4">
-          <h4 class="font-label-caps text-label-caps text-charcoal font-bold mb-4 uppercase">{{ menu.title }}</h4>
-          {%- for link in menu.links -%}
-            <a class="font-label-caps text-label-caps text-charcoal/80 hover:text-terracotta transition-colors uppercase" href="{{ link.url }}">{{ link.title }}</a>
-          {%- endfor -%}
+        {%- comment -%} Social Icons (Instagram & TikTok only) {%- endcomment -%}
+        <div class="flex items-center gap-2.5">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+             class="w-7 h-7 flex items-center justify-center border hover:border-white/50 transition-colors"
+             style="border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok"
+             class="w-7 h-7 flex items-center justify-center border hover:border-white/50 transition-colors"
+             style="border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.86 4.86 0 0 1-1.02-.06z"/>
+            </svg>
+          </a>
         </div>
-      {%- endif -%}
-    {%- endfor -%}
+      </div>
+
+      {%- comment -%} Right: Navigation Links {%- endcomment -%}
+      <div class="flex flex-wrap gap-12 lg:gap-20">
+        {%- comment -%} Client Care {%- endcomment -%}
+        <div>
+          <h5 class="text-[9px] tracking-[0.3em] uppercase mb-4 font-semibold" style="color: rgba(255,255,255,0.25);" data-i18n="help">
+            Client Care
+          </h5>
+          <ul class="space-y-2.5">
+            <li><button type="button" data-size-guide-open class="text-xs transition-colors hover:text-white text-left" style="color: rgba(255,255,255,0.45);" data-i18n="sizeGuide">Size Guide</button></li>
+            <li><button type="button" data-support-open class="text-xs transition-colors hover:text-white text-left" style="color: rgba(255,255,255,0.45);">Shipping & Returns</button></li>
+            <li><button type="button" data-support-open class="text-xs transition-colors hover:text-white text-left" style="color: rgba(255,255,255,0.45);">Contact Us</button></li>
+            <li><button type="button" data-support-open class="text-xs transition-colors hover:text-white text-left" style="color: rgba(255,255,255,0.45);">FAQs</button></li>
+          </ul>
+        </div>
+
+        {%- comment -%} Collections {%- endcomment -%}
+        <div>
+          <h5 class="text-[9px] tracking-[0.3em] uppercase mb-4 font-semibold" style="color: rgba(255,255,255,0.25);" data-i18n="collections">
+            Collections
+          </h5>
+          <ul class="space-y-2.5">
+            <li><a href="#featured-products" data-nav-filter="Women" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Women's Sleepwear</a></li>
+            <li><a href="#featured-products" data-nav-filter="Men" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Men's Homewear</a></li>
+            <li><a href="#featured-products" data-nav-filter="Together" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Together Edition</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="px-margin-mobile md:px-margin-desktop py-6 border-t border-charcoal/10 max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-    <p class="font-label-caps text-[10px] text-charcoal/60 tracking-widest uppercase">
-      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ powered_by_link }}
-    </p>
-    <div class="flex items-center gap-6">
-      {%- if section.settings.social_instagram != blank -%}
-        <a href="{{ section.settings.social_instagram }}" aria-label="Instagram" class="text-charcoal/60 hover:text-terracotta transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+  {%- comment -%} Bottom Row: Copyright & Legal Links {%- endcomment -%}
+  <div class="px-6 lg:px-10 py-5">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-[10px]" style="color: rgba(255,255,255,0.25);" data-i18n="copyright">
+        &copy; 2024 Aurca Homewear. All rights reserved.
+      </p>
+
+      <div class="flex items-center gap-5">
+        <a href="#" class="text-[9px] hover:text-white/50 transition-colors" style="color: rgba(255,255,255,0.25);">
+          Privacy
         </a>
-      {%- endif -%}
-      {%- if section.settings.social_facebook != blank -%}
-        <a href="{{ section.settings.social_facebook }}" aria-label="Facebook" class="text-charcoal/60 hover:text-terracotta transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.7c0-.9.3-1.6 1.7-1.6h1.5V3.2c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.9H8v3.2h2.8v8h2.7z"/></svg>
+        <a href="#" class="text-[9px] hover:text-white/50 transition-colors" style="color: rgba(255,255,255,0.25);">
+          Terms
         </a>
-      {%- endif -%}
-      {%- if section.settings.social_tiktok != blank -%}
-        <a href="{{ section.settings.social_tiktok }}" aria-label="TikTok" class="text-charcoal/60 hover:text-terracotta transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.1 1.8 3.5 3.9 3.6v3c-1.5 0-2.8-.5-3.9-1.3v5.7c0 3.6-2.6 5.9-5.7 5.9-3 0-5.4-2.2-5.4-5.3 0-3 2.3-5.3 5.5-5.3.3 0 .7 0 1 .1v3.1c-.3-.1-.6-.2-1-.2-1.4 0-2.5 1-2.5 2.4 0 1.4 1.1 2.3 2.4 2.3 1.5 0 2.6-1 2.6-2.9V3h3.1z"/></svg>
-        </a>
-      {%- endif -%}
-      <img width="213" height="213" src="{{ 'logo-monogram.svg' | asset_url }}" alt="" class="w-6 h-6 object-contain opacity-30">
-    </div>
-    <div class="flex items-center gap-3 opacity-60" aria-hidden="true">
-      <span class="font-label-caps text-[9px] uppercase tracking-widest border border-charcoal/30 rounded px-2 py-1">Visa</span>
-      <span class="font-label-caps text-[9px] uppercase tracking-widest border border-charcoal/30 rounded px-2 py-1">MC</span>
-      <span class="font-label-caps text-[9px] uppercase tracking-widest border border-charcoal/30 rounded px-2 py-1">Amex</span>
+      </div>
     </div>
   </div>
 </footer>
@@ -73,15 +83,7 @@
 {% schema %}
 {
   "name": "Footer",
-  "settings": [
-    { "type": "image_picker", "id": "wordmark", "label": "Wordmark", "info": "Defaults to the Aurca wordmark" },
-    { "type": "textarea", "id": "newsletter_text", "label": "Newsletter text", "default": "Luxury homewear for the sacred hours between waking and sleeping. Est. 2018." },
-    { "type": "link_list", "id": "menu_1", "label": "Menu 1 (Collections)", "default": "footer" },
-    { "type": "link_list", "id": "menu_2", "label": "Menu 2 (Company)" },
-    { "type": "link_list", "id": "menu_3", "label": "Menu 3 (Help)" },
-    { "type": "url", "id": "social_instagram", "label": "Instagram URL" },
-    { "type": "url", "id": "social_facebook", "label": "Facebook URL" },
-    { "type": "url", "id": "social_tiktok", "label": "TikTok URL" }
-  ]
+  "settings": [],
+  "presets": [{ "name": "Footer" }]
 }
 {% endschema %}
