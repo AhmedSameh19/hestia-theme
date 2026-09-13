@@ -1,83 +1,144 @@
-{%- comment -%}
-  Home carousel — native CSS scroll-snap does the swiping (no arrows),
-  theme.js auto-advances every 5s. Slides ship as theme assets.
-  Per-slide copy lives in `eyebrows`/`headlines`/`subheads`/`ctas`/`cta_links`
-  below — ponytail: hardcoded, add blocks/schema settings if the merchant
-  ever needs to edit this from the editor.
-{%- endcomment -%}
-<section class="fade-in-section">
-  <div class="relative">
-  {%- comment -%} h-svh: full first screen, no gap below; svh so mobile URL-bar collapse doesn't resize it {%- endcomment -%}
-  <div data-slider class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar w-full h-svh">
-    {%- comment -%} Clones of the last/first slide at each end make the loop seamless; theme.js teleports off them {%- endcomment -%}
-    <img src="{{ 'slider-5.jpg' | asset_url }}" alt="" aria-hidden="true" width="2400" height="1350"
-         class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
-    {%- assign eyebrows = "Women's Essentials|Men's Essentials|Together Edition|New Collection — 2024|Limited Edition" | split: '|' -%}
-    {%- assign headlines = "Graceful silhouettes, made to be lived in.|Refined comfort, without compromise.|Shared mornings, shared ease.|Dressed for the Hours Between|Quiet luxury for every hour." | split: '|' -%}
-    {%- assign subheads = "From mulberry silk to organic cotton — every piece shaped around a woman who actually lives.|Premium natural fabrics in precise cuts. Ease and elegance, at every hour.|Matching sets for the moments you share.|Luxurious pyjamas and homewear for morning rituals, afternoon ease, and quiet evenings.|Our most considered pieces, in limited runs." | split: '|' -%}
-    {%- assign ctas = "Explore Women's|Explore Men's|Explore Together|Shop the Collection|Explore Limited Edition" | split: '|' -%}
-    {%- assign cta_links = '/collections/women|/collections/men|/collections/together|/collections/all|/collections/all' | split: '|' -%}
-    {%- for i in (1..5) -%}
-      {%- assign idx = forloop.index0 -%}
-      {%- assign img = 'slider-' | append: forloop.index | append: '.jpg' -%}
-      <div class="relative w-full h-full shrink-0 snap-center">
-        <img src="{{ img | asset_url }}" alt="{{ shop.name }} lookbook {{ forloop.index }}"
-             width="2400" height="1350"
-             class="w-full h-full object-cover"
-             {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent"></div>
-        <div class="absolute inset-0 flex items-center">
-          <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
-            <div class="max-w-xl">
-              <span class="font-label-caps text-label-caps uppercase text-cream/80 tracking-widest mb-4 block">{{ eyebrows[idx] }}</span>
-              <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-cream mb-6 italic">{{ headlines[idx] }}</h1>
-              <p class="font-body-lg text-cream/90 max-w-md mb-8">{{ subheads[idx] }}</p>
-              <a href="{{ cta_links[idx] }}" class="inline-block bg-terracotta text-white px-8 py-4 font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all">
-                {{ ctas[idx] }} &rarr;
-              </a>
-            </div>
+<section data-hero-slider class="relative overflow-hidden w-full select-none" style="height: 92vh; min-height: 560px;">
+  {%- comment -%} Slide 1 {%- endcomment -%}
+  <div data-slide class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-100 z-10" data-index="0">
+    <img src="https://images.unsplash.com/photo-1771620886948-3887ba3223f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1800"
+         alt="Aurca — Dressed for the Hours Between" fetchpriority="high"
+         class="w-full h-full object-cover object-center">
+    <div class="absolute inset-0 z-10" style="background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.1) 100%);"></div>
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 pb-20 lg:pb-24">
+        <div class="max-w-xl">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="{{ 'logo-monogram-flower.svg' | asset_url }}" alt="" class="w-5 h-5 object-contain brightness-0 invert opacity-55">
+            <span class="text-white/50 text-[9px] tracking-[0.42em] uppercase" data-i18n="hero_1_label">New Collection — 2024</span>
           </div>
+          <h1 class="text-white font-light leading-[0.93] mb-5 font-display text-[clamp(48px,7vw,84px)]" data-i18n-html="hero_1_title">
+            Dressed for the<br><em class="italic">Hours Between</em>
+          </h1>
+          <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-sm" data-i18n="hero_1_sub">
+            Luxurious pyjamas and homewear for morning rituals, afternoon ease, and quiet evenings.
+          </p>
+          <a href="#collections" class="inline-flex items-center gap-3 text-white text-[10px] tracking-[0.22em] uppercase px-8 py-4 transition-opacity hover:opacity-80" style="background: #A87052;">
+            <span data-i18n="hero_1_cta">Shop the Collection</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
       </div>
-    {%- endfor -%}
-    <img src="{{ 'slider-1.jpg' | asset_url }}" alt="" aria-hidden="true" width="2400" height="1350"
-         class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
-  </div>
-  <script>
-    // Position on the real first slide before paint, so the leading clone never flashes
-    (function () {
-      var s = document.querySelector('[data-slider]');
-      s.scrollLeft = s.clientWidth;
-    })();
-  </script>
-
-  <div data-slide-counter class="absolute bottom-8 right-8 z-10 font-label-caps text-label-caps text-cream tracking-widest">
-    <span data-slide-current>01</span> <span class="opacity-50">— 05</span>
-  </div>
+    </div>
   </div>
 
-  {%- comment -%} Brand pattern ribbon separating the slider from the page (see .pattern-divider) {%- endcomment -%}
-  <div class="pattern-divider h-12 bg-surface my-[5px]" aria-hidden="true"></div>
-
-  {%- comment -%} Lifestyle triptych (branding/after the slider) — links to the three lines, zoom on hover {%- endcomment -%}
-  <div class="grid grid-cols-3 gap-[5px]">
-    {%- assign trip_alts = 'Women,Men,Together' | split: ',' -%}
-    {%- for i in (1..3) -%}
-      {%- assign trip = 'triptych-' | append: forloop.index | append: '.jpg' -%}
-      <a href="/collections/{{ trip_alts[forloop.index0] | downcase }}" class="bento-card-zoom block overflow-hidden">
-        <img src="{{ trip | asset_url }}" alt="{{ shop.name }} — {{ trip_alts[forloop.index0] }}"
-             width="960" height="1620" loading="lazy" class="w-full h-auto object-cover">
-      </a>
-    {%- endfor -%}
+  {%- comment -%} Slide 2 {%- endcomment -%}
+  <div data-slide class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0" data-index="1">
+    <img src="https://images.unsplash.com/photo-1766056278944-ca0e4f49e61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+         alt="Aurca — Women's Edit" loading="lazy"
+         class="w-full h-full object-cover object-center">
+    <div class="absolute inset-0 z-10" style="background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.1) 100%);"></div>
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 pb-20 lg:pb-24">
+        <div class="max-w-xl">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="{{ 'logo-monogram-flower.svg' | asset_url }}" alt="" class="w-5 h-5 object-contain brightness-0 invert opacity-55">
+            <span class="text-white/50 text-[9px] tracking-[0.42em] uppercase" data-i18n="hero_2_label">Women's Edit</span>
+          </div>
+          <h1 class="text-white font-light leading-[0.93] mb-5 font-display text-[clamp(48px,7vw,84px)]" data-i18n-html="hero_2_title">
+            Graceful silhouettes,<br><em class="italic">made to be lived in.</em>
+          </h1>
+          <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-sm" data-i18n="hero_2_sub">
+            From mulberry silk to organic cotton — every piece shaped around how a woman actually lives.
+          </p>
+          <a href="#collections" class="inline-flex items-center gap-3 text-white text-[10px] tracking-[0.22em] uppercase px-8 py-4 transition-opacity hover:opacity-80" style="background: #A87052;">
+            <span data-i18n="hero_2_cta">Explore Women's</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="pattern-divider h-12 bg-surface my-[5px]" aria-hidden="true"></div>
+  {%- comment -%} Slide 3 {%- endcomment -%}
+  <div data-slide class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0" data-index="2">
+    <img src="https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+         alt="Aurca — Men's Essentials" loading="lazy"
+         class="w-full h-full object-cover object-center">
+    <div class="absolute inset-0 z-10" style="background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.1) 100%);"></div>
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 pb-20 lg:pb-24">
+        <div class="max-w-xl">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="{{ 'logo-monogram-flower.svg' | asset_url }}" alt="" class="w-5 h-5 object-contain brightness-0 invert opacity-55">
+            <span class="text-white/50 text-[9px] tracking-[0.42em] uppercase" data-i18n="hero_3_label">Men's Essentials</span>
+          </div>
+          <h1 class="text-white font-light leading-[0.93] mb-5 font-display text-[clamp(48px,7vw,84px)]" data-i18n-html="hero_3_title">
+            Refined comfort,<br><em class="italic">without compromise.</em>
+          </h1>
+          <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-sm" data-i18n="hero_3_sub">
+            Premium natural fabrics in precise cuts. Ease and elegance, at every hour.
+          </p>
+          <a href="#collections" class="inline-flex items-center gap-3 text-white text-[10px] tracking-[0.22em] uppercase px-8 py-4 transition-opacity hover:opacity-80" style="background: #A87052;">
+            <span data-i18n="hero_3_cta">Explore Men's</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Slide 4 {%- endcomment -%}
+  <div data-slide class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0" data-index="3">
+    <img src="https://images.unsplash.com/photo-1778731525489-020d49e8e1a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+         alt="Aurca — Together Edition" loading="lazy"
+         class="w-full h-full object-cover object-center">
+    <div class="absolute inset-0 z-10" style="background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.1) 100%);"></div>
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 pb-20 lg:pb-24">
+        <div class="max-w-xl">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="{{ 'logo-monogram-flower.svg' | asset_url }}" alt="" class="w-5 h-5 object-contain brightness-0 invert opacity-55">
+            <span class="text-white/50 text-[9px] tracking-[0.42em] uppercase" data-i18n="hero_4_label">Together Edition</span>
+          </div>
+          <h1 class="text-white font-light leading-[0.93] mb-5 font-display text-[clamp(48px,7vw,84px)]" data-i18n-html="hero_4_title">
+            Made for the<br><em class="italic">moments you share.</em>
+          </h1>
+          <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-sm" data-i18n="hero_4_sub">
+            Limited pieces in cashmere and mulberry silk — designed as a pair, worn as one.
+          </p>
+          <a href="#collections" class="inline-flex items-center gap-3 text-white text-[10px] tracking-[0.22em] uppercase px-8 py-4 transition-opacity hover:opacity-80" style="background: #A87052;">
+            <span data-i18n="hero_4_cta">Shop Together</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Navigation Arrows {%- endcomment -%}
+  <button type="button" data-hero-prev class="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center bg-black/25 hover:bg-black/45 transition-colors" style="backdrop-filter: blur(4px);" aria-label="Previous slide">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <button type="button" data-hero-next class="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center bg-black/25 hover:bg-black/45 transition-colors" style="backdrop-filter: blur(4px);" aria-label="Next slide">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+
+  {%- comment -%} Pagination Indicators (Pills) {%- endcomment -%}
+  <div class="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-2">
+    <button type="button" data-hero-dot="0" class="hero-dot transition-all duration-300" style="height: 3px; width: 28px; background: white;" aria-label="Go to slide 1"></button>
+    <button type="button" data-hero-dot="1" class="hero-dot transition-all duration-300" style="height: 3px; width: 10px; background: rgba(255,255,255,0.38);" aria-label="Go to slide 2"></button>
+    <button type="button" data-hero-dot="2" class="hero-dot transition-all duration-300" style="height: 3px; width: 10px; background: rgba(255,255,255,0.38);" aria-label="Go to slide 3"></button>
+    <button type="button" data-hero-dot="3" class="hero-dot transition-all duration-300" style="height: 3px; width: 10px; background: rgba(255,255,255,0.38);" aria-label="Go to slide 4"></button>
+  </div>
+
+  {%- comment -%} Slide Counter (Desktop) {%- endcomment -%}
+  <div class="absolute right-8 bottom-20 lg:bottom-24 z-20 hidden lg:flex items-center gap-2">
+    <span data-hero-current class="text-white text-sm font-light">01</span>
+    <div class="w-8 h-px bg-white/30"></div>
+    <span class="text-white/40 text-sm font-light">04</span>
+  </div>
 </section>
 
 {% schema %}
 {
-  "name": "Slider",
+  "name": "Hero Slider",
   "settings": [],
-  "presets": [{ "name": "Slider" }]
+  "presets": [{ "name": "Hero Slider" }]
 }
 {% endschema %}

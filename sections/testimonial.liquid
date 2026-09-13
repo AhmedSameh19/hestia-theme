@@ -1,21 +1,70 @@
-<section class="py-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center fade-in-section">
-  <div class="max-w-3xl mx-auto">
-    <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ 'general.customer_love' | t }}</span>
-    <div class="flex justify-center gap-1 mb-6 text-terracotta" aria-hidden="true">
-      {%- for i in (1..5) -%}<span class="material-symbols-outlined icon-fill text-[18px]">star</span>{%- endfor -%}
+<section class="py-12 px-6 lg:px-10 transition-colors duration-300 bg-white dark:bg-[#141414]">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="text-[9px] tracking-[0.42em] uppercase mb-3 font-medium" style="color: #A87052;" data-i18n="customerLove">
+          Customer Love
+        </p>
+        <h2 class="font-light font-display text-[clamp(22px,3vw,30px)] text-[#2D2E2D] dark:text-[#F0EDE8] transition-colors" data-i18n="whatCustomersSay">
+          What Our Customers Say
+        </h2>
+      </div>
+      <div class="flex gap-0.5" aria-label="5 stars rating">
+        {%- for i in (1..5) -%}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#A87052">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        {%- endfor -%}
+      </div>
     </div>
-    <blockquote class="font-headline-md text-headline-md mb-8 leading-snug text-primary">
-      &ldquo;{{ section.settings.quote }}&rdquo;
-    </blockquote>
-    <div class="flex items-center justify-center gap-4">
-      {%- if section.settings.avatar -%}
-        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
-          <img width="80" height="80" src="{{ section.settings.avatar | image_url: width: 80, height: 80, crop: 'center' }}" alt="{{ section.settings.author | escape }}" loading="lazy" class="w-full h-full object-cover">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {%- comment -%} Review 1: Isabelle M. {%- endcomment -%}
+      <div class="px-6 py-5 bg-[#FAF8F5] dark:bg-[#242424] transition-colors duration-300">
+        <p class="italic text-sm leading-relaxed mb-4 font-display text-[16px] text-[#494D57] dark:text-[#9A9690]">
+          &ldquo;The Midnight Silk Set is the most luxurious thing I own. Every morning feels like a five-star ritual.&rdquo;
+        </p>
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0" style="background: rgba(168, 112, 82, 0.2); color: #A87052;">
+            I
+          </div>
+          <div>
+            <p class="text-xs font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">Isabelle M.</p>
+            <p class="text-[9px] text-[#494D57] dark:text-[#9A9690]">Paris, France</p>
+          </div>
         </div>
-      {%- endif -%}
-      <div class="text-left">
-        <p class="font-label-caps text-label-caps uppercase font-bold">{{ section.settings.author }}</p>
-        <p class="font-body-md text-[14px] text-on-surface-variant">{{ section.settings.author_note }}</p>
+      </div>
+
+      {%- comment -%} Review 2: Amara L. {%- endcomment -%}
+      <div class="px-6 py-5 bg-[#FAF8F5] dark:bg-[#242424] transition-colors duration-300">
+        <p class="italic text-sm leading-relaxed mb-4 font-display text-[16px] text-[#494D57] dark:text-[#9A9690]">
+          &ldquo;Finally, pyjamas worth keeping. The quality is extraordinary &mdash; soft, elegant, and they hold their shape perfectly.&rdquo;
+        </p>
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0" style="background: rgba(168, 112, 82, 0.2); color: #A87052;">
+            A
+          </div>
+          <div>
+            <p class="text-xs font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">Amara L.</p>
+            <p class="text-[9px] text-[#494D57] dark:text-[#9A9690]">London, UK</p>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Review 3: Sofia R. {%- endcomment -%}
+      <div class="px-6 py-5 bg-[#FAF8F5] dark:bg-[#242424] transition-colors duration-300">
+        <p class="italic text-sm leading-relaxed mb-4 font-display text-[16px] text-[#494D57] dark:text-[#9A9690]">
+          &ldquo;I gifted the Cloud White set to my mother and she cried. We are both devoted Aurca customers now.&rdquo;
+        </p>
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0" style="background: rgba(168, 112, 82, 0.2); color: #A87052;">
+            S
+          </div>
+          <div>
+            <p class="text-xs font-medium text-[#2D2E2D] dark:text-[#F0EDE8]">Sofia R.</p>
+            <p class="text-[9px] text-[#494D57] dark:text-[#9A9690]">New York, USA</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -23,13 +72,8 @@
 
 {% schema %}
 {
-  "name": "Testimonial",
-  "settings": [
-    { "type": "textarea", "id": "quote", "label": "Quote", "default": "The Midnight Silk Set is the most luxurious thing I own. Every morning feels like a five-star ritual." },
-    { "type": "image_picker", "id": "avatar", "label": "Avatar" },
-    { "type": "text", "id": "author", "label": "Author", "default": "Isabelle M." },
-    { "type": "text", "id": "author_note", "label": "Author note", "default": "Paris, France" }
-  ],
-  "presets": [{ "name": "Testimonial" }]
+  "name": "Testimonials",
+  "settings": [],
+  "presets": [{ "name": "Testimonials" }]
 }
 {% endschema %}

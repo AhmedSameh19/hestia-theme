@@ -1,4 +1,4 @@
-// Token names mirror the Stitch mockups so their markup ports verbatim.
+// Token names mirror the Stitch mockups and Figma site.
 // Colors point at CSS vars (src/vars.css) so `.dark` on <html> flips the palette.
 const names = [
   'surface', 'surface-dim', 'surface-bright', 'surface-container-lowest',
@@ -11,34 +11,29 @@ const names = [
   'on-tertiary-container', 'error', 'on-error', 'error-container',
   'on-error-container', 'primary-fixed', 'primary-fixed-dim', 'secondary-fixed',
   'secondary-fixed-dim', 'tertiary-fixed', 'background', 'on-background',
-  'surface-variant', 'cream', 'beige', 'terracotta', 'warm-brown', 'sage', 'charcoal',
+  'surface-variant', 'cream', 'cream-dark', 'beige', 'blush', 'terracotta', 'copper',
+  'warm-brown', 'mauve', 'sage', 'slate', 'charcoal', 'dark', 'maroon', 'burgundy', 'wine', 'silver'
 ];
 const colors = Object.fromEntries(
   names.map((n) => [n, `rgb(var(--c-${n}) / <alpha-value>)`])
 );
 
 module.exports = {
-  content: ['./layout/**/*.liquid', './sections/**/*.liquid', './snippets/**/*.liquid', './templates/**/*.liquid'],
+  content: ['./layout/**/*.liquid', './sections/**/*.liquid', './snippets/**/*.liquid', './templates/**/*.liquid', './assets/**/*.js'],
   darkMode: 'class',
   theme: {
     extend: {
       colors,
-      // Brand decision: sharp corners everywhere — the whole radius scale renders square.
-      // (rounded-* classes stay in the markup; flip these back to restore curves.)
-      borderRadius: {
-        none: '0', sm: '0', DEFAULT: '0', md: '0', lg: '0', xl: '0',
-        '2xl': '0', '3xl': '0', full: '0',
-      },
       spacing: {
         'container-max': '1440px', 'section-padding': '120px',
         'margin-mobile': '20px', gutter: '24px', 'margin-desktop': '80px',
       },
       fontFamily: {
-        // Display: Cormorant Garamond (self-hosted). Section headings: Playfair Display. Body/labels: Inter.
-        'display-lg': ['"Cormorant Garamond"', 'serif'],
-        'display-lg-mobile': ['"Cormorant Garamond"', 'serif'],
-        'headline-md': ['"Playfair Display"', 'serif'],
-        'headline-sm': ['"Playfair Display"', 'serif'],
+        // Display: Cormorant Garamond / Sevone. Section headings: Playfair Display. Body/labels: Inter.
+        'display-lg': ['"Sevone"', '"Cormorant Garamond"', 'serif'],
+        'display-lg-mobile': ['"Sevone"', '"Cormorant Garamond"', 'serif'],
+        'headline-md': ['"Sevone"', '"Cormorant Garamond"', '"Playfair Display"', 'serif'],
+        'headline-sm': ['"Sevone"', '"Cormorant Garamond"', '"Playfair Display"', 'serif'],
         'body-lg': ['"Inter"', 'sans-serif'],
         'body-md': ['"Inter"', 'sans-serif'],
         'label-caps': ['"Inter"', 'sans-serif'],

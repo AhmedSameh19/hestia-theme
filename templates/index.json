@@ -16,13 +16,14 @@
     "instagram": {
       "type": "instagram-grid",
       "blocks": {
-        "p1": { "type": "photo" },
-        "p2": { "type": "photo" },
-        "p3": { "type": "photo" },
-        "p4": { "type": "photo" },
-        "p5": { "type": "photo" }
+        "p1": { "type": "photo", "settings": { "tag": "Women · Silk Edit", "caption": "Morning Ritual" } },
+        "p2": { "type": "photo", "settings": { "tag": "Men · Essential", "caption": "Evening Ease" } },
+        "p3": { "type": "photo", "settings": { "tag": "Together Edition", "caption": "Sunday Hours" } },
+        "p4": { "type": "photo", "settings": { "tag": "Women · Modal", "caption": "The Quiet Bedroom" } },
+        "p5": { "type": "photo", "settings": { "tag": "Together Edition", "caption": "Shared Mornings" } },
+        "p6": { "type": "photo", "settings": { "tag": "Women · Silk", "caption": "First Light" } }
       },
-      "block_order": ["p1", "p2", "p3", "p4", "p5"]
+      "block_order": ["p1", "p2", "p3", "p4", "p5", "p6"]
     }
   },
   "order": ["slider", "marquee", "categories", "featured", "testimonial", "instagram"]

@@ -1,47 +1,216 @@
-{%- comment -%}
-  "Life in Aurca" UGC/Instagram-style masonry grid. Each block is one photo;
-  the first block renders large (spans 2 rows), the rest render as a 2-col grid —
-  matches the reference site's asymmetric layout. Merchant-editable via blocks
-  (no product/Instagram API dependency).
-{%- endcomment -%}
-<section class="py-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto fade-in-section">
-  <div class="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">
-    <div>
-      <span class="font-label-caps text-label-caps uppercase text-on-secondary-container mb-4 block">{{ section.settings.eyebrow }}</span>
-      <h2 class="font-headline-md text-headline-md">{{ section.settings.heading }}</h2>
-    </div>
-    {%- if section.settings.instagram_url != blank -%}
-      <a class="font-label-caps text-label-caps uppercase text-on-surface-variant border-b border-outline-variant hover:border-primary transition-colors pb-1"
-         href="{{ section.settings.instagram_url }}">{{ section.settings.link_label }}</a>
-    {%- endif -%}
-  </div>
-
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-gutter">
-    {%- for block in section.blocks -%}
-      <a href="{{ section.settings.instagram_url | default: '#' }}"
-         class="relative overflow-hidden rounded-2xl bento-card-zoom block {% if forloop.first %}col-span-2 row-span-2 aspect-square md:aspect-auto{% else %}aspect-square{% endif %}"
-         {{ block.shopify_attributes }}>
-        {%- if block.settings.image -%}
-          <img width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.caption | escape }}" loading="lazy" class="w-full h-full object-cover">
-        {%- else -%}
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-        {%- endif -%}
-        {%- if block.settings.caption != blank -%}
-          <div class="absolute bottom-4 left-4">
-            {%- if block.settings.tag != blank -%}
-              <span class="font-label-caps text-[10px] text-white/80 uppercase tracking-widest block mb-1">{{ block.settings.tag }}</span>
-            {%- endif -%}
-            <span class="font-headline-sm text-[16px] text-white">{{ block.settings.caption }}</span>
-          </div>
-        {%- endif -%}
+<section id="lookbook" class="py-16 px-6 lg:px-10 transition-colors duration-300 bg-[#F8F6F1] dark:bg-[#141414]">
+  <div class="max-w-7xl mx-auto">
+    {%- comment -%} Section Header {%- endcomment -%}
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <p class="text-[9px] tracking-[0.42em] uppercase mb-2 font-medium" style="color: #A87052;">
+          @aurca
+        </p>
+        <h2 class="font-light font-display text-[clamp(28px,4vw,42px)] text-[#2D2E2D] dark:text-[#F0EDE8] transition-colors" data-i18n="lifeInAurca">
+          Life in Aurca
+        </h2>
+      </div>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+         class="hidden md:flex items-center gap-2 text-[10px] tracking-[0.22em] uppercase border-b pb-px hover:opacity-60 transition-opacity font-medium"
+         style="color: #A87052; border-color: #A87052;">
+        <span data-i18n="followInstagram">Follow on Instagram</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-    {%- endfor -%}
+    </div>
+
+    {%- comment -%} Masonry Grid: 1 large 2x2 featured item + 5 square items {%- endcomment -%}
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign fallback_img = '' -%}
+          {%- assign fallback_tag = '' -%}
+          {%- assign fallback_cap = '' -%}
+          {%- case forloop.index -%}
+            {%- when 1 -%}
+              {%- assign fallback_img = 'https://images.unsplash.com/photo-1766876767264-0c6d73891a7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+              {%- assign fallback_tag = 'Women · Silk Edit' -%}
+              {%- assign fallback_cap = 'Morning Ritual' -%}
+            {%- when 2 -%}
+              {%- assign fallback_img = 'https://images.unsplash.com/photo-1639905517739-abec6b616041?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+              {%- assign fallback_tag = 'Men · Essential' -%}
+              {%- assign fallback_cap = 'Evening Ease' -%}
+            {%- when 3 -%}
+              {%- assign fallback_img = 'https://images.unsplash.com/photo-1506377170913-e1d634babf96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+              {%- assign fallback_tag = 'Together Edition' -%}
+              {%- assign fallback_cap = 'Sunday Hours' -%}
+            {%- when 4 -%}
+              {%- assign fallback_img = 'https://images.unsplash.com/photo-1594735974070-b678995b9f09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+              {%- assign fallback_tag = 'Women · Modal' -%}
+              {%- assign fallback_cap = 'The Quiet Bedroom' -%}
+            {%- when 5 -%}
+              {%- assign fallback_img = 'https://images.unsplash.com/photo-1666964613986-ee204609abbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+              {%- assign fallback_tag = 'Together Edition' -%}
+              {%- assign fallback_cap = 'Shared Mornings' -%}
+            {%- when 6 -%}
+              {%- assign fallback_img = 'https://images.unsplash.com/photo-1552858725-a19e7fcd3ac4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+              {%- assign fallback_tag = 'Women · Silk' -%}
+              {%- assign fallback_cap = 'First Light' -%}
+          {%- endcase -%}
+
+          {%- assign img_src = fallback_img -%}
+          {%- if block.settings.image != blank -%}
+            {%- assign img_src = block.settings.image | image_url: width: 1080 -%}
+          {%- endif -%}
+          {%- assign tag_text = block.settings.tag | default: fallback_tag -%}
+          {%- assign cap_text = block.settings.caption | default: fallback_cap -%}
+
+          <div class="{% if forloop.first %}col-span-2 row-span-2{% endif %} group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;" {{ block.shopify_attributes }}>
+            <img src="{{ img_src }}" alt="{{ cap_text | escape }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="absolute inset-0 transition-opacity duration-300 {% if forloop.first %}opacity-50{% else %}opacity-35{% endif %} group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%);"></div>
+            <div class="absolute bottom-0 left-0 right-0 {% if forloop.first %}p-6{% else %}p-4{% endif %} translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+              {%- if tag_text != blank -%}
+                <p class="{% if forloop.first %}text-[9px] mb-1{% else %}text-[8px] mb-0.5{% endif %} tracking-[0.28em] uppercase font-medium" style="color: #A87052;">{{ tag_text }}</p>
+              {%- endif -%}
+              <p class="text-white font-light font-display {% if forloop.first %}text-[22px]{% else %}text-xs text-[14px]{% endif %}">{{ cap_text }}</p>
+            </div>
+            <div class="absolute {% if forloop.first %}top-4 right-4 w-8 h-8{% else %}top-3 right-3 w-7 h-7{% endif %} flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+              <svg width="{% if forloop.first %}13{% else %}11{% endif %}" height="{% if forloop.first %}13{% else %}11{% endif %}" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Photo 1: Featured 2x2 {%- endcomment -%}
+        <div class="col-span-2 row-span-2 group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;">
+          <img src="https://images.unsplash.com/photo-1766876767264-0c6d73891a7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Morning Ritual" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 transition-opacity duration-300 opacity-50 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <p class="text-[9px] tracking-[0.28em] uppercase mb-1 font-medium" style="color: #A87052;">Women · Silk Edit</p>
+            <p class="text-white font-light font-display text-[22px]">Morning Ritual</p>
+          </div>
+          <div class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+
+        {%- comment -%} Photo 2 {%- endcomment -%}
+        <div class="group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;">
+          <img src="https://images.unsplash.com/photo-1639905517739-abec6b616041?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Evening Ease" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 transition-opacity duration-300 opacity-35 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <p class="text-[8px] tracking-[0.25em] uppercase mb-0.5 font-medium" style="color: #A87052;">Men · Essential</p>
+            <p class="text-white text-xs font-light font-display text-[14px]">Evening Ease</p>
+          </div>
+          <div class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+
+        {%- comment -%} Photo 3 {%- endcomment -%}
+        <div class="group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;">
+          <img src="https://images.unsplash.com/photo-1506377170913-e1d634babf96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Sunday Hours" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 transition-opacity duration-300 opacity-35 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <p class="text-[8px] tracking-[0.25em] uppercase mb-0.5 font-medium" style="color: #A87052;">Together Edition</p>
+            <p class="text-white text-xs font-light font-display text-[14px]">Sunday Hours</p>
+          </div>
+          <div class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+
+        {%- comment -%} Photo 4 {%- endcomment -%}
+        <div class="group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;">
+          <img src="https://images.unsplash.com/photo-1594735974070-b678995b9f09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="The Quiet Bedroom" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 transition-opacity duration-300 opacity-35 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <p class="text-[8px] tracking-[0.25em] uppercase mb-0.5 font-medium" style="color: #A87052;">Women · Modal</p>
+            <p class="text-white text-xs font-light font-display text-[14px]">The Quiet Bedroom</p>
+          </div>
+          <div class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+
+        {%- comment -%} Photo 5 {%- endcomment -%}
+        <div class="group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;">
+          <img src="https://images.unsplash.com/photo-1666964613986-ee204609abbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Shared Mornings" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 transition-opacity duration-300 opacity-35 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <p class="text-[8px] tracking-[0.25em] uppercase mb-0.5 font-medium" style="color: #A87052;">Together Edition</p>
+            <p class="text-white text-xs font-light font-display text-[14px]">Shared Mornings</p>
+          </div>
+          <div class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+
+        {%- comment -%} Photo 6 {%- endcomment -%}
+        <div class="group relative overflow-hidden cursor-pointer" style="aspect-ratio: 1;">
+          <img src="https://images.unsplash.com/photo-1552858725-a19e7fcd3ac4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="First Light" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 transition-opacity duration-300 opacity-35 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <p class="text-[8px] tracking-[0.25em] uppercase mb-0.5 font-medium" style="color: #A87052;">Women · Silk</p>
+            <p class="text-white text-xs font-light font-display text-[14px]">First Light</p>
+          </div>
+          <div class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40" style="backdrop-filter: blur(4px);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Mobile Follow Link {%- endcomment -%}
+    <div class="flex justify-center mt-8 md:hidden">
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+         class="flex items-center gap-2 text-[10px] tracking-[0.22em] uppercase border-b pb-px hover:opacity-60 transition-opacity font-medium"
+         style="color: #A87052; border-color: #A87052;">
+        <span data-i18n="followInstagram">Follow on Instagram &rarr;</span>
+      </a>
+    </div>
+
+    {%- comment -%} Bottom Copper Line Divider with Center Dot {%- endcomment -%}
+    <div class="flex items-center gap-4 mt-12 opacity-30">
+      <div class="flex-1 h-px" style="background: #A87052;"></div>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="#A87052">
+        <circle cx="6" cy="6" r="2"/>
+      </svg>
+      <div class="flex-1 h-px" style="background: #A87052;"></div>
+    </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Instagram grid",
+  "name": "Life in Aurca",
   "max_blocks": 6,
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "@aurca" },
@@ -55,17 +224,21 @@
       "name": "Photo",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "tag", "label": "Tag (optional)", "info": "e.g. Women · Silk Edit" },
-        { "type": "text", "id": "caption", "label": "Caption", "info": "e.g. Morning Ritual" }
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Women · Silk Edit" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Morning Ritual" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Instagram grid",
+      "name": "Life in Aurca",
       "blocks": [
-        { "type": "photo" }, { "type": "photo" }, { "type": "photo" },
-        { "type": "photo" }, { "type": "photo" }
+        { "type": "photo", "settings": { "tag": "Women · Silk Edit", "caption": "Morning Ritual" } },
+        { "type": "photo", "settings": { "tag": "Men · Essential", "caption": "Evening Ease" } },
+        { "type": "photo", "settings": { "tag": "Together Edition", "caption": "Sunday Hours" } },
+        { "type": "photo", "settings": { "tag": "Women · Modal", "caption": "The Quiet Bedroom" } },
+        { "type": "photo", "settings": { "tag": "Together Edition", "caption": "Shared Mornings" } },
+        { "type": "photo", "settings": { "tag": "Women · Silk", "caption": "First Light" } }
       ]
     }
   ]

@@ -69,14 +69,19 @@
                       {%- if swatch_color == blank -%}
                         {%- assign value_handle = value | handle -%}
                         {%- case value_handle -%}
-                          {%- when 'champagne' -%}{%- assign swatch_color = '#F0E2C6' -%}
-                          {%- when 'terracotta' -%}{%- assign swatch_color = '#C97B63' -%}
-                          {%- when 'charcoal' -%}{%- assign swatch_color = '#2D2D2D' -%}
+                          {%- when 'copper' or 'terracotta' -%}{%- assign swatch_color = '#A87052' -%}
+                          {%- when 'charcoal' or 'slate' -%}{%- assign swatch_color = '#494D57' -%}
+                          {%- when 'dark' -%}{%- assign swatch_color = '#2D2E2D' -%}
+                          {%- when 'mauve' -%}{%- assign swatch_color = '#97606C' -%}
+                          {%- when 'burgundy' -%}{%- assign swatch_color = '#4A1A28' -%}
+                          {%- when 'blush' -%}{%- assign swatch_color = '#E5D7CD' -%}
+                          {%- when 'silver' -%}{%- assign swatch_color = '#BCBCBC' -%}
+                          {%- when 'champagne' or 'cream' -%}{%- assign swatch_color = '#F8F6F1' -%}
                           {%- when 'sage' -%}{%- assign swatch_color = '#A9B29B' -%}
                           {%- when 'ivory' -%}{%- assign swatch_color = '#FFFFF0' -%}
-                          {%- when 'sand' -%}{%- assign swatch_color = '#DCC9B6' -%}
+                          {%- when 'sand' -%}{%- assign swatch_color = '#E5D7CD' -%}
                           {%- when 'taupe' -%}{%- assign swatch_color = '#B9A08E' -%}
-                          {%- else -%}{%- assign swatch_color = '#DCC9B6' -%}
+                          {%- else -%}{%- assign swatch_color = '#A87052' -%}
                         {%- endcase -%}
                       {%- endif -%}
                       <span class="block w-8 h-8 rounded-full ring-1 ring-outline-variant peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-primary transition-soft"
@@ -99,7 +104,7 @@
             <button type="button" data-qty-plus class="material-symbols-outlined text-primary hover:opacity-50" aria-label="{{ 'general.increase' | t }}">add</button>
           </div>
           <button type="submit" name="add" data-add-to-cart
-                  class="flex-grow bg-terracotta text-white rounded-xl h-14 font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-soft shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex-grow bg-copper text-white rounded-xl h-14 font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-soft shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
             <span data-add-label>
               {%- if product.selected_or_first_available_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}

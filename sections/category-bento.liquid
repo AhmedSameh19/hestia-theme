@@ -1,64 +1,181 @@
-<section class="py-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto fade-in-section">
-  <div class="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">
-    <h2 class="font-headline-md text-headline-md">{{ section.settings.heading }}</h2>
-    <a class="font-label-caps text-label-caps uppercase text-on-surface-variant border-b border-outline-variant hover:border-primary transition-colors pb-1"
-       href="{{ routes.collections_url }}">{{ section.settings.link_label }}</a>
-  </div>
-
-  {%- assign cards = section.blocks -%}
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[600px]">
-    {%- for block in cards limit: 2 -%}
-      <a href="{{ block.settings.collection.url | default: routes.all_products_collection_url }}"
-         class="{% if forloop.first %}md:col-span-4{% else %}md:col-span-8{% endif %} group relative overflow-hidden rounded-3xl bento-card-zoom cursor-pointer bg-secondary-container min-h-[300px]"
-         {{ block.shopify_attributes }}>
-        {%- assign img = block.settings.image | default: block.settings.collection.featured_image -%}
-        {%- if img -%}
-          <img width="{{ img.width }}" height="{{ img.height }}" src="{{ img | image_url: width: 1200 }}" alt="{{ block.settings.title | escape }}" loading="lazy" class="w-full h-full object-cover">
-        {%- else -%}
-          {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-        {%- endif -%}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-        {%- if block.settings.badge != blank -%}
-          <span class="absolute top-6 left-6 bg-maroon text-white px-3 py-1 font-label-caps text-[10px] tracking-widest uppercase">{{ block.settings.badge }}</span>
-        {%- endif -%}
-        <div class="absolute bottom-8 left-8">
-          {%- if block.settings.eyebrow != blank -%}
-            <span class="font-label-caps text-label-caps text-white/70 mb-2 block tracking-widest uppercase">{{ block.settings.eyebrow }}</span>
-          {%- endif -%}
-          <h3 class="font-headline-sm text-headline-sm text-white mb-2">{{ block.settings.title | default: block.settings.collection.title }}</h3>
-          <span class="font-label-caps text-label-caps text-white/90 uppercase tracking-widest border-b border-white/50 pb-1">{{ 'general.explore' | t }} &rarr;</span>
-        </div>
-      </a>
-    {%- endfor -%}
-  </div>
-
-  {%- if cards.size > 2 -%}
-    {%- assign block = cards[2] -%}
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mt-gutter">
-      <a href="{{ block.settings.collection.url | default: routes.all_products_collection_url }}"
-         class="md:col-span-12 group relative overflow-hidden rounded-3xl h-64 bento-card-zoom cursor-pointer bg-tertiary-container block"
-         {{ block.shopify_attributes }}>
-        {%- assign img = block.settings.image | default: block.settings.collection.featured_image -%}
-        {%- if img -%}
-          <img width="{{ img.width }}" height="{{ img.height }}" src="{{ img | image_url: width: 2400 }}" alt="{{ block.settings.title | escape }}" loading="lazy" class="w-full h-full object-cover">
-        {%- else -%}
-          {{ 'collection-2' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-        {%- endif -%}
-        <div class="absolute inset-0 bg-black/10"></div>
-        <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
-          <h3 class="font-headline-md text-headline-md text-white mb-2">{{ block.settings.title | default: block.settings.collection.title }}</h3>
-          <p class="font-label-caps text-label-caps text-white tracking-[0.2em] uppercase">{{ block.settings.subtitle }}</p>
-        </div>
-      </a>
+<section id="collections" class="py-20 px-6 lg:px-10 max-w-7xl mx-auto transition-colors duration-300">
+  <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-5">
+    <div>
+      <p class="text-[9px] tracking-[0.42em] uppercase mb-3 font-medium" style="color: #A87052;" data-i18n="explore">
+        Explore
+      </p>
+      <h2 class="font-light font-display text-[clamp(36px,5vw,52px)] text-[#2D2E2D] dark:text-[#F0EDE8] transition-colors" data-i18n="shopByCollection">
+        Shop by Collection
+      </h2>
     </div>
-  {%- endif -%}
+    <a href="#featured-products" data-nav-filter="All" class="text-[10px] tracking-[0.22em] uppercase border-b pb-px self-start hover:opacity-70 transition-opacity font-medium" style="color: #A87052; border-color: #A87052;" data-i18n="viewAll">
+      View All &rarr;
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- assign fallback_img = '' -%}
+        {%- assign fallback_badge = '' -%}
+        {%- assign fallback_eyebrow = '' -%}
+        {%- assign fallback_title = '' -%}
+        {%- assign fallback_border = '#A87052' -%}
+        {%- assign fallback_badge_bg = '#97606C' -%}
+
+        {%- case forloop.index -%}
+          {%- when 1 -%}
+            {%- assign fallback_img = 'https://images.unsplash.com/photo-1766056278944-ca0e4f49e61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+            {%- assign fallback_badge = 'New Arrivals' -%}
+            {%- assign fallback_eyebrow = 'The Feminine Edit' -%}
+            {%- assign fallback_title = 'Women' -%}
+            {%- assign fallback_border = '#97606C' -%}
+            {%- assign fallback_badge_bg = '#97606C' -%}
+          {%- when 2 -%}
+            {%- assign fallback_img = 'https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+            {%- assign fallback_badge = '' -%}
+            {%- assign fallback_eyebrow = 'The Essential Range' -%}
+            {%- assign fallback_title = 'Men' -%}
+            {%- assign fallback_border = '#494D57' -%}
+            {%- assign fallback_badge_bg = '#494D57' -%}
+          {%- when 3 -%}
+            {%- assign fallback_img = 'https://images.unsplash.com/photo-1778731525489-020d49e8e1a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080' -%}
+            {%- assign fallback_badge = 'Limited Edition' -%}
+            {%- assign fallback_eyebrow = 'The Luxury Reserve' -%}
+            {%- assign fallback_title = 'Together' -%}
+            {%- assign fallback_border = '#4A1A28' -%}
+            {%- assign fallback_badge_bg = '#4A1A28' -%}
+        {%- endcase -%}
+
+        {%- assign card_title = block.settings.title | default: fallback_title -%}
+        {%- assign card_eyebrow = block.settings.eyebrow | default: fallback_eyebrow -%}
+        {%- assign card_badge = block.settings.badge | default: fallback_badge -%}
+        {%- assign card_img = fallback_img -%}
+        {%- if block.settings.image != blank -%}
+          {%- assign card_img = block.settings.image | image_url: width: 1080 -%}
+        {%- elsif block.settings.collection.featured_image != blank -%}
+          {%- assign card_img = block.settings.collection.featured_image | image_url: width: 1080 -%}
+        {%- endif -%}
+        {%- assign card_link = block.settings.collection.url | default: '#featured-products' -%}
+
+        <div class="group relative overflow-hidden cursor-pointer" data-collection-card="{{ card_title }}" {{ block.shopify_attributes }}>
+          <div class="overflow-hidden" style="aspect-ratio: 2/3;">
+            <img src="{{ card_img }}"
+                 alt="{{ card_title }} — {{ card_eyebrow }}" loading="lazy"
+                 class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.04) 60%);"></div>
+          </div>
+          {%- if card_badge != blank -%}
+            <div class="absolute top-5 left-5 text-white text-[8px] tracking-[0.28em] uppercase px-3 py-1.5 font-medium" style="background: {{ fallback_badge_bg }};">
+              {{ card_badge }}
+            </div>
+          {%- endif -%}
+          <div class="absolute bottom-0 left-0 right-0 p-7">
+            {%- if card_eyebrow != blank -%}
+              <p class="text-white/45 text-[9px] tracking-[0.3em] uppercase mb-2 font-medium">
+                {{ card_eyebrow }}
+              </p>
+            {%- endif -%}
+            <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]">
+              {{ card_title }}
+            </h3>
+            <a href="{{ card_link }}" data-nav-filter="{{ card_title }}"
+               class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
+               style="border-color: {{ fallback_border }};">
+              <span data-i18n="explore">Explore</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- comment -%} Card 1: Women {%- endcomment -%}
+      <div class="group relative overflow-hidden cursor-pointer" data-collection-card="Women">
+        <div class="overflow-hidden" style="aspect-ratio: 2/3;">
+          <img src="https://images.unsplash.com/photo-1766056278944-ca0e4f49e61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Women — The Feminine Edit" loading="lazy"
+               class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.04) 60%);"></div>
+        </div>
+        <div class="absolute top-5 left-5 text-white text-[8px] tracking-[0.28em] uppercase px-3 py-1.5 font-medium" style="background: #97606C;" data-i18n="newArrivals">
+          New Arrivals
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-7">
+          <p class="text-white/45 text-[9px] tracking-[0.3em] uppercase mb-2 font-medium" data-i18n="women_sub">
+            The Feminine Edit
+          </p>
+          <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]" data-i18n="women">
+            Women
+          </h3>
+          <a href="#featured-products" data-nav-filter="Women"
+             class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
+             style="border-color: #97606C;">
+            <span data-i18n="explore">Explore</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} Card 2: Men {%- endcomment -%}
+      <div class="group relative overflow-hidden cursor-pointer" data-collection-card="Men">
+        <div class="overflow-hidden" style="aspect-ratio: 2/3;">
+          <img src="https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Men — The Essential Range" loading="lazy"
+               class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.04) 60%);"></div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-7">
+          <p class="text-white/45 text-[9px] tracking-[0.3em] uppercase mb-2 font-medium" data-i18n="men_sub">
+            The Essential Range
+          </p>
+          <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]" data-i18n="men">
+            Men
+          </h3>
+          <a href="#featured-products" data-nav-filter="Men"
+             class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
+             style="border-color: #494D57;">
+            <span data-i18n="explore">Explore</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} Card 3: Together {%- endcomment -%}
+      <div class="group relative overflow-hidden cursor-pointer" data-collection-card="Together">
+        <div class="overflow-hidden" style="aspect-ratio: 2/3;">
+          <img src="https://images.unsplash.com/photo-1778731525489-020d49e8e1a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+               alt="Together — The Luxury Reserve" loading="lazy"
+               class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.04) 60%);"></div>
+        </div>
+        <div class="absolute top-5 left-5 text-white text-[8px] tracking-[0.28em] uppercase px-3 py-1.5 font-medium" style="background: #4A1A28;" data-i18n="limitedEdition">
+          Limited Edition
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-7">
+          <p class="text-white/45 text-[9px] tracking-[0.3em] uppercase mb-2 font-medium" data-i18n="together_sub">
+            The Luxury Reserve
+          </p>
+          <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]" data-i18n="together">
+            Together
+          </h3>
+          <a href="#featured-products" data-nav-filter="Together"
+             class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
+             style="border-color: #4A1A28;">
+            <span data-i18n="explore">Explore</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
 </section>
 
 {% schema %}
 {
-  "name": "Category bento",
+  "name": "Shop by Collection",
   "max_blocks": 3,
   "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Explore" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Collection" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "View All" }
   ],
@@ -68,17 +185,16 @@
       "name": "Category",
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
-        { "type": "image_picker", "id": "image", "label": "Image", "info": "Falls back to the collection image" },
-        { "type": "text", "id": "badge", "label": "Badge (optional)", "info": "e.g. New Arrivals, Limited Edition" },
-        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "e.g. The Feminine Edit" },
-        { "type": "text", "id": "title", "label": "Title override" },
-        { "type": "text", "id": "subtitle", "label": "Subtitle (wide card only)", "default": "Explore textures" }
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "badge", "label": "Badge (optional)" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "title", "label": "Title" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Category bento",
+      "name": "Shop by Collection",
       "blocks": [
         { "type": "category", "settings": { "title": "Women", "eyebrow": "The Feminine Edit", "badge": "New Arrivals" } },
         { "type": "category", "settings": { "title": "Men", "eyebrow": "The Essential Range" } },

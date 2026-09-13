@@ -196,3 +196,8 @@
     color: #ffffff;
   }
 }
+
+/* Ensure [hidden] attribute ALWAYS overrides .flex, .grid and any display classes */
+[hidden] {
+  display: none !important;
+}
