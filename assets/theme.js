@@ -160,6 +160,117 @@
     }, 3200);
   }
 
+  let activeCartNotificationTimeout = null;
+
+  function showCartNotification(item) {
+    const container = document.getElementById('toast-container');
+    if (!container || !item) return;
+
+    const existing = document.getElementById('cart-add-notification');
+    if (existing) {
+      if (activeCartNotificationTimeout) clearTimeout(activeCartNotificationTimeout);
+      existing.remove();
+    }
+
+    const title = escapeHtml(item.product_title || item.title || '');
+    const variantTitle = (item.variant_title && item.variant_title !== 'Default Title')
+      ? escapeHtml(item.variant_title)
+      : '';
+    const rawPrice = (typeof item.price === 'number')
+      ? (item.price / 100)
+      : (parseFloat(item.price) || 0);
+    const priceText = formatPrice(rawPrice);
+    const imgSrc = item.image || (item.featured_image && (item.featured_image.url || item.featured_image.src || item.featured_image)) || '';
+    const isAr = currentLang === 'ar';
+    const addedText = isAr ? 'تمت الإضافة للحقيبة' : 'Added to Bag';
+    const viewBagText = isAr ? 'عرض الحقيبة' : 'View Bag';
+
+    const card = document.createElement('div');
+    card.id = 'cart-add-notification';
+    card.className = 'w-[340px] max-w-[calc(100vw-2rem)] bg-[#2D2E2D] text-white p-4 shadow-2xl border border-white/15 pointer-events-auto transition-all duration-300 transform translate-y-4 opacity-0 flex flex-col gap-3 font-sans';
+    if (isAr) card.setAttribute('dir', 'rtl');
+
+    card.innerHTML = `
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <div class="flex items-center gap-1.5 text-[#A87052] text-[10px] font-medium tracking-widest uppercase">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>${addedText}</span>
+        </div>
+        <button type="button" data-close-cart-popup class="text-white/40 hover:text-white p-1 transition-colors" aria-label="Close">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="flex gap-3 items-center">
+        ${imgSrc ? `<img src="${imgSrc}" alt="${title}" class="w-14 h-14 object-cover rounded-sm bg-white/5 border border-white/10 flex-shrink-0" />` : ''}
+        <div class="flex-1 min-w-0">
+          <h4 class="text-xs font-serif font-medium text-white truncate leading-snug">${title}</h4>
+          ${variantTitle ? `<p class="text-[10px] text-white/60 truncate mt-0.5">${variantTitle}</p>` : ''}
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-xs font-medium text-white/90">${priceText}</span>
+            ${item.quantity > 1 ? `<span class="text-[10px] text-white/50">× ${item.quantity}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="pt-1">
+        <button type="button" data-view-bag-btn class="w-full py-2 px-3 text-[10px] font-medium uppercase tracking-[0.15em] bg-[#A87052] text-white hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-1.5">
+          <span>${viewBagText}</span>
+          <svg class="w-3 h-3 ${isAr ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    `;
+
+    container.appendChild(card);
+
+    requestAnimationFrame(() => {
+      card.classList.remove('translate-y-4', 'opacity-0');
+    });
+
+    function dismiss() {
+      if (activeCartNotificationTimeout) {
+        clearTimeout(activeCartNotificationTimeout);
+        activeCartNotificationTimeout = null;
+      }
+      card.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => card.remove(), 300);
+    }
+
+    function startTimer(duration = 5000) {
+      if (activeCartNotificationTimeout) clearTimeout(activeCartNotificationTimeout);
+      activeCartNotificationTimeout = setTimeout(() => dismiss(), duration);
+    }
+
+    startTimer(5000);
+
+    card.addEventListener('mouseenter', () => {
+      if (activeCartNotificationTimeout) {
+        clearTimeout(activeCartNotificationTimeout);
+        activeCartNotificationTimeout = null;
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      startTimer(3000);
+    });
+
+    const closeBtn = card.querySelector('[data-close-cart-popup]');
+    if (closeBtn) closeBtn.addEventListener('click', dismiss);
+
+    const viewBagBtn = card.querySelector('[data-view-bag-btn]');
+    if (viewBagBtn) {
+      viewBagBtn.addEventListener('click', () => {
+        dismiss();
+        openDrawer('cart');
+      });
+    }
+  }
+
   function saveWishlist() {
     localStorage.setItem('aurca_wishlist', JSON.stringify(wishlist));
     updateWishlistUI();
@@ -411,13 +522,18 @@
     try {
       const product = await fetch(`/products/${entry.handle}.js`).then(r => r.json());
       // ponytail: adds the first available variant sight-unseen (no size/color picker
-      // from the wishlist row) — open the product page to choose options precisely.
       const variant = product.variants.find(v => v.available) || product.variants[0];
       if (!variant) return;
-      await cartAddItems([{ id: variant.id, quantity: 1 }]);
+      const res = await cartAddItems([{ id: variant.id, quantity: 1 }]);
       await refreshCartDrawer();
-      showToast(currentLang === 'en' ? 'Added to bag' : 'تمت الإضافة للحقيبة');
-      openDrawer('cart');
+      const addedItem = (res && res.items && res.items[0]) || {
+        title: product.title,
+        price: variant.price,
+        image: variant.featured_image ? (variant.featured_image.src || variant.featured_image.url || variant.featured_image) : (product.images && product.images[0]),
+        variant_title: variant.title,
+        quantity: 1
+      };
+      showCartNotification(addedItem);
     } catch (e) {
       showToast(currentLang === 'en' ? 'Could not add to bag' : 'تعذّرت الإضافة للحقيبة', 'info');
     }
@@ -956,10 +1072,18 @@
           return;
         }
         try {
-          await cartAddItems([{ id: variant.id, quantity: 1 }]);
+          const res = await cartAddItems([{ id: variant.id, quantity: 1 }]);
           await refreshCartDrawer();
-          showToast(currentLang === 'en' ? 'Added to bag' : 'تمت الإضافة للحقيبة');
-          openDrawer('cart');
+          const cardTitle = card ? card.querySelector('h3, [data-product-title]')?.textContent?.trim() : '';
+          const cardImg = card ? card.querySelector('img')?.src : '';
+          const addedItem = (res && res.items && res.items[0]) || {
+            title: cardTitle || 'Product',
+            price: variant.price,
+            image: cardImg,
+            variant_title: variant.title,
+            quantity: 1
+          };
+          showCartNotification(addedItem);
         } catch (err) {
           showToast(err.message, 'info');
         }
@@ -1002,11 +1126,17 @@
         const variant = qvResolveVariant();
         if (!qvProduct || !variant || !variant.available) return;
         try {
-          await cartAddItems([{ id: variant.id, quantity: qvQty }]);
+          const res = await cartAddItems([{ id: variant.id, quantity: qvQty }]);
           await refreshCartDrawer();
-          showToast(currentLang === 'en' ? `"${qvProduct.title}" added to bag` : `تمت إضافة "${qvProduct.title}" للحقيبة`);
           closeModal('quickview');
-          openDrawer('cart');
+          const addedItem = (res && res.items && res.items[0]) || {
+            title: qvProduct.title,
+            price: variant.price,
+            image: variant.featured_image ? (variant.featured_image.src || variant.featured_image.url || variant.featured_image) : (qvProduct.images && qvProduct.images[0]),
+            variant_title: variant.title,
+            quantity: qvQty
+          };
+          showCartNotification(addedItem);
         } catch (err) {
           showToast(err.message, 'info');
         }
@@ -1200,10 +1330,18 @@
           const qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
           if (addBtn) addBtn.disabled = true;
           try {
-            await cartAddItems([{ id: variant.id, quantity: qty }]);
+            const res = await cartAddItems([{ id: variant.id, quantity: qty }]);
             await refreshCartDrawer();
-            showToast(currentLang === 'en' ? 'Added to bag' : 'تمت الإضافة للحقيبة');
-            openDrawer('cart');
+            const productTitleEl = document.querySelector('h1, [data-product-title]');
+            const mainImgEl = document.querySelector('[data-main-image]');
+            const addedItem = (res && res.items && res.items[0]) || {
+              title: productTitleEl ? productTitleEl.textContent.trim() : 'Product',
+              price: variant.price,
+              image: mainImgEl ? mainImgEl.src : '',
+              variant_title: variant.title,
+              quantity: qty
+            };
+            showCartNotification(addedItem);
           } catch (err) {
             showToast(err.message, 'info');
             form.submit();

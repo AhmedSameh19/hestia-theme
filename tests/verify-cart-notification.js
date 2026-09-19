@@ -28,7 +28,7 @@ assert(
 // Verify Quick View does not open drawer and calls showCartNotification
 const qvSection = themeJs.slice(
   themeJs.indexOf('const qvAddBtn'),
-  themeJs.indexOf('const qvWishBtn')
+  themeJs.lastIndexOf('const qvWishBtn')
 );
 assert(
   !qvSection.includes("openDrawer('cart')"),
