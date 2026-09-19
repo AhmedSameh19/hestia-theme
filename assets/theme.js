@@ -726,6 +726,11 @@
       if (loadMoreBtn) {
         loadMoreBtn.hidden = matchCount <= visibleCount;
       }
+
+      const featuredGrid = document.querySelector('[data-featured-grid]');
+      if (featuredGrid) {
+        featuredGrid.scrollTo({ left: 0, behavior: 'smooth' });
+      }
     }
 
     tabs.forEach(btn => {
