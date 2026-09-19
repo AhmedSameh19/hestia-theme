@@ -10,6 +10,9 @@ require('./verify-testimonials-carousel.js');
 console.log('Verifying cart notification popup...');
 require('./verify-cart-notification.js');
 
+console.log('Verifying logos...');
+require('./verify-logos.js');
+
 console.log('Verifying compiled CSS assets...');
 const css = fs.readFileSync('assets/theme.css', 'utf8');
 assert(css.includes('72vw'), 'assets/theme.css missing 72vw utility');
