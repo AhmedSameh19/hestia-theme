@@ -16,13 +16,18 @@
     {%- assign p_has_compare = true -%}
     {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
   {%- endif -%}
+  {%- comment -%}
+    "Together" checked first: it's the more specific/intentional line, and a
+    product should read as one category everywhere (badge, homepage tabs, this
+    label) even if it's still tagged men/women for some other reason.
+  {%- endcomment -%}
   {%- assign p_cat = product.type | default: 'Women' -%}
-  {%- if product.tags contains 'women' or product.tags contains 'Women' -%}
+  {%- if product.tags contains 'together' or product.tags contains 'Together' -%}
+    {%- assign p_cat = 'Together' -%}
+  {%- elsif product.tags contains 'women' or product.tags contains 'Women' -%}
     {%- assign p_cat = 'Women' -%}
   {%- elsif product.tags contains 'men' or product.tags contains 'Men' -%}
     {%- assign p_cat = 'Men' -%}
-  {%- elsif product.tags contains 'together' or product.tags contains 'Together' -%}
-    {%- assign p_cat = 'Together' -%}
   {%- endif -%}
   {%- assign p_fabric = product.metafields.custom.fabric_care | default: 'Mulberry Silk' -%}
   {%- if p_fabric contains '.' -%}
@@ -33,10 +38,40 @@
     {%- assign p_img = 'https://images.unsplash.com/photo-1766056278944-ca0e4f49e61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800' -%}
   {%- endunless -%}
 
-  <div class="group cursor-pointer product-card" data-product-id="{{ p_id }}" data-product-cat="{{ p_cat }}">
+  {%- comment -%} Real color dots from the product's own Color/Colour option, if it has one {%- endcomment -%}
+  {%- assign p_colors = '' -%}
+  {%- for option in product.options_with_values -%}
+    {%- if option.name == 'Color' or option.name == 'Colour' -%}
+      {%- for value in option.values -%}
+        {%- assign swatch_color = value.swatch.color -%}
+        {%- if swatch_color == blank -%}
+          {%- assign value_handle = value | handle -%}
+          {%- case value_handle -%}
+            {%- when 'copper' or 'terracotta' -%}{%- assign swatch_color = '#A87052' -%}
+            {%- when 'charcoal' or 'slate' -%}{%- assign swatch_color = '#494D57' -%}
+            {%- when 'dark' -%}{%- assign swatch_color = '#2D2E2D' -%}
+            {%- when 'mauve' -%}{%- assign swatch_color = '#97606C' -%}
+            {%- when 'burgundy' -%}{%- assign swatch_color = '#4A1A28' -%}
+            {%- when 'blush' or 'sand' -%}{%- assign swatch_color = '#E5D7CD' -%}
+            {%- when 'silver' -%}{%- assign swatch_color = '#BCBCBC' -%}
+            {%- when 'champagne' or 'cream' -%}{%- assign swatch_color = '#F8F6F1' -%}
+            {%- when 'sage' -%}{%- assign swatch_color = '#A9B29B' -%}
+            {%- when 'ivory' -%}{%- assign swatch_color = '#FFFFF0' -%}
+            {%- when 'taupe' -%}{%- assign swatch_color = '#B9A08E' -%}
+            {%- else -%}{%- assign swatch_color = '#A87052' -%}
+          {%- endcase -%}
+        {%- endif -%}
+        {%- assign p_colors = p_colors | append: swatch_color | append: ',' -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign p_colors = p_colors | split: ',' -%}
+
+  <div class="group cursor-pointer product-card" data-product-id="{{ p_id }}" data-product-cat="{{ p_cat }}"
+       data-variants-json="{{ product.variants | json | escape }}">
     {%- comment -%} Image Container with 3/4 Aspect Ratio {%- endcomment -%}
-    <div class="relative overflow-hidden mb-4 product-image-wrap" style="background: #E5D7CD;" data-open-quickview="{{ p_id }}">
-      <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+    <div class="relative overflow-hidden mb-4 product-image-wrap" style="background: #E5D7CD;" data-open-quickview="{{ product.handle }}">
+      <div class="overflow-hidden aspect-square md:aspect-[3/4]">
         <img src="{{ p_img }}" alt="{{ p_title | escape }}" loading="lazy"
              class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700">
       </div>
@@ -61,27 +96,49 @@
       {%- endif -%}
 
       {%- comment -%} Wishlist Button {%- endcomment -%}
-      <button type="button" data-wishlist-toggle="{{ p_id }}" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 rounded-none flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57] hover:text-[#A87052]" aria-label="Add to wishlist">
+      <button type="button" data-wishlist-toggle="{{ p_id }}" data-wishlist-handle="{{ product.handle }}" class="wishlist-btn absolute top-4 right-4 w-8 h-8 bg-white/90 rounded-none flex items-center justify-center shadow-sm hover:bg-white transition-colors text-[#494D57] hover:text-[#A87052]" aria-label="Add to wishlist">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       </button>
 
-      {%- comment -%} Quick Size Add Overlay on Hover {%- endcomment -%}
+      {%- comment -%}
+        Quick Size Add Overlay on Hover. Sources real Size option(s) from the product
+        so the pills never offer a size the product doesn't actually carry. "Together"
+        pieces ship with two size options — Size (Her) / Size (Him) — and both rows
+        render automatically since this loops every option named "Size...".
+      {%- endcomment -%}
+      {%- assign size_option_count = 0 -%}
+      {%- for option in product.options_with_values -%}
+        {%- if option.name contains 'Size' -%}{%- assign size_option_count = size_option_count | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
       <div class="absolute bottom-0 left-0 right-0 p-3 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
            style="background: #2D2E2D;" onclick="event.stopPropagation();">
-        <div class="flex items-center justify-between">
-          <div class="flex gap-1 size-selector-group">
-            {%- assign sizes = "XS,S,M,L,XL" | split: "," -%}
-            {%- for s in sizes -%}
-              <button type="button" data-size="{{ s }}"
-                      class="size-pill w-7 h-7 text-[8px] font-medium transition-colors {% if s == 'M' %}active-size bg-[#A87052] text-white{% else %}bg-white/10 text-white hover:bg-white/20{% endif %}">
-                {{ s }}
-              </button>
-            {%- endfor -%}
-          </div>
+        <div class="flex items-center justify-between gap-3">
+          {%- if size_option_count > 0 -%}
+            <div class="flex flex-col gap-1.5 min-w-0">
+              {%- for option in product.options_with_values -%}
+                {%- if option.name contains 'Size' -%}
+                  {%- assign size_label = option.name | remove: 'Size' | remove: '(' | remove: ')' | strip -%}
+                  <div class="flex items-center gap-1.5">
+                    {%- if size_option_count > 1 and size_label != blank -%}
+                      <span class="text-white/50 text-[7px] uppercase tracking-wider w-7 shrink-0">{{ size_label }}</span>
+                    {%- endif -%}
+                    <div class="flex gap-1 size-selector-group" data-option-name="{{ option.name | escape }}" data-option-index="{{ forloop.index0 }}">
+                      {%- for value in option.values -%}
+                        <button type="button" data-size="{{ value | escape }}"
+                                class="size-pill w-6 h-6 text-[7px] font-medium transition-colors {% if forloop.first %}active-size bg-[#A87052] text-white{% else %}bg-white/10 text-white hover:bg-white/20{% endif %}">
+                          {{ value }}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
           <button type="button" data-quick-add-btn="{{ p_id }}"
-                  class="text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium"
+                  class="shrink-0 text-white text-[9px] tracking-[0.18em] uppercase px-4 py-1.5 transition-colors hover:opacity-80 font-medium"
                   style="background: #A87052;">
             Add
           </button>
@@ -104,11 +161,13 @@
             <span class="text-xs line-through text-[#BCBCBC]">{{ p_compare }}</span>
           {%- endif -%}
         </div>
-        <div class="flex gap-1.5">
-          <div class="w-3 h-3 rounded-full border border-black/15" style="background: #D4C8B4;"></div>
-          <div class="w-3 h-3 rounded-full border border-black/15" style="background: #9E6E7A;"></div>
-          <div class="w-3 h-3 rounded-full border border-black/15" style="background: #A87052;"></div>
-        </div>
+        {%- if p_colors.size > 0 -%}
+          <div class="flex gap-1.5">
+            {%- for c in p_colors -%}
+              <div class="w-3 h-3 rounded-full border border-black/15" style="background: {{ c }};"></div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
       <button type="button" data-ask-question="{{ p_title | escape }}"
               class="text-[8px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity border-b pb-px text-[#494D57]/60 border-[#494D57]/40 dark:text-white/40">

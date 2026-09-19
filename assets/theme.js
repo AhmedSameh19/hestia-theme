@@ -44,84 +44,6 @@
     { id: 12, name: 'Champagne Dreams', cat: 'Together', price: 22721, originalPrice: null, tag: 'Together', img: IMAGES.prod1, colors: ['#D4C8B4', '#F5F0EA', '#5C1C2A'], fabric: 'Cashmere Blend' }
   ];
 
-  const PRODUCT_DETAILS = {
-    1: {
-      tagline: 'A midnight reverie in the finest silk.',
-      body: 'Cut from hand-loomed mulberry silk, the Midnight Silk Set moves with extraordinary softness. Each panel is hand-finished with flat-fell seams and mother-of-pearl buttons. A study in restrained opulence.',
-      care: ['Hand wash cold', 'Lay flat to dry', 'Cool iron inside out', 'Do not bleach']
-    },
-    2: {
-      tagline: 'Morning light, bottled in fabric.',
-      body: 'Premium modal — four times softer than cotton — in a relaxed wide-leg silhouette. The Morning Bloom set breathes through warm afternoons and holds its shape wash after wash.',
-      care: ['Machine wash 30°C', 'Tumble dry low', 'Cool iron', 'Do not wring']
-    },
-    3: {
-      tagline: 'Designed to be worn together.',
-      body: "The Lavender Reverie is Aurca's signature couples set — matching cuts from a single bolt of hand-dyed mulberry silk. Offered in a shared palette, designed to complement without mirroring.",
-      care: ['Hand wash cold', 'Lay flat to dry', 'Store folded, not hung', 'Dry away from sunlight']
-    },
-    4: {
-      tagline: 'Effortless ivory from dawn to dusk.',
-      body: 'Woven from GOTS-certified organic cotton, Cloud White is weightless, breathable, and quietly beautiful. The relaxed wide leg and smocked waistband adapt gracefully from morning to evening.',
-      care: ['Machine wash 30°C', 'Tumble dry low', 'Warm iron', 'Do not bleach']
-    },
-    5: {
-      tagline: 'The essential robe, made extraordinary.',
-      body: 'Structured in velour-weight cotton that holds its nap through years of wear. The Dusk Robe features an inside-stitched belt, deep pockets, and a shawl collar that drapes without effort.',
-      care: ['Machine wash 40°C', 'Tumble dry medium', 'Cool iron collar only', 'Do not dry clean']
-    },
-    6: {
-      tagline: 'Couture at the threshold of sleep.',
-      body: 'Cashmere blended with finest merino for drape without weight. The Noir Prestige set is produced in runs of 50 per colour — a quiet luxury made rarer by design.',
-      care: ['Dry clean only', 'Store folded in cloth bag', 'Air between wears', 'Remove pills with cashmere comb']
-    },
-    7: {
-      tagline: 'Ivory warmth for the quietest hours.',
-      body: 'Our most relaxed silhouette in GOTS-certified organic cotton. The Ivory Embrace set features elastic-free cuffing, a full-length leg, and a loose-fit top that never clings.',
-      care: ['Machine wash 30°C', 'Tumble dry low', 'Warm iron', 'Do not bleach']
-    },
-    8: {
-      tagline: 'The understated essential, perfected.',
-      body: 'Premium modal in a precise tailored cut — the Slate Essential set prioritises comfort without sacrificing structure. Fitted enough for evenings, relaxed enough for mornings.',
-      care: ['Machine wash 30°C', 'Tumble dry low', 'Cool iron', 'Do not wring']
-    },
-    9: {
-      tagline: 'A quiet romance in silk.',
-      body: 'Rose Atelier blends a dusty mauve silk top with wide-leg ivory trousers — designed as a Together Edition piece but equally striking worn individually.',
-      care: ['Hand wash cold', 'Lay flat to dry', 'Store folded, not hung', 'Dry away from sunlight']
-    },
-    10: {
-      tagline: 'The lightest morning you can wear.',
-      body: 'Pearl Morning in premium modal feels like a second skin by the second wear. A relaxed top with wide lace trim meets a fluid wide-leg trouser in this soft, luminous palette.',
-      care: ['Machine wash 30°C', 'Tumble dry low', 'Cool iron', 'Do not wring']
-    },
-    11: {
-      tagline: 'Black, structured, quietly refined.',
-      body: 'Onyx Classic in velour-weight cotton offers deep coverage and a luxe hand-feel. The shawl collar and copper monogram detail mark it as distinctly Aurca.',
-      care: ['Machine wash 40°C', 'Tumble dry medium', 'Cool iron collar only', 'Do not dry clean']
-    },
-    12: {
-      tagline: 'Reserved for the rarest evenings.',
-      body: 'Champagne Dreams arrives in a cashmere-silk blend woven to our highest thread specification. Produced once per season in a single colourway — this is Aurca at its most exceptional.',
-      care: ['Dry clean only', 'Store folded in cloth bag', 'Air between wears', 'Remove pills with cashmere comb']
-    }
-  };
-
-  const PRODUCT_GALLERIES = {
-    1: [IMAGES.prod1, IMAGES.prod2, IMAGES.morning, IMAGES.lifestyle1],
-    2: [IMAGES.prod2, IMAGES.prod4, IMAGES.lifestyle1, IMAGES.morning],
-    3: [IMAGES.prod3, IMAGES.prod1, IMAGES.lifestyle4, IMAGES.lifestyle5],
-    4: [IMAGES.prod4, IMAGES.prod1, IMAGES.morning, IMAGES.lifestyle1],
-    5: [IMAGES.prod5, IMAGES.prod6, IMAGES.living, IMAGES.lifestyle2],
-    6: [IMAGES.prod6, IMAGES.prod5, IMAGES.lifestyle2, IMAGES.living],
-    7: [IMAGES.prod4, IMAGES.prod2, IMAGES.lifestyle1, IMAGES.morning],
-    8: [IMAGES.prod5, IMAGES.prod6, IMAGES.lifestyle3, IMAGES.living],
-    9: [IMAGES.prod3, IMAGES.prod6, IMAGES.lifestyle5, IMAGES.lifestyle4],
-    10: [IMAGES.prod2, IMAGES.prod4, IMAGES.morning, IMAGES.lifestyle1],
-    11: [IMAGES.prod6, IMAGES.prod5, IMAGES.living, IMAGES.lifestyle3],
-    12: [IMAGES.prod1, IMAGES.prod3, IMAGES.lifestyle4, IMAGES.lifestyle5]
-  };
-
 
   const TRANSLATIONS = {
     en: {
@@ -175,12 +97,12 @@
   /* ==========================================================================
      2. APP STATE
      ========================================================================== */
-  let cart = [];
-  try {
-    cart = JSON.parse(localStorage.getItem('aurca_cart') || '[]');
-  } catch (e) {
-    cart = [];
-  }
+  // The cart itself is real Shopify state (routes.cart_add_url etc., set in
+  // layout/theme.liquid) — no client-side cart array. Only wishlist is local,
+  // since Shopify has no native wishlist concept.
+  const ROUTES = window.routes || {
+    root_url: '/', cart_add_url: '/cart/add', cart_change_url: '/cart/change', cart_url: '/cart'
+  };
 
   let wishlist = [];
   try {
@@ -198,6 +120,18 @@
   /* ==========================================================================
      3. HELPER FUNCTIONS
      ========================================================================== */
+  // Safe for both text-node and quoted-attribute contexts — the DOM
+  // textContent->innerHTML round trip only escapes &, <, > (not quotes), which
+  // isn't enough for the href="${...}" / alt="${...}" usages below.
+  function escapeHtml(str) {
+    return (str == null ? '' : String(str))
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function formatPrice(amount) {
     const rounded = Math.round(amount || 0);
     if (currentLang === 'ar') {
@@ -226,14 +160,110 @@
     }, 3200);
   }
 
-  function saveCart() {
-    localStorage.setItem('aurca_cart', JSON.stringify(cart));
-    updateCartUI();
-  }
-
   function saveWishlist() {
     localStorage.setItem('aurca_wishlist', JSON.stringify(wishlist));
     updateWishlistUI();
+  }
+
+  /* ==========================================================================
+     REAL SHOPIFY CART (AJAX API) — replaces the old client-only demo cart.
+     ========================================================================== */
+  async function shopifyFetch(url, options) {
+    const res = await fetch(url, Object.assign(
+      { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } },
+      options
+    ));
+    if (!res.ok) {
+      let message = 'Something went wrong.';
+      try {
+        const data = await res.json();
+        message = data.description || data.message || message;
+      } catch (e) { /* non-JSON error body */ }
+      throw new Error(message);
+    }
+    return res.json();
+  }
+
+  function cartAddItems(items) {
+    return shopifyFetch(`${ROUTES.cart_add_url}.js`, { method: 'POST', body: JSON.stringify({ items }) });
+  }
+
+  function cartChangeLine(line, quantity) {
+    return shopifyFetch(`${ROUTES.cart_change_url}.js`, { method: 'POST', body: JSON.stringify({ line, quantity }) });
+  }
+
+  async function updateHeaderCartCount() {
+    try {
+      const cartData = await shopifyFetch('/cart.js', { method: 'GET' });
+      document.querySelectorAll('[data-cart-count]').forEach(badge => {
+        badge.textContent = cartData.item_count;
+        badge.classList.toggle('hidden', cartData.item_count === 0);
+      });
+    } catch (e) { /* header badge is a nicety, not worth surfacing an error for */ }
+  }
+
+  function bindCartDrawerEvents() {
+    document.querySelectorAll('#modal-cart-drawer [data-close-drawer]').forEach(el => {
+      el.addEventListener('click', () => closeDrawer(el.getAttribute('data-close-drawer')));
+    });
+    document.querySelectorAll('#modal-cart-drawer [data-drawer-qty]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const line = parseInt(btn.getAttribute('data-drawer-qty'), 10);
+        const delta = parseInt(btn.getAttribute('data-delta'), 10);
+        const qtyEl = btn.parentElement.querySelector('span');
+        const currentQty = parseInt(qtyEl?.textContent || '1', 10);
+        try {
+          await cartChangeLine(line, currentQty + delta);
+          await refreshCartDrawer();
+        } catch (e) {
+          showToast(e.message, 'info');
+        }
+      });
+    });
+    document.querySelectorAll('#modal-cart-drawer [data-drawer-remove]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const line = parseInt(btn.getAttribute('data-drawer-remove'), 10);
+        try {
+          await cartChangeLine(line, 0);
+          await refreshCartDrawer();
+        } catch (e) {
+          showToast(e.message, 'info');
+        }
+      });
+    });
+  }
+
+  // Re-fetches sections/cart-drawer.liquid via Shopify's Section Rendering API so the
+  // drawer always shows the real cart, then rebinds its (freshly replaced) buttons.
+  async function refreshCartDrawer() {
+    try {
+      const res = await fetch(`${ROUTES.root_url}?section_id=cart-drawer`);
+      const html = await res.text();
+      const existing = document.getElementById('modal-cart-drawer');
+      const wasOpen = existing ? !existing.hidden : false;
+      if (existing) {
+        existing.outerHTML = html;
+        bindCartDrawerEvents();
+        if (wasOpen) openDrawer('cart');
+      }
+    } catch (e) { /* leave the stale drawer in place rather than break the page */ }
+    updateHeaderCartCount();
+  }
+
+  // Resolves the exact variant a product card's selected size pill(s) point to.
+  // "Together" cards have two independent size-selector-groups (Her / Him); this
+  // matches against both by their option position (data-option-index).
+  function resolveVariantFromCard(card) {
+    let variants = [];
+    try { variants = JSON.parse(card.dataset.variantsJson || '[]'); } catch (e) { return null; }
+    if (variants.length <= 1) return variants[0] || null;
+    const selected = {};
+    card.querySelectorAll('.size-selector-group').forEach(group => {
+      const idx = group.getAttribute('data-option-index');
+      const active = group.querySelector('.size-pill.active-size');
+      if (active) selected[idx] = active.getAttribute('data-size');
+    });
+    return variants.find(v => Object.keys(selected).every(idx => v[`option${parseInt(idx, 10) + 1}`] === selected[idx])) || null;
   }
 
   /* ==========================================================================
@@ -269,156 +299,54 @@
     });
 
     // Update dynamic drawer headers and badges
-    updateCartUI();
     updateWishlistUI();
   }
 
-  /* ==========================================================================
-     5. CART MANAGEMENT & DRAWER
-     ========================================================================== */
-  function addToCart(product, size = 'M') {
-    const existing = cart.find(item => item.id === product.id && item.size === size);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        img: product.img,
-        size: size,
-        qty: 1,
-        fabric: product.fabric
-      });
-    }
-    saveCart();
-    const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
-    showToast(currentLang === 'en' ? `"${product.name}" added to bag` : `تمت إضافة "${product.name}" للحقيبة`);
-    openDrawer('cart');
-  }
-
-  function updateCartQty(id, size, delta) {
-    const item = cart.find(i => i.id === id && i.size === size);
-    if (!item) return;
-    item.qty += delta;
-    if (item.qty <= 0) {
-      cart = cart.filter(i => !(i.id === id && i.size === size));
-    }
-    saveCart();
-  }
-
-  function removeCartItem(id, size) {
-    cart = cart.filter(i => !(i.id === id && i.size === size));
-    saveCart();
-  }
-
-  function updateCartUI() {
-    const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-    // Update Header cart count badges
-    document.querySelectorAll('[data-cart-count]').forEach(badge => {
-      badge.textContent = totalCount;
-      if (totalCount > 0) {
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
-      }
-    });
-
-    // Update Drawer cart count
-    const drawerCountEl = document.querySelector('[data-drawer-cart-count]');
-    if (drawerCountEl) drawerCountEl.textContent = totalCount;
-
-    // Update Drawer Subtotal
-    const subtotalEl = document.querySelector('[data-drawer-cart-subtotal]');
-    if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
-
-    // Update Shipping Progress Bar (Threshold: 2,500 EGP)
-    const progressBar = document.querySelector('[data-shipping-progress-bar]');
-    const progressText = document.querySelector('[data-shipping-progress-text]');
-    if (progressBar && progressText) {
-      const threshold = 2500;
-      const pct = Math.min(100, Math.round((subtotal / threshold) * 100));
-      progressBar.style.width = `${pct}%`;
-      if (subtotal >= threshold) {
-        progressText.textContent = currentLang === 'en' ? '✓ You qualify for free shipping!' : '✓ أنت مؤهل للشحن المجاني!';
-        progressBar.style.background = '#494D57';
-      } else {
-        const remaining = threshold - subtotal;
-        const formattedRemaining = formatPrice(remaining);
-        progressText.textContent = currentLang === 'en' ? `Add ${formattedRemaining} for free shipping` : `أضف ${formattedRemaining} للشحن المجاني`;
-        progressBar.style.background = '#A87052';
-      }
-    }
-
-    // Render Items
-    const itemsContainer = document.querySelector('[data-drawer-cart-items]');
-    const emptyState = document.querySelector('[data-drawer-cart-empty]');
-    const footerWrap = document.querySelector('[data-drawer-cart-footer]');
-
-    if (!itemsContainer) return;
-
-    if (cart.length === 0) {
-      itemsContainer.innerHTML = '';
-      if (emptyState) emptyState.hidden = false;
-      if (footerWrap) footerWrap.hidden = true;
-      return;
-    }
-
-    if (emptyState) emptyState.hidden = true;
-    if (footerWrap) footerWrap.hidden = false;
-
-    itemsContainer.innerHTML = cart.map(item => `
-      <div class="flex gap-4 py-4 items-center">
-        <img src="${item.img}" alt="${item.name}" class="w-16 h-20 object-cover bg-[#E5D7CD] shrink-0">
-        <div class="flex-1 min-w-0">
-          <h4 class="font-display text-sm font-light truncate">${item.name}</h4>
-          <p class="text-[10px] text-[#494D57] dark:text-[#9A9690] mb-1">${item.fabric} · Size: ${item.size}</p>
-          <span class="text-xs font-medium">${formatPrice(item.price)}</span>
-        </div>
-        <div class="flex items-center gap-2 border border-black/15 dark:border-white/15 px-2 py-1">
-          <button type="button" class="text-xs px-1 hover:text-[#A87052]" onclick="window.aurcaUpdateQty(${item.id}, '${item.size}', -1)">-</button>
-          <span class="text-xs font-medium w-4 text-center">${item.qty}</span>
-          <button type="button" class="text-xs px-1 hover:text-[#A87052]" onclick="window.aurcaUpdateQty(${item.id}, '${item.size}', 1)">+</button>
-        </div>
-        <button type="button" class="p-1 hover:text-red-500 transition-colors" onclick="window.aurcaRemoveItem(${item.id}, '${item.size}')" aria-label="Remove item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-      </div>
-    `).join('');
-  }
-
-  // Global hooks for inline event handlers
-  window.aurcaUpdateQty = updateCartQty;
-  window.aurcaRemoveItem = removeCartItem;
 
   /* ==========================================================================
      6. WISHLIST MANAGEMENT & DRAWER
      ========================================================================== */
-  function toggleWishlist(productId) {
+  // Shared by every heart icon (product cards + quick view) so "wished" always
+  // means the same filled, copper heart everywhere.
+  function setWishlistIconState(btn, isWished) {
+    const svg = btn.querySelector('svg');
+    if (isWished) {
+      btn.classList.add('text-[#A87052]');
+      btn.classList.remove('text-[#494D57]');
+      if (svg) svg.setAttribute('fill', 'currentColor');
+    } else {
+      btn.classList.remove('text-[#A87052]');
+      btn.classList.add('text-[#494D57]');
+      if (svg) svg.setAttribute('fill', 'none');
+    }
+  }
+
+  // Restartable heart "pop" — plays on every add, even if clicked again before
+  // the previous run finished.
+  function pulseWishlistIcon(btn) {
+    btn.classList.remove('wishlist-pop');
+    void btn.offsetWidth; // force reflow so the animation can replay
+    btn.classList.add('wishlist-pop');
+  }
+
+  function toggleWishlist(productId, handle) {
     const id = parseInt(productId, 10);
-    const idx = wishlist.indexOf(id);
-    const product = PRODUCTS.find(p => p.id === id);
+    const idx = wishlist.findIndex(w => w.id === id);
     if (idx !== -1) {
       wishlist.splice(idx, 1);
       showToast(currentLang === 'en' ? 'Removed from wishlist' : 'أُزيل من المفضلة', 'info');
     } else {
-      wishlist.push(id);
-      showToast(currentLang === 'en' ? `"${product?.name || 'Item'}" saved to wishlist` : `تمت إضافة القطعة للمفضلة`);
+      wishlist.push({ id, handle });
+      showToast(currentLang === 'en' ? 'Saved to wishlist' : 'تمت الإضافة للمفضلة');
     }
     saveWishlist();
   }
 
-  function updateWishlistUI() {
+  async function updateWishlistUI() {
     // Update count in header
     document.querySelectorAll('[data-wishlist-count]').forEach(badge => {
       badge.textContent = wishlist.length;
-      if (wishlist.length > 0) {
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
-      }
+      badge.classList.toggle('hidden', wishlist.length === 0);
     });
 
     // Update Drawer count
@@ -428,20 +356,10 @@
     // Update heart icons on cards
     document.querySelectorAll('[data-wishlist-toggle]').forEach(btn => {
       const id = parseInt(btn.getAttribute('data-wishlist-toggle'), 10);
-      const isWished = wishlist.includes(id);
-      const svg = btn.querySelector('svg');
-      if (isWished) {
-        btn.classList.add('text-[#A87052]');
-        btn.classList.remove('text-[#494D57]');
-        if (svg) svg.setAttribute('fill', 'currentColor');
-      } else {
-        btn.classList.remove('text-[#A87052]');
-        btn.classList.add('text-[#494D57]');
-        if (svg) svg.setAttribute('fill', 'none');
-      }
+      setWishlistIconState(btn, wishlist.some(w => w.id === id));
     });
 
-    // Render Wishlist Drawer
+    // Render Wishlist Drawer — fetches each wishlisted product's real data by handle
     const container = document.querySelector('[data-drawer-wishlist-items]');
     const emptyState = document.querySelector('[data-drawer-wishlist-empty]');
 
@@ -455,28 +373,54 @@
 
     if (emptyState) emptyState.hidden = true;
 
-    const wishedProducts = wishlist.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
-    container.innerHTML = wishedProducts.map(p => `
-      <div class="flex gap-4 py-4 items-center">
-        <img src="${p.img}" alt="${p.name}" class="w-16 h-20 object-cover bg-[#E5D7CD] shrink-0">
-        <div class="flex-1 min-w-0">
-          <h4 class="font-display text-sm font-light truncate">${p.name}</h4>
-          <p class="text-[10px] text-[#494D57] dark:text-[#9A9690] mb-1">${p.cat} · ${p.fabric}</p>
-          <span class="text-xs font-medium">${formatPrice(p.price)}</span>
+    const products = await Promise.all(
+      wishlist.map(w => w.handle
+        ? fetch(`/products/${w.handle}.js`).then(r => (r.ok ? r.json() : null)).catch(() => null)
+        : Promise.resolve(null))
+    );
+
+    container.innerHTML = wishlist.map((w, i) => {
+      const p = products[i];
+      if (!p) return '';
+      const img = p.featured_image || (p.images && p.images[0]) || '';
+      const url = escapeHtml(p.url);
+      const title = escapeHtml(p.title);
+      return `
+        <div class="flex gap-4 py-4 items-center">
+          <a href="${url}" class="w-16 h-20 bg-[#E5D7CD] shrink-0 block overflow-hidden">
+            ${img ? `<img src="${escapeHtml(img)}" alt="${title}" class="w-full h-full object-cover">` : ''}
+          </a>
+          <div class="flex-1 min-w-0">
+            <h4 class="font-display text-sm font-light truncate"><a href="${url}">${title}</a></h4>
+            <span class="text-xs font-medium">${formatPrice(p.price / 100)}</span>
+          </div>
+          <button type="button" class="px-3 py-1.5 bg-[#A87052] text-white text-[9px] tracking-[0.18em] uppercase font-medium hover:opacity-85" onclick="window.aurcaWishToCart(${w.id})">
+            Add
+          </button>
+          <button type="button" class="p-1 hover:text-red-500 transition-colors" onclick="window.aurcaRemoveWish(${w.id})" aria-label="Remove wishlist item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
         </div>
-        <button type="button" class="px-3 py-1.5 bg-[#A87052] text-white text-[9px] tracking-[0.18em] uppercase font-medium hover:opacity-85" onclick="window.aurcaWishToCart(${p.id})">
-          Add
-        </button>
-        <button type="button" class="p-1 hover:text-red-500 transition-colors" onclick="window.aurcaRemoveWish(${p.id})" aria-label="Remove wishlist item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
-  window.aurcaWishToCart = function (id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    if (product) addToCart(product, 'M');
+  window.aurcaWishToCart = async function (id) {
+    const entry = wishlist.find(w => w.id === id);
+    if (!entry || !entry.handle) return;
+    try {
+      const product = await fetch(`/products/${entry.handle}.js`).then(r => r.json());
+      // ponytail: adds the first available variant sight-unseen (no size/color picker
+      // from the wishlist row) — open the product page to choose options precisely.
+      const variant = product.variants.find(v => v.available) || product.variants[0];
+      if (!variant) return;
+      await cartAddItems([{ id: variant.id, quantity: 1 }]);
+      await refreshCartDrawer();
+      showToast(currentLang === 'en' ? 'Added to bag' : 'تمت الإضافة للحقيبة');
+      openDrawer('cart');
+    } catch (e) {
+      showToast(currentLang === 'en' ? 'Could not add to bag' : 'تعذّرت الإضافة للحقيبة', 'info');
+    }
   };
 
   window.aurcaRemoveWish = function (id) {
@@ -523,88 +467,161 @@
   }
 
   /* ==========================================================================
-     8. QUICK VIEW MODAL LOGIC
+     8. QUICK VIEW MODAL LOGIC — fetches the real product (by handle) via
+     Shopify's /products/{handle}.js AJAX endpoint. Replaces the old version
+     that read from the 12-item fake PRODUCTS array.
      ========================================================================== */
-  let activeQuickViewProduct = null;
-  let activeQuickViewSize = 'M';
-  let activeQuickViewQty = 1;
+  let qvProduct = null;
+  let qvSelectedOptions = [];
+  let qvQty = 1;
 
-  function openQuickView(productId) {
-    const id = parseInt(productId, 10);
-    const product = PRODUCTS.find(p => p.id === id);
-    if (!product) return;
+  const COLOR_SWATCHES = {
+    copper: '#A87052', terracotta: '#A87052', charcoal: '#494D57', slate: '#494D57',
+    dark: '#2D2E2D', mauve: '#97606C', burgundy: '#4A1A28', blush: '#E5D7CD',
+    sand: '#E5D7CD', silver: '#BCBCBC', champagne: '#F8F6F1', cream: '#F8F6F1',
+    sage: '#A9B29B', ivory: '#FFFFF0', taupe: '#B9A08E'
+  };
 
-    activeQuickViewProduct = product;
-    activeQuickViewSize = 'M';
-    activeQuickViewQty = 1;
+  function swatchColorFor(value) {
+    const handle = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    return COLOR_SWATCHES[handle] || '#A87052';
+  }
 
-    const details = PRODUCT_DETAILS[id] || {
-      tagline: 'Refined comfort, without compromise.',
-      body: 'Woven with exceptional craftsmanship for effortless mornings and peaceful nights.',
-      care: ['Hand wash cold', 'Lay flat to dry', 'Cool iron']
-    };
+  function qvResolveVariant() {
+    if (!qvProduct) return null;
+    if (qvProduct.variants.length === 1) return qvProduct.variants[0];
+    return qvProduct.variants.find(v =>
+      qvSelectedOptions.every((val, idx) => val == null || v[`option${idx + 1}`] === val)
+    ) || null;
+  }
 
-    const gallery = PRODUCT_GALLERIES[id] || [product.img, IMAGES.prod2, IMAGES.morning, IMAGES.lifestyle1];
+  function qvRenderAddState() {
+    if (!qvProduct) return;
+    const variant = qvResolveVariant();
+    const priceEl = document.getElementById('qv-price');
+    const compareEl = document.getElementById('qv-compare');
+    const refPrice = variant ? variant.price : qvProduct.price;
+    if (priceEl) priceEl.textContent = formatPrice(refPrice / 100);
+    if (compareEl) {
+      const comparePrice = variant ? variant.compare_at_price : qvProduct.compare_at_price;
+      if (comparePrice && comparePrice > refPrice) {
+        compareEl.textContent = formatPrice(comparePrice / 100);
+        compareEl.classList.remove('hidden');
+      } else {
+        compareEl.classList.add('hidden');
+      }
+    }
+    const addBtn = document.getElementById('qv-add-btn');
+    if (addBtn) {
+      const strings = window.hestiaStrings || {};
+      if (!variant) {
+        addBtn.disabled = true;
+        addBtn.textContent = strings.unavailable || 'Unavailable';
+      } else if (!variant.available) {
+        addBtn.disabled = true;
+        addBtn.textContent = strings.soldOut || 'Sold out';
+      } else {
+        addBtn.disabled = false;
+        addBtn.textContent = strings.addToCart || 'Add to Cart';
+      }
+    }
+    if (variant && variant.featured_image) {
+      const mainImg = document.getElementById('qv-main-img');
+      if (mainImg) mainImg.src = variant.featured_image.src || variant.featured_image;
+    }
+  }
 
-    // Populate Fields
+  function qvRenderOptions() {
+    const wrap = document.getElementById('qv-options');
+    if (!wrap || !qvProduct) return;
+    wrap.innerHTML = '';
+    qvProduct.options.forEach((option, idx) => {
+      const isColor = option.name === 'Color' || option.name === 'Colour';
+      const group = document.createElement('div');
+      const label = document.createElement('label');
+      label.className = 'block text-[9px] tracking-[0.25em] uppercase font-semibold text-[#2D2E2D] dark:text-[#F0EDE8] mb-2';
+      label.textContent = option.name;
+      group.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'flex gap-2 flex-wrap';
+      option.values.forEach(value => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isActive = qvSelectedOptions[idx] === value;
+        if (isColor) {
+          btn.className = `w-8 h-8 rounded-full border transition-colors ${isActive ? 'ring-2 ring-offset-2 ring-[#A87052] border-transparent' : 'border-black/20'}`;
+          btn.style.background = swatchColorFor(value);
+          btn.title = value;
+        } else {
+          btn.className = `min-w-[2.5rem] h-10 px-3 border text-xs font-medium transition-colors ${isActive ? 'border-[#A87052] bg-[#A87052] text-white' : 'border-black/15 dark:border-white/15 hover:border-[#A87052]'}`;
+          btn.textContent = value;
+        }
+        btn.addEventListener('click', () => {
+          qvSelectedOptions[idx] = value;
+          qvRenderOptions();
+          qvRenderAddState();
+        });
+        row.appendChild(btn);
+      });
+      group.appendChild(row);
+      wrap.appendChild(group);
+    });
+  }
+
+  async function openQuickView(handle) {
+    if (!handle) return;
+    try {
+      qvProduct = await fetch(`/products/${handle}.js`).then(r => r.json());
+    } catch (e) {
+      showToast(currentLang === 'en' ? 'Could not load that product' : 'تعذّر تحميل هذا المنتج', 'info');
+      return;
+    }
+
+    const firstVariant = qvProduct.variants[0] || {};
+    qvSelectedOptions = [firstVariant.option1, firstVariant.option2, firstVariant.option3].filter(v => v != null);
+    qvQty = 1;
+
+    const images = qvProduct.images || [];
     const mainImg = document.getElementById('qv-main-img');
-    if (mainImg) mainImg.src = gallery[0];
+    if (mainImg) mainImg.src = qvProduct.featured_image || images[0] || '';
 
     const thumbsContainer = document.getElementById('qv-thumbnails');
     if (thumbsContainer) {
-      thumbsContainer.innerHTML = gallery.map((imgSrc, idx) => `
-        <button type="button" class="aspect-[3/4] overflow-hidden border ${idx === 0 ? 'border-[#A87052]' : 'border-transparent'} hover:border-[#A87052] transition-colors" onclick="document.getElementById('qv-main-img').src='${imgSrc}'">
-          <img src="${imgSrc}" class="w-full h-full object-cover">
+      thumbsContainer.innerHTML = images.slice(0, 4).map((src, idx) => `
+        <button type="button" class="aspect-[3/4] overflow-hidden border ${idx === 0 ? 'border-[#A87052]' : 'border-transparent'} hover:border-[#A87052] transition-colors" data-qv-thumb="${escapeHtml(src)}">
+          <img src="${escapeHtml(src)}" class="w-full h-full object-cover">
         </button>
       `).join('');
+      thumbsContainer.querySelectorAll('[data-qv-thumb]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (mainImg) mainImg.src = btn.getAttribute('data-qv-thumb');
+          thumbsContainer.querySelectorAll('button').forEach(b => b.classList.add('border-transparent'));
+          thumbsContainer.querySelectorAll('button').forEach(b => b.classList.remove('border-[#A87052]'));
+          btn.classList.add('border-[#A87052]');
+          btn.classList.remove('border-transparent');
+        });
+      });
     }
 
     const eyebrow = document.getElementById('qv-eyebrow');
-    if (eyebrow) eyebrow.textContent = `${product.cat} · ${product.fabric}`;
+    if (eyebrow) eyebrow.textContent = qvProduct.type || qvProduct.vendor || '';
 
     const title = document.getElementById('qv-title');
-    if (title) title.textContent = product.name;
-
-    const price = document.getElementById('qv-price');
-    if (price) price.textContent = formatPrice(product.price);
-
-    const compare = document.getElementById('qv-compare');
-    if (compare) {
-      if (product.originalPrice) {
-        compare.textContent = formatPrice(product.originalPrice);
-        compare.classList.remove('hidden');
-      } else {
-        compare.classList.add('hidden');
-      }
-    }
-
-    const tagline = document.getElementById('qv-tagline');
-    if (tagline) tagline.textContent = details.tagline;
+    if (title) title.textContent = qvProduct.title;
 
     const body = document.getElementById('qv-body');
-    if (body) body.textContent = details.body;
+    if (body) body.textContent = (qvProduct.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 220);
 
-    const careList = document.getElementById('qv-care-list');
-    if (careList) {
-      careList.innerHTML = details.care.map(c => `<li class="flex items-center gap-1.5">&bull; ${c}</li>`).join('');
-    }
+    // ponytail: /products/{handle}.js doesn't expose metafields (fabric & care lives
+    // there) — the care accordion stays on the full product page, one click away.
+    const careWrap = document.getElementById('qv-care-wrap');
+    if (careWrap) careWrap.hidden = true;
 
-    const colorsWrap = document.getElementById('qv-colors');
-    if (colorsWrap) {
-      colorsWrap.innerHTML = product.colors.map((c, i) => `
-        <button type="button" class="w-4 h-4 rounded-full border border-black/20 ${i === 0 ? 'ring-2 ring-offset-2 ring-[#A87052]' : ''}" style="background: ${c};" onclick="this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('ring-2','ring-offset-2','ring-[#A87052]')); this.classList.add('ring-2','ring-offset-2','ring-[#A87052]');"></button>
-      `).join('');
-    }
+    qvRenderOptions();
+    qvRenderAddState();
 
-    // Reset size buttons
-    document.querySelectorAll('.qv-size-btn').forEach(btn => {
-      const s = btn.getAttribute('data-qv-size');
-      if (s === 'M') {
-        btn.className = 'qv-size-btn w-10 h-10 border text-xs font-medium transition-colors border-[#A87052] bg-[#A87052] text-white';
-      } else {
-        btn.className = 'qv-size-btn w-10 h-10 border text-xs font-medium transition-colors border-black/15 dark:border-white/15 hover:border-[#A87052]';
-      }
-    });
+    const qvWishBtn = document.getElementById('qv-wish-btn');
+    if (qvWishBtn) setWishlistIconState(qvWishBtn, wishlist.some(w => w.id === qvProduct.id));
 
     const qtyEl = document.getElementById('qv-qty');
     if (qtyEl) qtyEl.textContent = '1';
@@ -692,6 +709,12 @@
     const cards = document.querySelectorAll('.product-card-item');
     const loadMoreBtn = document.querySelector('[data-load-more]');
 
+    // Real cards (snippets/product-card.liquid) carry their category on the nested
+    // .product-card element as data-product-cat, not on this wrapper.
+    function cardCategory(card) {
+      return card.getAttribute('data-cat') || card.querySelector('[data-product-cat]')?.getAttribute('data-product-cat');
+    }
+
     function applyFilter(tabName) {
       currentFilter = tabName;
       visibleCount = 6;
@@ -709,7 +732,7 @@
 
       let matchCount = 0;
       cards.forEach(card => {
-        const cat = card.getAttribute('data-cat');
+        const cat = cardCategory(card);
         const matches = (tabName === 'All' || cat === tabName);
         if (matches) {
           matchCount++;
@@ -744,7 +767,7 @@
         visibleCount += 6;
         let matchCount = 0;
         cards.forEach(card => {
-          const cat = card.getAttribute('data-cat');
+          const cat = cardCategory(card);
           const matches = (currentFilter === 'All' || cat === currentFilter);
           if (matches) {
             matchCount++;
@@ -759,19 +782,6 @@
       });
     }
 
-    // Handle deep navigation links with [data-nav-filter]
-    document.querySelectorAll('[data-nav-filter]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const targetFilter = link.getAttribute('data-nav-filter');
-        if (targetFilter) {
-          applyFilter(targetFilter);
-          const targetSection = document.getElementById('featured-products');
-          if (targetSection) {
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      });
-    });
   }
 
   /* ==========================================================================
@@ -914,31 +924,46 @@
       });
     });
 
-    // Quick size buttons on cards
-    document.querySelectorAll('.product-card-item').forEach(card => {
-      let selectedSize = 'M';
-      card.querySelectorAll('.size-btn').forEach(btn => {
+    // Quick size pills + real add-to-cart on Shopify product cards
+    // (snippets/product-card.liquid). Each size-selector-group (e.g. Her / Him on
+    // "together" pieces) toggles its own active pill independently; resolveVariantFromCard
+    // reads whichever pill is active in each group to find the exact variant to add.
+    document.querySelectorAll('.size-selector-group').forEach(group => {
+      group.querySelectorAll('.size-pill').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          card.querySelectorAll('.size-btn').forEach(b => {
+          group.querySelectorAll('.size-pill').forEach(b => {
             b.classList.remove('active-size', 'bg-[#A87052]');
             b.classList.add('bg-white/10');
           });
           btn.classList.add('active-size', 'bg-[#A87052]');
           btn.classList.remove('bg-white/10');
-          selectedSize = btn.getAttribute('data-size');
         });
       });
+    });
 
-      const addBtn = card.querySelector('[data-quick-add]');
-      if (addBtn) {
-        addBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const id = parseInt(addBtn.getAttribute('data-quick-add'), 10);
-          const product = PRODUCTS.find(p => p.id === id);
-          if (product) addToCart(product, selectedSize);
-        });
-      }
+    document.querySelectorAll('[data-quick-add-btn]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.product-card');
+        const variant = card ? resolveVariantFromCard(card) : null;
+        if (!variant) {
+          showToast(currentLang === 'en' ? 'Please select a size' : 'يرجى اختيار مقاس', 'info');
+          return;
+        }
+        if (!variant.available) {
+          showToast(currentLang === 'en' ? 'That size is sold out' : 'هذا المقاس غير متوفر', 'info');
+          return;
+        }
+        try {
+          await cartAddItems([{ id: variant.id, quantity: 1 }]);
+          await refreshCartDrawer();
+          showToast(currentLang === 'en' ? 'Added to bag' : 'تمت الإضافة للحقيبة');
+          openDrawer('cart');
+        } catch (err) {
+          showToast(err.message, 'info');
+        }
+      });
     });
 
     // Wishlist buttons on cards
@@ -946,80 +971,56 @@
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const id = btn.getAttribute('data-wishlist-toggle');
-        toggleWishlist(id);
+        const handle = btn.getAttribute('data-wishlist-handle');
+        const wasWished = wishlist.some(w => w.id === parseInt(id, 10));
+        toggleWishlist(id, handle);
+        if (!wasWished) pulseWishlistIcon(btn);
       });
     });
 
-    // Quick View Modal options & add
-    document.querySelectorAll('[data-qv-size]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('[data-qv-size]').forEach(b => {
-          b.className = 'qv-size-btn w-10 h-10 border text-xs font-medium transition-colors border-black/15 dark:border-white/15 hover:border-[#A87052]';
-        });
-        btn.className = 'qv-size-btn w-10 h-10 border text-xs font-medium transition-colors border-[#A87052] bg-[#A87052] text-white';
-        activeQuickViewSize = btn.getAttribute('data-qv-size');
-      });
-    });
-
+    // Quick View Modal qty & add — option pills are (re)built by qvRenderOptions()
+    // itself each time the modal opens, since they depend on the fetched product.
     const qvPlus = document.getElementById('qv-qty-plus');
     const qvMinus = document.getElementById('qv-qty-minus');
-    const qvQty = document.getElementById('qv-qty');
-    if (qvPlus && qvMinus && qvQty) {
+    const qvQtyEl = document.getElementById('qv-qty');
+    if (qvPlus && qvMinus && qvQtyEl) {
       qvPlus.addEventListener('click', () => {
-        activeQuickViewQty += 1;
-        qvQty.textContent = activeQuickViewQty;
+        qvQty += 1;
+        qvQtyEl.textContent = qvQty;
       });
       qvMinus.addEventListener('click', () => {
-        if (activeQuickViewQty > 1) {
-          activeQuickViewQty -= 1;
-          qvQty.textContent = activeQuickViewQty;
+        if (qvQty > 1) {
+          qvQty -= 1;
+          qvQtyEl.textContent = qvQty;
         }
       });
     }
 
     const qvAddBtn = document.getElementById('qv-add-btn');
     if (qvAddBtn) {
-      qvAddBtn.addEventListener('click', () => {
-        if (!activeQuickViewProduct) return;
-        for (let i = 0; i < activeQuickViewQty; i++) {
-          addToCart(activeQuickViewProduct, activeQuickViewSize);
+      qvAddBtn.addEventListener('click', async () => {
+        const variant = qvResolveVariant();
+        if (!qvProduct || !variant || !variant.available) return;
+        try {
+          await cartAddItems([{ id: variant.id, quantity: qvQty }]);
+          await refreshCartDrawer();
+          showToast(currentLang === 'en' ? `"${qvProduct.title}" added to bag` : `تمت إضافة "${qvProduct.title}" للحقيبة`);
+          closeModal('quickview');
+          openDrawer('cart');
+        } catch (err) {
+          showToast(err.message, 'info');
         }
-        closeModal('quickview');
       });
     }
 
     const qvWishBtn = document.getElementById('qv-wish-btn');
     if (qvWishBtn) {
       qvWishBtn.addEventListener('click', () => {
-        if (activeQuickViewProduct) {
-          toggleWishlist(activeQuickViewProduct.id);
-        }
-      });
-    }
-
-    // Checkout Modal trigger from Drawer
-    const drawerCheckoutBtn = document.querySelector('[data-drawer-checkout-btn]');
-    if (drawerCheckoutBtn) {
-      drawerCheckoutBtn.addEventListener('click', () => {
-        closeDrawer('cart');
-        const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const totalItemsEl = document.getElementById('checkout-total-items');
-        const totalPriceEl = document.getElementById('checkout-total-price');
-        if (totalItemsEl) totalItemsEl.textContent = `${totalCount} item${totalCount === 1 ? '' : 's'}`;
-        if (totalPriceEl) totalPriceEl.textContent = formatPrice(subtotal);
-        openModal('checkout');
-      });
-    }
-
-    // Checkout Confirmation
-    const checkoutConfirmBtn = document.getElementById('checkout-confirm-btn');
-    if (checkoutConfirmBtn) {
-      checkoutConfirmBtn.addEventListener('click', () => {
-        cart = [];
-        saveCart();
-        closeModal('checkout');
-        showToast(currentLang === 'en' ? 'Order placed successfully! 🎉' : 'تم تأكيد طلبك بنجاح! 🎉');
+        if (!qvProduct) return;
+        const wasWished = wishlist.some(w => w.id === qvProduct.id);
+        toggleWishlist(qvProduct.id, qvProduct.handle);
+        setWishlistIconState(qvWishBtn, !wasWished);
+        if (!wasWished) pulseWishlistIcon(qvWishBtn);
       });
     }
 
@@ -1042,15 +1043,6 @@
       });
     });
 
-    // Synchronize initial product card prices to EGP immediately
-    document.querySelectorAll('.product-card-item').forEach(card => {
-      const id = parseInt(card.getAttribute('data-id'), 10);
-      const product = PRODUCTS.find(p => p.id === id);
-      if (product) {
-        const priceSpan = card.querySelector('.font-medium');
-        if (priceSpan) priceSpan.textContent = formatPrice(product.price);
-      }
-    });
 
     // Mobile menu toggle
     const menuBtn = document.querySelector('[data-menu-open]');
@@ -1112,24 +1104,425 @@
     // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        ['quickview', 'search', 'sizeguide', 'askquestion', 'support', 'account', 'comingsoon', 'checkout'].forEach(closeModal);
+        ['quickview', 'search', 'sizeguide', 'askquestion', 'support', 'account', 'comingsoon', 'lightbox'].forEach(closeModal);
         ['cart', 'wishlist'].forEach(closeDrawer);
       }
     });
   }
 
   /* ==========================================================================
+     12a. PRODUCT PAGE VARIANT PICKER (sections/main-product.liquid)
+     Was pure static markup — selecting Size/Color never updated the price, the
+     hidden variant id, or whether Add to Cart was enabled, so submitting always
+     added whatever variant happened to render first. Wires it to the real
+     variants embedded via data-product-json (same pattern as product-card.liquid).
+     ========================================================================== */
+  function initProductForm() {
+    document.querySelectorAll('[data-product]').forEach(root => {
+      let variants = [];
+      try { variants = JSON.parse(root.dataset.productJson || '[]'); } catch (e) { return; }
+      if (!variants.length) return;
+
+      const variantIdInput = root.querySelector('[data-variant-id]');
+      const priceWrap = root.querySelector('[data-price]');
+      const addBtn = root.querySelector('[data-add-to-cart]');
+      const addLabel = addBtn ? addBtn.querySelector('[data-add-label]') : null;
+      const form = root.querySelector('form');
+      const qtyInput = root.querySelector('[data-qty]');
+      const qtyPlus = root.querySelector('[data-qty-plus]');
+      const qtyMinus = root.querySelector('[data-qty-minus]');
+
+      function currentVariant() {
+        if (variants.length === 1) return variants[0];
+        const selected = [];
+        root.querySelectorAll('fieldset[data-option-index]').forEach(fieldset => {
+          const idx = parseInt(fieldset.getAttribute('data-option-index'), 10);
+          const checked = fieldset.querySelector('input[type="radio"]:checked');
+          if (checked) selected[idx] = checked.value;
+        });
+        return variants.find(v => selected.every((val, idx) => val == null || v[`option${idx + 1}`] === val)) || null;
+      }
+
+      function render() {
+        const variant = currentVariant();
+        if (variantIdInput) variantIdInput.value = variant ? variant.id : '';
+
+        if (variant && variant.featured_image) {
+          const mainImg = root.querySelector('[data-main-image]');
+          if (mainImg) mainImg.src = variant.featured_image.src || variant.featured_image;
+        }
+
+        if (priceWrap && variant) {
+          const hasCompare = variant.compare_at_price > variant.price;
+          priceWrap.innerHTML = hasCompare
+            ? `<span class="flex gap-2 items-center"><span class="font-body-md text-on-surface-variant">${formatPrice(variant.price / 100)}</span><s class="font-body-md text-[14px] text-outline">${formatPrice(variant.compare_at_price / 100)}</s></span>`
+            : `<span class="font-body-md text-on-surface-variant">${formatPrice(variant.price / 100)}</span>`;
+        }
+
+        const strings = window.hestiaStrings || {};
+        if (addBtn) {
+          const available = !!(variant && variant.available);
+          addBtn.disabled = !available;
+          if (addLabel) addLabel.textContent = !variant ? (strings.unavailable || 'Unavailable') : (available ? (strings.addToCart || 'Add to Cart') : (strings.soldOut || 'Sold out'));
+        }
+
+        root.querySelectorAll('fieldset[data-option-index]').forEach(fieldset => {
+          const label = fieldset.querySelector('[data-option-label]');
+          const checked = fieldset.querySelector('input[type="radio"]:checked');
+          if (label && checked) label.textContent = checked.value;
+        });
+      }
+
+      root.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', render);
+      });
+
+      if (qtyInput && qtyPlus && qtyMinus) {
+        qtyPlus.addEventListener('click', () => {
+          qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) + 1);
+        });
+        qtyMinus.addEventListener('click', () => {
+          qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) - 1);
+        });
+      }
+
+      // AJAX-enhance "Add to Cart" only — a "Buy it Now" button (name="checkout") in
+      // the same form should still submit natively straight to checkout.
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          // Unknown submitter (older browser) or the "Buy it Now" button — let it
+          // submit natively. The hidden variant id is already kept in sync above,
+          // so a plain POST still adds/checks out the correct variant either way.
+          if (!e.submitter || e.submitter.name !== 'add') return;
+          const variant = currentVariant();
+          if (!variant || !variant.available) return;
+          e.preventDefault();
+          const qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+          if (addBtn) addBtn.disabled = true;
+          try {
+            await cartAddItems([{ id: variant.id, quantity: qty }]);
+            await refreshCartDrawer();
+            showToast(currentLang === 'en' ? 'Added to bag' : 'تمت الإضافة للحقيبة');
+            openDrawer('cart');
+          } catch (err) {
+            showToast(err.message, 'info');
+            form.submit();
+          } finally {
+            render();
+          }
+        });
+      }
+
+      render();
+    });
+  }
+
+  /* ==========================================================================
+     12a1b. PRODUCT IMAGE GALLERY + LIGHTBOX (sections/main-product.liquid)
+     Thumbnails had markup but no click handler at all (dead buttons). Adds
+     that, plus a full-screen lightbox to zoom through every product image.
+     ========================================================================== */
+  function initProductGallery() {
+    const openBtn = document.querySelector('[data-gallery-open]');
+    const mainImg = document.querySelector('[data-main-image]');
+    const thumbs = Array.from(document.querySelectorAll('[data-thumb]'));
+
+    thumbs.forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        const src = thumb.getAttribute('data-thumb-src');
+        const alt = thumb.getAttribute('data-thumb-alt');
+        if (mainImg && src) {
+          mainImg.src = src;
+          if (alt) mainImg.alt = alt;
+        }
+        thumbs.forEach(t => {
+          t.classList.remove('border-primary');
+          t.classList.add('border-transparent');
+        });
+        thumb.classList.add('border-primary');
+        thumb.classList.remove('border-transparent');
+        if (openBtn) openBtn.dataset.currentIndex = thumb.getAttribute('data-gallery-index');
+      });
+    });
+
+    if (!openBtn) return;
+    let gallery = [];
+    try { gallery = JSON.parse(openBtn.getAttribute('data-gallery-json') || '[]'); } catch (e) { gallery = []; }
+    if (!gallery.length) return;
+
+    const lightbox = document.getElementById('modal-lightbox');
+    if (!lightbox) return;
+    const lightboxImg = lightbox.querySelector('[data-lightbox-image]');
+    const counter = lightbox.querySelector('[data-lightbox-counter]');
+    const prevBtn = lightbox.querySelector('[data-lightbox-prev]');
+    const nextBtn = lightbox.querySelector('[data-lightbox-next]');
+    let index = 0;
+
+    function renderLightbox() {
+      const item = gallery[index];
+      if (!item || !lightboxImg) return;
+      lightboxImg.src = item.src;
+      lightboxImg.alt = item.alt || '';
+      lightboxImg.classList.remove('scale-[1.75]');
+      if (counter) counter.textContent = `${index + 1} / ${gallery.length}`;
+    }
+
+    const hasMultiple = gallery.length > 1;
+    if (prevBtn) prevBtn.hidden = !hasMultiple;
+    if (nextBtn) nextBtn.hidden = !hasMultiple;
+
+    openBtn.addEventListener('click', () => {
+      index = parseInt(openBtn.dataset.currentIndex || '0', 10) || 0;
+      renderLightbox();
+      openModal('lightbox');
+    });
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        index = (index - 1 + gallery.length) % gallery.length;
+        renderLightbox();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        index = (index + 1) % gallery.length;
+        renderLightbox();
+      });
+    }
+    if (lightboxImg) {
+      lightboxImg.addEventListener('click', () => {
+        lightboxImg.classList.toggle('scale-[1.75]');
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.hidden || !hasMultiple) return;
+      if (e.key === 'ArrowLeft') { index = (index - 1 + gallery.length) % gallery.length; renderLightbox(); }
+      if (e.key === 'ArrowRight') { index = (index + 1) % gallery.length; renderLightbox(); }
+    });
+  }
+
+  /* ==========================================================================
+     12a2. FULL CART PAGE (sections/main-cart.liquid) — same unwired-buttons bug
+     as the drawer had: qty +/- and remove did nothing. Reloads after a change
+     rather than re-rendering in place, since this is a full page, not a drawer.
+     ========================================================================== */
+  function initCartPage() {
+    const root = document.querySelector('[data-cart]');
+    if (!root) return;
+
+    root.querySelectorAll('[data-line-qty]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const line = parseInt(btn.getAttribute('data-line-qty'), 10);
+        const delta = parseInt(btn.getAttribute('data-delta'), 10);
+        const qtyEl = btn.parentElement.querySelector('span');
+        const currentQty = parseInt(qtyEl?.textContent || '1', 10);
+        try {
+          await cartChangeLine(line, currentQty + delta);
+          window.location.reload();
+        } catch (e) {
+          showToast(e.message, 'info');
+        }
+      });
+    });
+
+    root.querySelectorAll('[data-line-remove]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const line = parseInt(btn.getAttribute('data-line-remove'), 10);
+        try {
+          await cartChangeLine(line, 0);
+          window.location.reload();
+        } catch (e) {
+          showToast(e.message, 'info');
+        }
+      });
+    });
+
+    const noteField = root.querySelector('[data-cart-note]');
+    if (noteField) {
+      noteField.addEventListener('blur', () => {
+        shopifyFetch('/cart/update.js', { method: 'POST', body: JSON.stringify({ note: noteField.value }) }).catch(() => {});
+      });
+    }
+  }
+
+  /* ==========================================================================
+     12b. COLLECTION FILTERS DRAWER (mobile)
+     ========================================================================== */
+  function initCollectionFilters() {
+    const aside = document.querySelector('[data-filters]');
+    const backdrop = document.querySelector('[data-filters-backdrop]');
+    if (!aside || !backdrop) return;
+
+    function openFilters() {
+      aside.classList.remove('-translate-x-full');
+      backdrop.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFilters() {
+      aside.classList.add('-translate-x-full');
+      backdrop.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('[data-filters-toggle]').forEach(btn => {
+      btn.addEventListener('click', openFilters);
+    });
+    document.querySelectorAll('[data-filters-close]').forEach(btn => {
+      btn.addEventListener('click', closeFilters);
+    });
+    backdrop.addEventListener('click', closeFilters);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFilters();
+    });
+  }
+
+  /* ==========================================================================
+     12c. COLLECTION FILTERING & SORTING — entirely client-side (sections/main-
+     collection.liquid). Every product on the page already carries its tags,
+     price, title and created-at as data attributes; checking a filter or
+     changing sort just shows/hides/reorders the already-rendered cards, with
+     no page reload and no server round trip.
+     ========================================================================== */
+  function initProductFilters() {
+    const root = document.querySelector('[data-collection-filters]');
+    const grid = root ? root.querySelector('[data-product-grid]') : null;
+    if (!root || !grid) return;
+
+    const items = Array.from(grid.querySelectorAll('.product-filter-item'));
+    const originalOrder = items.slice();
+    const checkboxes = Array.from(root.querySelectorAll('[data-filter-checkbox]'));
+    const noResults = root.querySelector('[data-no-results]');
+    const activeWrap = root.querySelector('[data-active-filters]');
+    const activeChips = root.querySelector('[data-active-filter-chips]');
+    const clearBtn = root.querySelector('[data-clear-filters]');
+    const filtersBadge = root.querySelector('[data-filters-badge]');
+    const sortSelect = root.querySelector('[data-sort]');
+
+    const itemTags = new Map();
+    items.forEach(item => {
+      const tags = (item.getAttribute('data-tags') || '').split(',').map(t => t.trim()).filter(Boolean);
+      itemTags.set(item, tags);
+    });
+
+    // Fill in each checkbox's product count from the actually-rendered cards —
+    // cheaper and always-accurate versus computing it server-side in Liquid.
+    checkboxes.forEach(cb => {
+      const tag = cb.getAttribute('data-filter-tag');
+      const count = items.filter(item => itemTags.get(item).includes(tag)).length;
+      const option = cb.closest('[data-filter-option]');
+      const countEl = option ? option.querySelector('[data-filter-count]') : null;
+      if (countEl) countEl.textContent = `(${count})`;
+      if (count === 0) {
+        cb.disabled = true;
+        if (option) option.classList.add('opacity-40');
+      }
+    });
+
+    function groupOf(checkbox) {
+      return checkbox.getAttribute('data-filter-tag').split(':')[0];
+    }
+
+    function applyFilters() {
+      const checked = checkboxes.filter(cb => cb.checked);
+      const byGroup = {};
+      checked.forEach(cb => {
+        const group = groupOf(cb);
+        (byGroup[group] = byGroup[group] || []).push(cb.getAttribute('data-filter-tag'));
+      });
+      const groups = Object.values(byGroup);
+
+      let visibleCount = 0;
+      items.forEach(item => {
+        const tags = itemTags.get(item);
+        const matches = groups.every(groupTags => groupTags.some(tag => tags.includes(tag)));
+        item.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+
+      if (noResults) noResults.hidden = visibleCount > 0;
+      grid.hidden = visibleCount === 0;
+      if (filtersBadge) filtersBadge.hidden = checked.length === 0;
+
+      if (!activeWrap) return;
+      if (checked.length === 0) {
+        activeWrap.hidden = true;
+        return;
+      }
+      activeWrap.hidden = false;
+      if (activeChips) {
+        activeChips.innerHTML = '';
+        checked.forEach(cb => {
+          const labelSpan = cb.closest('label')?.querySelector('span');
+          const label = (labelSpan ? labelSpan.textContent : '').replace(/\s*\(\d+\)\s*$/, '').trim();
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'inline-flex items-center gap-2 rounded-full border border-outline-variant pl-4 pr-3 py-1.5 font-body-md text-[13px] text-primary hover:border-terracotta transition-colors';
+          chip.innerHTML = `${escapeHtml(label)} <span class="material-symbols-outlined text-[15px]" aria-hidden="true">close</span>`;
+          chip.addEventListener('click', () => {
+            cb.checked = false;
+            applyFilters();
+          });
+          activeChips.appendChild(chip);
+        });
+      }
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', applyFilters));
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        checkboxes.forEach(cb => { cb.checked = false; });
+        applyFilters();
+      });
+    }
+
+    function applySort() {
+      const value = sortSelect.value;
+      if (value === 'manual') {
+        originalOrder.forEach(item => grid.appendChild(item));
+        return;
+      }
+      const [key, dir] = value.split('-');
+      const factor = dir === 'descending' ? -1 : 1;
+      const sorted = items.slice().sort((a, b) => {
+        if (key === 'title') {
+          return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '') * factor;
+        }
+        if (key === 'price') {
+          return ((parseFloat(a.getAttribute('data-price')) || 0) - (parseFloat(b.getAttribute('data-price')) || 0)) * factor;
+        }
+        if (key === 'created') {
+          return ((parseInt(a.getAttribute('data-created'), 10) || 0) - (parseInt(b.getAttribute('data-created'), 10) || 0)) * factor;
+        }
+        return 0;
+      });
+      sorted.forEach(item => grid.appendChild(item));
+    }
+
+    if (sortSelect) sortSelect.addEventListener('change', applySort);
+
+    applyFilters();
+  }
+
+  /* ==========================================================================
      13. INITIALIZATION ON DOM READY
      ========================================================================== */
   document.addEventListener('DOMContentLoaded', () => {
-    ['quickview', 'search', 'sizeguide', 'askquestion', 'support', 'account', 'comingsoon', 'checkout'].forEach(closeModal);
+    ['quickview', 'search', 'sizeguide', 'askquestion', 'support', 'account', 'comingsoon', 'lightbox'].forEach(closeModal);
     ['cart', 'wishlist'].forEach(closeDrawer);
     initHeroSlider();
     initProductTabs();
     initSearchModal();
+    initCollectionFilters();
+    initProductFilters();
+    initProductForm();
+    initProductGallery();
+    initCartPage();
     initEventListeners();
+    bindCartDrawerEvents();
     applyLanguage(currentLang);
-    updateCartUI();
     updateWishlistUI();
   });
 })();

@@ -1,14 +1,74 @@
-<div class="pt-24 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-  <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-16">{{ 'general.collections' | t }}</h1>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-    {% for collection in collections %}
-      <a href="{{ collection.url }}" class="group relative overflow-hidden rounded-3xl bento-card-zoom aspect-[4/3] block bg-secondary-container">
-        {% if collection.featured_image %}
-          <img width="{{ collection.featured_image.width }}" height="{{ collection.featured_image.height }}" src="{{ collection.featured_image | image_url: width: 720 }}" alt="{{ collection.title | escape }}" loading="lazy" class="w-full h-full object-cover">
-        {% endif %}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-        <h2 class="absolute bottom-8 left-8 font-headline-sm text-headline-sm text-white">{{ collection.title }}</h2>
-      </a>
-    {% endfor %}
-  </div>
+<div class="pt-12 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+  <nav class="mb-10" aria-label="breadcrumbs">
+    <ol class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant uppercase">
+      <li><a class="hover:text-primary transition-colors" href="{{ routes.root_url }}">{{ 'general.home' | t }}</a></li>
+      <li class="flex items-center gap-2 font-bold text-primary" aria-current="page">
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">chevron_right</span> {{ 'general.collections' | t }}
+      </li>
+    </ol>
+  </nav>
+
+  <header class="mb-14 max-w-2xl">
+    <p class="text-[10px] tracking-[0.42em] uppercase mb-3 font-medium" style="color: #A87052;">{{ 'general.explore' | t }}</p>
+    <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">{{ 'general.collections' | t }}</h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">{{ 'collections.list_intro' | t }}</p>
+  </header>
+
+  {%- if collections.size == 0 -%}
+    <p class="font-body-lg text-on-surface-variant">{{ 'collections.empty' | t }}</p>
+  {%- else -%}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      {%- for collection in collections -%}
+        {%- liquid
+          assign brand_bg = ''
+          assign brand_text = '#FFFFFF'
+          case collection.handle
+            when 'men'
+              assign brand_bg = '#2D2E2D'
+            when 'women'
+              assign brand_bg = '#E5D7CD'
+              assign brand_text = '#2D2E2D'
+            when 'together'
+              assign brand_bg = '#A87052'
+          endcase
+          assign card_count = collection.all_products_count | default: collection.products_count
+        -%}
+        <a href="{{ collection.url }}" class="group relative flex flex-col overflow-hidden rounded-3xl bg-surface-container-low shadow-sm hover:shadow-lg transition-shadow duration-300" aria-label="{{ collection.title | escape }} — {{ card_count }} {{ 'collections.products_count' | t }}">
+          <div class="relative overflow-hidden" style="aspect-ratio: 4/3; {% if brand_bg != '' and collection.featured_image == blank %}background-color: {{ brand_bg }};{% endif %}">
+            {%- if collection.featured_image -%}
+              <img width="{{ collection.featured_image.width }}" height="{{ collection.featured_image.height }}"
+                   src="{{ collection.featured_image | image_url: width: 900 }}" alt="{{ collection.title | escape }}" loading="lazy"
+                   class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent"></div>
+            {%- else -%}
+              <div class="absolute inset-0 flex items-center justify-center opacity-90">
+                <span class="font-display text-[56px] leading-none" style="color: {{ brand_text }};">{{ collection.title | slice: 0, 1 }}</span>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"></div>
+            {%- endif -%}
+
+            {%- if card_count > 0 -%}
+              <span class="absolute top-4 right-4 text-[9px] tracking-[0.22em] uppercase px-3 py-1.5 font-medium rounded-full bg-white/90 text-[#2D2E2D]">
+                {{ card_count }} {{ 'collections.products_count' | t }}
+              </span>
+            {%- endif -%}
+
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+              <h2 class="font-display text-[28px] md:text-[32px] font-light leading-none text-white mb-2">{{ collection.title }}</h2>
+              <span class="inline-flex items-center gap-2 text-white text-[10px] tracking-[0.22em] uppercase border-b border-white/60 pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium">
+                {{ 'collections.shop_now' | t }}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+
+          {%- if collection.description != blank -%}
+            <div class="p-6">
+              <p class="font-body-md text-on-surface-variant text-[14px] line-clamp-2">{{ collection.description | strip_html }}</p>
+            </div>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </div>

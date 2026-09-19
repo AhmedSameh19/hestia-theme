@@ -4,8 +4,7 @@
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10 lg:gap-16">
       {%- comment -%} Left: Brand Monogram, Tagline & Socials {%- endcomment -%}
       <div class="max-w-sm">
-        <img src="{{ 'logo-monogram-dark.svg' | asset_url }}" alt="Aurca" width="64" height="64"
-             class="object-contain mb-4" style="width: 64px; height: 64px;">
+        <img src="{{ 'logo-wordmark-cream.svg' | asset_url }}" alt="Aurca" class="h-7 md:h-8 w-auto object-contain mb-4" style="max-height: 32px;">
         <p class="text-xs leading-relaxed mb-6" style="color: rgba(255,255,255,0.4);" data-i18n="brandTagline">
           Luxury homewear for the sacred hours between waking and sleeping. Est. 2018.
         </p>
@@ -52,9 +51,9 @@
             Collections
           </h5>
           <ul class="space-y-2.5">
-            <li><a href="#featured-products" data-nav-filter="Women" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Women's Sleepwear</a></li>
-            <li><a href="#featured-products" data-nav-filter="Men" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Men's Homewear</a></li>
-            <li><a href="#featured-products" data-nav-filter="Together" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Together Edition</a></li>
+            <li><a href="{{ collections['women'].url | default: routes.all_products_collection_url }}" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Women's Sleepwear</a></li>
+            <li><a href="{{ collections['men'].url | default: routes.all_products_collection_url }}" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Men's Homewear</a></li>
+            <li><a href="{{ collections['together'].url | default: routes.all_products_collection_url }}" class="text-xs transition-colors hover:text-white" style="color: rgba(255,255,255,0.45);">Together Edition</a></li>
           </ul>
         </div>
       </div>

@@ -12,12 +12,26 @@
   </nav>
 
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter" data-product data-product-handle="{{ product.handle }}" data-product-json="{{ product.variants | json | escape }}">
-    {%- comment -%} Gallery {%- endcomment -%}
+    {%- comment -%}
+      Gallery. Shopify already supports any number of images per product
+      (Admin → Product → Media) — this just needed the click-to-swap thumbnails
+      wired up (they had markup but no JS) and a lightbox added for zooming
+      through all of them.
+    {%- endcomment -%}
     <div class="lg:col-span-7 flex flex-col-reverse md:flex-row-reverse gap-4">
       <div class="flex-grow aspect-[4/5] rounded-xl overflow-hidden bg-surface-container-low shadow-sm">
         {%- if product.featured_media -%}
-          <img width="{{ product.featured_media.width }}" height="{{ product.featured_media.height }}" data-main-image src="{{ product.featured_media | image_url: width: 1400 }}"
-               alt="{{ product.featured_media.alt | escape }}" class="w-full h-full object-cover transition-soft hover:scale-105">
+          {%- capture gallery_json -%}
+            [{%- for media in product.media -%}{"src":{{ media | image_url: width: 1800 | json }},"alt":{{ media.alt | default: product.title | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
+          {%- endcapture -%}
+          <button type="button" data-gallery-open data-current-index="0" data-gallery-json="{{ gallery_json | strip_newlines | escape }}"
+                  class="group relative block w-full h-full appearance-none border-0 bg-transparent p-0 text-left cursor-zoom-in" aria-label="{{ 'products.zoom' | t }}">
+            <img width="{{ product.featured_media.width }}" height="{{ product.featured_media.height }}" data-main-image src="{{ product.featured_media | image_url: width: 1400 }}"
+                 alt="{{ product.featured_media.alt | escape }}" class="w-full h-full object-cover transition-soft group-hover:scale-105">
+            <span class="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+            </span>
+          </button>
         {%- else -%}
           {% render 'swatch', item: product %}
         {%- endif -%}
@@ -25,7 +39,8 @@
       {%- if product.media.size > 1 -%}
         <div class="flex flex-row md:flex-col gap-4 md:w-24 shrink-0 overflow-x-auto no-scrollbar">
           {%- for media in product.media -%}
-            <button type="button" data-thumb="{{ media | image_url: width: 1400 }}"
+            <button type="button" data-thumb data-gallery-index="{{ forloop.index0 }}"
+                    data-thumb-src="{{ media | image_url: width: 1400 }}" data-thumb-alt="{{ media.alt | escape }}"
                     class="w-20 md:w-auto shrink-0 aspect-[3/4] rounded-lg overflow-hidden border-2 {% if forloop.first %}border-primary{% else %}border-transparent hover:border-outline-variant{% endif %} cursor-pointer">
               <img width="{{ media.width }}" height="{{ media.height }}" src="{{ media | image_url: width: 200 }}" alt="{{ media.alt | escape }}" loading="lazy" class="w-full h-full object-cover">
             </button>

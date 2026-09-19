@@ -30,7 +30,9 @@ The CSV contains a `Fabric & Care (product.metafields.custom.fabric_care)` colum
 5. Click **Upload and preview**, then click **Import products**.
 *Note: Re-import with **Overwrite existing products** checked if products were imported before this revision (prices are now EGP; size tags, fabric-care metafields, and `men`/`women`/`together` line tags were added). The `men` / `women` / `together` tags will NOT appear on the dashboard until this re-import is done — the CSV carries them, but an earlier import won't update itself.*
 
-*Products intentionally ship without photos — the theme renders a brand color block per product (from its `color:` tag) wherever an image would appear. Skip any image upload step; `store-data/images/` is a leftover archive and is not referenced by the CSV.*
+*Every product tagged **together** (Silk Robe, Silk Pajama Set, Silk Sleep Mask, Organic Linen Set, Waffle Knit Robe, Linen Throw) carries two size options — **Size (Her)** and **Size (Him)** — instead of one, since the line is sold as a matched pair for two people. The theme's product page and product-card quick-add automatically render both selectors for any product with two size-named options; no template change is needed if you add this pattern to future "together" products in the admin, and the two options' values don't need to match each other or match other products' — size each product however makes sense for it.*
+
+*The CSV still ships without photos (Shopify's import only accepts public image URLs, not local files, so images can't travel through the CSV) — the theme falls back to a brand color block per product (from its `color:` tag) wherever an image would appear. `store-data/images/` has real usable photos for 8 of the 10 products (filenames match handles — drag each one onto its matching product in Admin → Media): silk-robe, pure-silk-slip, silk-sleep-mask, waffle-knit-robe, silk-shorts, silk-camisole, cashmere-essential, silk-pajama-set. `organic-linen-set.png` and `linen-throw.png` are NOT usable — they're screenshots of an unrelated demo site's product/cart pages, not product photos; replace both before launch.*
 
 ## 2. Create Automated Collections
 Navigate to **Products** → **Collections** and create the following 3 collections. Ensure they use the exact handles and rules specified below:
@@ -112,7 +114,7 @@ To test the checkout process end-to-end:
 
 | Item | Where | Status |
 |---|---|---|
-| Product visuals (brand color block per product, from `color:` tag) | theme snippets/swatch.liquid | INTENTIONAL — no photos to upload |
+| Product visuals (brand color block per product, from `color:` tag) | theme snippets/swatch.liquid | 8 of 10 have real photos ready in `store-data/images/` — upload via Admin. `organic-linen-set` and `linen-throw` still need real photos (existing files for those two are unusable screenshots) |
 | Product titles, descriptions, prices (EGP) | products.csv | DUMMY |
 | Fabric & care copy | products.csv metafield column | DUMMY |
 | Shipping rates & delivery promises | Admin shipping + product shipping accordion + announcement bar | DUMMY |

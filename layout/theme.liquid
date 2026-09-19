@@ -79,6 +79,12 @@
         unavailable: {{ 'products.unavailable' | t | json }}
       };
       window.hestiaMoneyFormat = {{ shop.money_format | json }};
+      window.routes = {
+        root_url: {{ routes.root_url | json }},
+        cart_add_url: {{ routes.cart_add_url | json }},
+        cart_change_url: {{ routes.cart_change_url | json }},
+        cart_url: {{ routes.cart_url | json }}
+      };
     </script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
 
@@ -98,6 +104,7 @@
 
     {% section 'footer' %}
 
+    {% section 'cart-drawer' %}
     {% render 'aurca-modals' %}
   </body>
 </html>

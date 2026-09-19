@@ -8,26 +8,25 @@
 
   {%- comment -%} Main Header Bar (110px height) {%- endcomment -%}
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
-    <div class="flex items-center justify-between" style="height: 110px;">
+    <div class="flex items-center justify-between relative" style="height: 110px;">
       
       {%- comment -%} Left Navigation (Desktop) {%- endcomment -%}
-      <nav class="hidden lg:flex items-center gap-10">
-        <a href="#featured-products" data-nav-filter="Women" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="women">
+      <nav class="hidden lg:flex items-center gap-10 z-20">
+       
+        <a href="{{ collections['women'].url | default: routes.all_products_collection_url }}" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="women">
           Women
         </a>
-        <a href="#featured-products" data-nav-filter="Men" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="men">
+        <a href="{{ collections['men'].url | default: routes.all_products_collection_url }}" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="men">
           Men
         </a>
-        <a href="#featured-products" data-nav-filter="Together" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="together">
+        <a href="{{ collections['together'].url | default: routes.all_products_collection_url }}" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="together">
           Together
         </a>
-        <a href="#lookbook" class="text-white/70 hover:text-white transition-colors text-[11px] tracking-[0.2em] uppercase font-medium" data-i18n="lookbook">
-          Lookbook
-        </a>
+      
       </nav>
 
       {%- comment -%} Mobile Hamburger Menu Button {%- endcomment -%}
-      <div class="lg:hidden flex items-center">
+      <div class="lg:hidden flex items-center z-20">
         <button type="button" data-menu-open class="text-white/80 hover:text-white p-2" aria-label="Toggle menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M4 6h16M4 12h16M4 18h16"/>
@@ -35,13 +34,13 @@
         </button>
       </div>
 
-      {%- comment -%} Center Brand Monogram Logo (110px x 110px) {%- endcomment -%}
-      <a href="{{ routes.root_url }}" class="flex-1 lg:flex-none flex justify-center items-center">
-        <img src="{{ 'logo-monogram-copper.svg' | asset_url }}" alt="Aurca — Luxury Homewear" width="110" height="110" class="object-contain flex-shrink-0" style="width: 110px; height: 110px;">
+      {%- comment -%} Center Brand Wordmark Logo {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10">
+        <img src="{{ 'logo-wordmark-cream.svg' | asset_url }}" alt="Aurca — Luxury Homewear" class="h-9 md:h-11 w-auto object-contain flex-shrink-0" style="max-height: 44px;">
       </a>
 
       {%- comment -%} Right Controls (Desktop) {%- endcomment -%}
-      <div class="hidden lg:flex items-center gap-5">
+      <div class="hidden lg:flex items-center gap-5 z-20">
         {%- comment -%} Language Switcher (AR / EN) {%- endcomment -%}
         <button type="button" data-lang-toggle class="text-white/65 hover:text-white transition-colors text-[9px] tracking-[0.18em] uppercase border border-white/25 px-2.5 py-1 hover:border-white/50">
           <span data-lang-text>عربي</span>
@@ -85,16 +84,16 @@
         </button>
 
         {%- comment -%} Bag Button {%- endcomment -%}
-        <button type="button" data-cart-open class="text-white/65 hover:text-white transition-colors p-1 relative flex items-center gap-1.5" title="Bag" aria-label="Bag">
+        <button type="button" data-cart-open class="text-white/65 hover:text-white transition-colors p-1 relative" title="Bag" aria-label="Bag">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/>
           </svg>
-          <span data-cart-count class="bg-[#2D2E2D] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-medium {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
+          <span data-cart-count class="absolute -top-1.5 -right-1.5 bg-[#2D2E2D] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-medium {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
         </button>
       </div>
 
       {%- comment -%} Right Controls (Mobile) {%- endcomment -%}
-      <div class="lg:hidden flex items-center gap-3">
+      <div class="lg:hidden flex items-center gap-3 z-20">
         <button type="button" data-wishlist-open class="text-white/80 p-1 relative" aria-label="Wishlist">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -114,9 +113,10 @@
   {%- comment -%} Mobile Navigation Drawer {%- endcomment -%}
   <div data-menu hidden class="lg:hidden bg-[#2D2E2D] text-white border-t border-white/10 px-6 py-6 transition-all duration-300 shadow-2xl">
     <div class="flex flex-col gap-4 mb-6">
-      <a href="#featured-products" data-nav-filter="Women" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="women">Women</a>
-      <a href="#featured-products" data-nav-filter="Men" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="men">Men</a>
-      <a href="#featured-products" data-nav-filter="Together" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="together">Together</a>
+      <a href="{{ routes.all_products_collection_url }}" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="tab_all">All</a>
+      <a href="{{ collections['women'].url | default: routes.all_products_collection_url }}" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="women">Women</a>
+      <a href="{{ collections['men'].url | default: routes.all_products_collection_url }}" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="men">Men</a>
+      <a href="{{ collections['together'].url | default: routes.all_products_collection_url }}" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="together">Together</a>
       <a href="#lookbook" class="text-white/80 hover:text-white font-medium text-xs tracking-[0.2em] uppercase py-2" data-i18n="lookbook">Lookbook</a>
     </div>
     <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">

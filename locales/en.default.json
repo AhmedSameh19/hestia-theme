@@ -49,13 +49,29 @@
     "size_guide": "Size guide",
     "new": "New",
     "add_to_wishlist": "Add to wishlist",
-    "ask_a_question": "Ask a question"
+    "ask_a_question": "Ask a question",
+    "zoom": "Zoom in on image"
   },
   "collections": {
     "filters": "Filters",
     "sort_by": "Sort By",
     "empty": "No products match your selection.",
-    "no_filters": "No filters available for this collection."
+    "no_filters": "No filters available for this collection.",
+    "list_intro": "Browse every Aurca line — from women’s and men’s essentials to pieces designed to be worn together.",
+    "products_count": "products",
+    "shop_now": "Shop Now",
+    "active_filters": "Active filters",
+    "clear_all": "Clear all",
+    "apply_filters": "Apply Filters",
+    "close_filters": "Close filters",
+    "her_size": "Size (Her)",
+    "his_size": "Size (Him)",
+    "sort_featured": "Featured",
+    "sort_title_asc": "Alphabetically, A-Z",
+    "sort_title_desc": "Alphabetically, Z-A",
+    "sort_price_asc": "Price, low to high",
+    "sort_price_desc": "Price, high to low",
+    "sort_newest": "Date, new to old"
   },
   "cart": {
     "title": "Your Cart",

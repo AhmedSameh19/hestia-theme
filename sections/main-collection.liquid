@@ -43,105 +43,161 @@
     </header>
   {%- endif -%}
 
+  {%- comment -%}
+    Filtering & sorting are entirely client-side (theme.js initProductFilters) —
+    every product below renders up front with its tags/price/title as data
+    attributes, and checking a filter or changing sort just shows/hides/reorders
+    these already-rendered cards. No page reload, no server round trip.
+  {%- endcomment -%}
   {%- paginate collection.products by section.settings.per_page -%}
-    <form id="CollectionFilters">
-      <div class="flex justify-between items-center mb-10 border-b border-surface-variant pb-6">
-        <button type="button" data-filters-toggle class="flex items-center gap-4 text-label-caps font-label-caps text-on-surface-variant uppercase md:pointer-events-none">
+    <div data-collection-filters>
+      <div class="flex justify-between items-center mb-6 border-b border-surface-variant pb-6">
+        <button type="button" data-filters-toggle
+                class="flex items-center gap-3 text-label-caps font-label-caps text-on-surface-variant uppercase hover:text-primary transition-colors md:pointer-events-none">
           <span class="material-symbols-outlined">tune</span>
           <span>{{ 'collections.filters' | t }}</span>
+          <span data-filters-badge hidden class="w-2 h-2 rounded-full bg-terracotta md:hidden"></span>
         </button>
         <div class="flex items-center gap-4">
           <label for="SortBy" class="text-label-caps font-label-caps text-on-surface-variant uppercase">{{ 'collections.sort_by' | t }}:</label>
-          <select id="SortBy" name="sort_by" data-sort
+          <select id="SortBy" data-sort
                   class="bg-transparent border-none font-label-caps text-label-caps text-primary focus:ring-0 cursor-pointer">
-            {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
-            {%- endfor -%}
+            <option value="manual">{{ 'collections.sort_featured' | t }}</option>
+            <option value="title-ascending">{{ 'collections.sort_title_asc' | t }}</option>
+            <option value="title-descending">{{ 'collections.sort_title_desc' | t }}</option>
+            <option value="price-ascending">{{ 'collections.sort_price_asc' | t }}</option>
+            <option value="price-descending">{{ 'collections.sort_price_desc' | t }}</option>
+            <option value="created-descending">{{ 'collections.sort_newest' | t }}</option>
           </select>
         </div>
       </div>
 
+      <div data-active-filters hidden class="flex flex-wrap items-center gap-3 mb-10">
+        <span class="text-label-caps font-label-caps text-on-surface-variant uppercase">{{ 'collections.active_filters' | t }}:</span>
+        <div data-active-filter-chips class="flex flex-wrap items-center gap-3"></div>
+        <button type="button" data-clear-filters class="font-label-caps text-label-caps uppercase text-terracotta underline underline-offset-4 hover:opacity-70 transition-opacity">
+          {{ 'collections.clear_all' | t }}
+        </button>
+      </div>
+
       <div class="flex flex-col md:flex-row gap-gutter">
-        <aside data-filters class="w-full md:w-64 space-y-10 shrink-0 hidden md:block">
-          {%- for filter in collection.filters -%}
-            {%- if filter.type == 'list' -%}
-              <section>
-                <h3 class="font-label-caps text-label-caps text-primary mb-4 uppercase">{{ filter.label }}</h3>
-                <div class="space-y-3">
-                  {%- for value in filter.values -%}
-                    <label class="flex items-center gap-3 cursor-pointer group {% if value.count == 0 and value.active == false %}opacity-40{% endif %}">
-                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"
-                             {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                             class="w-4 h-4 rounded-full border-outline text-terracotta focus:ring-terracotta"
-                             onchange="this.form.submit()">
-                      <span class="font-body-md text-on-surface-variant group-hover:text-primary">{{ value.label }} ({{ value.count }})</span>
-                    </label>
-                  {%- endfor -%}
-                </div>
-              </section>
-            {%- endif -%}
-          {%- endfor -%}
-          {%- if collection.filters == empty -%}
+        <div data-filters-backdrop hidden class="fixed inset-0 bg-black/50 z-40 md:hidden"></div>
+        <aside data-filters
+               class="fixed inset-y-0 left-0 z-50 w-[86%] max-w-xs -translate-x-full bg-background overflow-y-auto p-6 transition-transform duration-300 ease-out
+                      md:static md:z-auto md:w-64 md:max-w-none md:translate-x-0 md:bg-transparent md:overflow-visible md:p-0 md:space-y-10 shrink-0">
+          <div class="flex items-center justify-between mb-8 md:hidden">
+            <h2 class="font-headline-sm text-headline-sm text-primary">{{ 'collections.filters' | t }}</h2>
+            <button type="button" data-filters-close aria-label="{{ 'collections.close_filters' | t }}" class="p-1 text-on-surface-variant hover:text-primary">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div class="space-y-10" data-filter-groups>
             {%- comment -%}
-              ponytail: no Search & Discovery filters configured. Fall back to native tags
-              using a `group:Value` convention (e.g. fabric:Silk, color:Champagne) so
-              filtering still works without the app. Shopify's collection URLs only support
-              one active tag at a time (`/collections/x/tag-handle`) — that's the accepted
-              ceiling here, not a bug in this fallback.
+              ponytail: built from each product's REAL variant options (Color,
+              Size, Size (Her)/Size (Him), ...) rather than a `group:Value` tag
+              convention — the catalog was never actually tagged that way, which
+              is why "no filters available" always showed. This needs no tagging
+              effort at all and can never drift out of sync with real variants.
+              Skipped over the Search & Discovery app's filters for the same
+              reason as before: that app's filtering is a page nav per click and
+              can't be made instant. theme.js fills in each option's product
+              count and does the actual show/hide.
             {%- endcomment -%}
-            {%- assign tag_groups_found = false -%}
-            {%- assign tag_prefixes = 'fabric,color,size' | split: ',' -%}
-            {%- for prefix in tag_prefixes -%}
-              {%- assign prefix_match = prefix | append: ':' -%}
-              {%- if prefix == 'size' -%}
-                {%- comment -%} all_tags sorts alphabetically (L, M, S, XL, XS) — force garment order {%- endcomment -%}
-                {%- assign group_tags = '' -%}
-                {%- assign size_order = 'XS,S,M,L,XL' | split: ',' -%}
+            {%- assign size_order = 'XS,S,M,L,XL,XXL' | split: ',' -%}
+            {%- assign option_names = '' -%}
+            {%- for product in collection.products -%}
+              {%- for option in product.options_with_values -%}
+                {%- assign marker = option.name | append: '||' -%}
+                {%- unless option.name == 'Title' or option_names contains marker -%}
+                  {%- assign option_names = option_names | append: marker -%}
+                {%- endunless -%}
+              {%- endfor -%}
+            {%- endfor -%}
+            {%- assign option_name_list = option_names | split: '||' -%}
+            {%- assign filter_groups_found = false -%}
+            {%- for group_name in option_name_list -%}
+              {%- assign group_handle = group_name | handle -%}
+              {%- assign group_values = '' -%}
+              {%- for product in collection.products -%}
+                {%- for option in product.options_with_values -%}
+                  {%- if option.name == group_name -%}
+                    {%- for value in option.values -%}
+                      {%- assign value_marker = value | append: '||' -%}
+                      {%- unless group_values contains value_marker -%}
+                        {%- assign group_values = group_values | append: value_marker -%}
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+              {%- assign group_value_list = group_values | split: '||' -%}
+              {%- if group_name contains 'Size' -%}
+                {%- comment -%} force garment order instead of whatever order values were first seen in {%- endcomment -%}
+                {%- assign ordered_values = '' -%}
                 {%- for size in size_order -%}
-                  {%- assign candidate = prefix_match | append: size -%}
-                  {%- if collection.all_tags contains candidate -%}
-                    {%- assign group_tags = group_tags | append: candidate | append: ',' -%}
+                  {%- if group_value_list contains size -%}
+                    {%- assign ordered_values = ordered_values | append: size | append: '||' -%}
                   {%- endif -%}
                 {%- endfor -%}
-                {%- assign group_tags = group_tags | split: ',' -%}
-              {%- else -%}
-                {%- assign group_tags = collection.all_tags -%}
+                {%- for value in group_value_list -%}
+                  {%- unless size_order contains value -%}
+                    {%- assign ordered_values = ordered_values | append: value | append: '||' -%}
+                  {%- endunless -%}
+                {%- endfor -%}
+                {%- assign group_value_list = ordered_values | split: '||' -%}
               {%- endif -%}
-              {%- capture group_links -%}
-                {%- for tag in group_tags -%}
-                  {%- if tag contains prefix_match -%}
-                    {%- assign tag_label = tag | split: ':' | last -%}
-                    <a href="{% if current_tags contains tag %}{{ collection.url }}{% else %}{{ collection.url }}/{{ tag | handle }}{% endif %}"
-                       class="block font-body-md {% if current_tags contains tag %}text-primary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} transition-colors">
-                      {{ tag_label }}
-                    </a>
-                  {%- endif -%}
-                {%- endfor -%}
-              {%- endcapture -%}
-              {%- if group_links != blank -%}
-                {%- assign tag_groups_found = true -%}
+              {%- if group_value_list.size > 0 -%}
+                {%- assign filter_groups_found = true -%}
                 <section>
-                  {%- assign group_title = prefix | capitalize -%}
-                  <h3 class="font-label-caps text-label-caps text-primary mb-4 uppercase">{{ group_title }}</h3>
-                  <div class="space-y-3">{{ group_links }}</div>
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 uppercase">{{ group_name }}</h3>
+                  <div class="space-y-3">
+                    {%- for value in group_value_list -%}
+                      <label class="flex items-center gap-3 cursor-pointer group" data-filter-option>
+                        <input type="checkbox" data-filter-checkbox data-filter-tag="{{ group_handle }}:{{ value | handle }}"
+                               class="w-4 h-4 rounded-full border-outline text-terracotta focus:ring-terracotta">
+                        <span class="font-body-md text-on-surface-variant group-hover:text-primary">{{ value }} <span data-filter-count>(0)</span></span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
                 </section>
               {%- endif -%}
             {%- endfor -%}
-            {%- unless tag_groups_found -%}
+            {%- unless filter_groups_found -%}
               <p class="font-body-md text-on-surface-variant text-[14px]">{{ 'collections.no_filters' | t }}</p>
             {%- endunless -%}
-          {%- endif -%}
+          </div>
+          <div class="md:hidden pt-8 mt-4 border-t border-outline-variant/40">
+            <button type="button" data-filters-close
+                    class="w-full bg-primary text-on-primary rounded-xl h-12 font-label-caps text-label-caps uppercase tracking-widest">
+              {{ 'collections.apply_filters' | t }}
+            </button>
+          </div>
         </aside>
 
-        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-16">
+        <div data-product-grid class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-16">
           {%- for product in collection.products -%}
-            {% render 'product-card', product: product, show_quick_add: true %}
+            {%- assign product_tags = '' -%}
+            {%- for tag in product.tags -%}{%- assign product_tags = product_tags | append: tag | append: ',' -%}{%- endfor -%}
+            {%- for option in product.options_with_values -%}
+              {%- unless option.name == 'Title' -%}
+                {%- assign option_handle = option.name | handle -%}
+                {%- for value in option.values -%}
+                  {%- assign value_handle = value | handle -%}
+                  {%- assign product_tags = product_tags | append: option_handle | append: ':' | append: value_handle | append: ',' -%}
+                {%- endfor -%}
+              {%- endunless -%}
+            {%- endfor -%}
+            <div class="product-filter-item" data-tags="{{ product_tags | downcase | escape }}" data-price="{{ product.price }}"
+                 data-title="{{ product.title | escape }}" data-created="{{ product.created_at | date: '%s' }}">
+              {% render 'product-card', product: product, show_quick_add: true %}
+            </div>
           {%- else -%}
             <p class="col-span-full font-body-lg text-on-surface-variant">{{ 'collections.empty' | t }}</p>
           {%- endfor -%}
         </div>
       </div>
-    </form>
+      <p data-no-results hidden class="text-center font-body-lg text-on-surface-variant py-16">{{ 'collections.empty' | t }}</p>
+    </div>
 
     {%- if paginate.pages > 1 -%}
       <nav class="mt-24 flex justify-center items-center gap-8" aria-label="pagination">
@@ -171,7 +227,7 @@
 {
   "name": "Collection",
   "settings": [
-    { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 24, "step": 3, "default": 12 }
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 96, "step": 12, "default": 48, "info": "Filtering/sorting only apply to products on the current page — set this high enough to cover the collection so filters feel instant." }
   ]
 }
 {% endschema %}

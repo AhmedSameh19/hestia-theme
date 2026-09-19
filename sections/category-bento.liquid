@@ -8,7 +8,7 @@
         Shop by Collection
       </h2>
     </div>
-    <a href="#featured-products" data-nav-filter="All" class="text-[10px] tracking-[0.22em] uppercase border-b pb-px self-start hover:opacity-70 transition-opacity font-medium" style="color: #A87052; border-color: #A87052;" data-i18n="viewAll">
+    <a href="{{ routes.all_products_collection_url }}" class="text-[10px] tracking-[0.22em] uppercase border-b pb-px self-start hover:opacity-70 transition-opacity font-medium" style="color: #A87052; border-color: #A87052;" data-i18n="viewAll">
       View All &rarr;
     </a>
   </div>
@@ -20,6 +20,7 @@
         {%- assign fallback_badge = '' -%}
         {%- assign fallback_eyebrow = '' -%}
         {%- assign fallback_title = '' -%}
+        {%- assign fallback_handle = '' -%}
         {%- assign fallback_border = '#A87052' -%}
         {%- assign fallback_badge_bg = '#97606C' -%}
 
@@ -29,6 +30,7 @@
             {%- assign fallback_badge = 'New Arrivals' -%}
             {%- assign fallback_eyebrow = 'The Feminine Edit' -%}
             {%- assign fallback_title = 'Women' -%}
+            {%- assign fallback_handle = 'women' -%}
             {%- assign fallback_border = '#97606C' -%}
             {%- assign fallback_badge_bg = '#97606C' -%}
           {%- when 2 -%}
@@ -36,6 +38,7 @@
             {%- assign fallback_badge = '' -%}
             {%- assign fallback_eyebrow = 'The Essential Range' -%}
             {%- assign fallback_title = 'Men' -%}
+            {%- assign fallback_handle = 'men' -%}
             {%- assign fallback_border = '#494D57' -%}
             {%- assign fallback_badge_bg = '#494D57' -%}
           {%- when 3 -%}
@@ -43,6 +46,7 @@
             {%- assign fallback_badge = 'Limited Edition' -%}
             {%- assign fallback_eyebrow = 'The Luxury Reserve' -%}
             {%- assign fallback_title = 'Together' -%}
+            {%- assign fallback_handle = 'together' -%}
             {%- assign fallback_border = '#4A1A28' -%}
             {%- assign fallback_badge_bg = '#4A1A28' -%}
         {%- endcase -%}
@@ -56,7 +60,14 @@
         {%- elsif block.settings.collection.featured_image != blank -%}
           {%- assign card_img = block.settings.collection.featured_image | image_url: width: 1080 -%}
         {%- endif -%}
-        {%- assign card_link = block.settings.collection.url | default: '#featured-products' -%}
+        {%- comment -%}
+          Merchant-picked collection wins if set (in the theme editor block settings);
+          otherwise fall back to the matching named collection (women/men/together) by
+          handle before ever falling back to the generic "all collections" page — a
+          shopper clicking "Women" should land on /collections/women directly, not on
+          a page where they have to pick a category a second time.
+        {%- endcomment -%}
+        {%- assign card_link = block.settings.collection.url | default: collections[fallback_handle].url | default: routes.all_products_collection_url -%}
 
         <div class="group relative overflow-hidden cursor-pointer" data-collection-card="{{ card_title }}" {{ block.shopify_attributes }}>
           <div class="overflow-hidden" style="aspect-ratio: 2/3;">
@@ -79,7 +90,7 @@
             <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]">
               {{ card_title }}
             </h3>
-            <a href="{{ card_link }}" data-nav-filter="{{ card_title }}"
+            <a href="{{ card_link }}"
                class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
                style="border-color: {{ fallback_border }};">
               <span data-i18n="explore">Explore</span>
@@ -107,7 +118,7 @@
           <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]" data-i18n="women">
             Women
           </h3>
-          <a href="#featured-products" data-nav-filter="Women"
+          <a href="{{ collections['women'].url | default: routes.all_products_collection_url }}"
              class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
              style="border-color: #97606C;">
             <span data-i18n="explore">Explore</span>
@@ -131,7 +142,7 @@
           <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]" data-i18n="men">
             Men
           </h3>
-          <a href="#featured-products" data-nav-filter="Men"
+          <a href="{{ collections['men'].url | default: routes.all_products_collection_url }}"
              class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
              style="border-color: #494D57;">
             <span data-i18n="explore">Explore</span>
@@ -158,7 +169,7 @@
           <h3 class="text-white font-light leading-none mb-5 font-display text-[42px]" data-i18n="together">
             Together
           </h3>
-          <a href="#featured-products" data-nav-filter="Together"
+          <a href="{{ collections['together'].url | default: routes.all_products_collection_url }}"
              class="inline-flex items-center gap-2.5 text-white text-[10px] tracking-[0.22em] uppercase border-b pb-0.5 group-hover:gap-4 transition-all duration-300 font-medium"
              style="border-color: #4A1A28;">
             <span data-i18n="explore">Explore</span>
